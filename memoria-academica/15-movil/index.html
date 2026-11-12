@@ -1,0 +1,2232 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Asistente de Respuesta por Voz e Integraciones — Proyecto Final de Grado Superior">
+      
+      
+      
+      
+        <link rel="prev" href="../14-interfaz/">
+      
+      
+        <link rel="next" href="../16-integraciones/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../web/assets/arvi-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil - ARVI — Documentación técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../web/stylesheets/arvi.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#15-aplicaciones-de-escritorio-pwa-y-tauri-y-acceso-movil" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="ARVI — Documentación técnica" class="md-header__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
+      
+  <img src="../../web/assets/arvi-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARVI — Documentación técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="cyan"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="cyan"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ARVI — Documentación técnica" class="md-nav__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
+      
+  <img src="../../web/assets/arvi-logo.svg" alt="logo">
+
+    </a>
+    ARVI — Documentación técnica
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memoria académica
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Memoria académica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-introduccion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introducción y motivación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-requisitos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Análisis de requisitos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-tecnologias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Estudio de tecnologías
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-diseno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Diseño y arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-planificacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Planificación del proyecto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-entorno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Preparación del entorno
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Desarrollo del backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-openai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Integración con OpenAI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-voz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Sistema de voz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-memoria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Memoria persistente con Obsidian
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-n8n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Integración con n8n
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-herramientas-permisos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13. Sistema de herramientas y permisos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-interfaz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. Interfaz gráfica y animaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#151-decision-pwa-primero-tauri-despues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 Decisión: PWA primero, Tauri después
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#152-implementacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Implementación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#153-pruebas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 Pruebas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#154-aplicacion-de-escritorio-con-tauri-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 Aplicación de escritorio con Tauri 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#155-acceso-desde-el-movil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 Acceso desde el móvil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#156-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 Estado
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-integraciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    16. Integraciones externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-seguridad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    17. Seguridad y privacidad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-pruebas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18. Pruebas y resultados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-incidencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    19. Incidencias y soluciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20-presupuesto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    20. Presupuesto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21-conclusiones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    21. Conclusiones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22-mejoras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    22. Posibles mejoras futuras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23-bibliografia-anexos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    23. Bibliografía y anexos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24-domotica/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    24. Ampliación: hogar inteligente con Home Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25-control-remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    25. Ampliación: control de varios ordenadores (ARVI Remote)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26-aprendizaje-voz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    26. Ampliación: aprendizaje continuo de la voz («Mi voz»)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../anexo-uso-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexo — Registro del uso de herramientas de IA en el desarrollo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desarrollo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Desarrollo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DIARIO_DESARROLLO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de desarrollo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-analisis-entorno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análisis del entorno
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/decisiones-tecnologicas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisiones tecnológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../desarrollo/HERRAMIENTAS_CLAUDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Herramientas de Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pruebas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Pruebas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pruebas/registro-pruebas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registro de pruebas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pruebas/incidencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Incidencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../capturas/figuras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capturas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gestión
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Gestión
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gestion/presupuesto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presupuesto y licencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../telefonia/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Investigación
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Investigación
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#151-decision-pwa-primero-tauri-despues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 Decisión: PWA primero, Tauri después
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#152-implementacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 Implementación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#153-pruebas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 Pruebas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#154-aplicacion-de-escritorio-con-tauri-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 Aplicación de escritorio con Tauri 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#155-acceso-desde-el-movil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.5 Acceso desde el móvil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#156-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.6 Estado
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="15-aplicaciones-de-escritorio-pwa-y-tauri-y-acceso-movil">15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil<a class="headerlink" href="#15-aplicaciones-de-escritorio-pwa-y-tauri-y-acceso-movil" title="Permanent link">&para;</a></h1>
+<h2 id="151-decision-pwa-primero-tauri-despues">15.1 Decisión: PWA primero, Tauri después<a class="headerlink" href="#151-decision-pwa-primero-tauri-despues" title="Permanent link">&para;</a></h2>
+<p>El plan original preveía una aplicación de escritorio con Tauri 2 (Fase 4b) y una PWA para el móvil
+(Fase 8). Al empezar la Fase 4b se comprobó que el equipo no tiene el compilador de C++ de Microsoft
+(<em>Visual Studio Build Tools</em> y <em>Windows SDK</em>), que Tauri necesita en Windows. Rust 1.99, Node 24 y
+WebView2 sí estaban instalados.</p>
+<p>Instalarlo supone descargar unos 2-3 GB, más unos 400 MB de paquetes de Rust. Una descarga parecida
+ya cortó durante minuto y medio otro servicio web que el alumno publica desde este equipo (INC-011).
+El alumno decidió <strong>adelantar la PWA y dejar Tauri para más tarde</strong> (ADR-011). Ese mismo día autorizó
+la descarga; las <em>Build Tools</em> se instalaron en unos 4 minutos, con un monitor que revisaba el túnel
+del otro servicio cada minuto (0 avisos), y se hizo también Tauri (apartado 15.4). Comparación:</p>
+<table>
+<thead>
+<tr>
+<th>Necesidad</th>
+<th>PWA</th>
+<th>Tauri</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ventana propia, sin barra del navegador</td>
+<td>Sí (<code>display: standalone</code>)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Icono en el escritorio, Inicio y barra de tareas</td>
+<td>Sí (Edge o Chrome → «Instalar aplicación»)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Mismo código de interfaz</td>
+<td>Sí</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Arrancar el backend automáticamente</td>
+<td>No</td>
+<td>Sí (comprobado, P-035)</td>
+</tr>
+<tr>
+<td>Icono en la bandeja del sistema</td>
+<td>No</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Tamaño</td>
+<td>0 (usa el navegador)</td>
+<td>3,1 MB el ejecutable; instalador de 1,2 MB</td>
+</tr>
+<tr>
+<td>Funcionar en el móvil</td>
+<td>Sí (con HTTPS, apartado 15.4)</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2 id="152-implementacion">15.2 Implementación<a class="headerlink" href="#152-implementacion" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frontend/public/manifest.webmanifest</code></td>
+<td>Nombre, colores, <code>display: standalone</code>, iconos 192/512 y <em>maskable</em></td>
+</tr>
+<tr>
+<td><code>frontend/public/sw.js</code></td>
+<td><em>Service worker</em> mínimo</td>
+</tr>
+<tr>
+<td><code>frontend/public/offline.html</code></td>
+<td>Página que se muestra si el backend no está en marcha</td>
+</tr>
+<tr>
+<td><code>scripts/frontend/generar_iconos.py</code></td>
+<td>Genera los PNG a partir del logotipo SVG con Chromium (reproducible)</td>
+</tr>
+<tr>
+<td><code>backend/arvi/api/main.py</code></td>
+<td>Tipo MIME del manifiesto y <code>Cache-Control: no-cache</code> para <code>/</code>, <code>sw.js</code>, el manifiesto y el HTML</td>
+</tr>
+</tbody>
+</table>
+<p><strong>El <em>service worker</em> es mínimo a propósito.</strong> ARVI es una aplicación local: el mismo backend sirve
+la interfaz y responde al chat, así que «funcionar sin conexión» no tiene sentido. El <em>service worker</em>
+solo hace dos cosas:</p>
+<ol>
+<li>Hace la aplicación instalable.</li>
+<li>Si el backend no responde, muestra una página que explica qué pasa, en lugar del error genérico
+   del navegador.</li>
+</ol>
+<p><strong>Nunca</strong> intercepta <code>/api</code>, <code>/ws</code> ni peticiones que no sean GET. Así no puede mostrar datos antiguos
+de la caché ni guardar respuestas con información personal.</p>
+<pre class="mermaid"><code>%% figura: Decisiones del service worker de ARVI para cada petición
+flowchart TD
+    A[Petición del navegador] --&gt; B{¿GET y mismo origen?}
+    B -- No --&gt; R[Red directa]
+    B -- Sí --&gt; C{¿/api o /ws?}
+    C -- Sí --&gt; R
+    C -- No --&gt; D{¿Navegación?}
+    D -- Sí --&gt; E[Red primero]
+    E -- Responde --&gt; F[Página real y refresco en segundo plano de offline.html]
+    E -- Falla --&gt; G[offline.html desde la caché]
+    D -- No --&gt; R</code></pre>
+<p>El registro solo se hace en la compilación de producción (<code>import.meta.env.PROD</code>), para no interferir
+con la recarga en caliente de Vite durante el desarrollo.</p>
+<h2 id="153-pruebas">15.3 Pruebas<a class="headerlink" href="#153-pruebas" title="Permanent link">&para;</a></h2>
+<p>La prueba <code>scripts/e2e/pwa.py</code> usa Chromium con un perfil persistente y dos fases:</p>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Comprobación</th>
+<th>Resultado (2026-11-12)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Con servidor</td>
+<td>Manifiesto <code>application/manifest+json</code>; <code>sw.js</code> y HTML con <code>no-cache</code></td>
+<td>Correcto</td>
+</tr>
+<tr>
+<td>Con servidor</td>
+<td><em>Service worker</em> activo con ámbito <code>/</code></td>
+<td>Correcto</td>
+</tr>
+<tr>
+<td>Con servidor</td>
+<td>Errores de instalabilidad que devuelve Chromium (<code>Page.getInstallabilityErrors</code>)</td>
+<td><strong>Ninguno</strong> (instalable)</td>
+</tr>
+<tr>
+<td>Con servidor</td>
+<td>Errores del manifiesto y de la consola</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>Sin servidor (detenido de verdad, sin nada escuchando en el puerto 8765)</td>
+<td>La navegación muestra «ARVI · sin conexión»</td>
+<td>Correcto</td>
+</tr>
+<tr>
+<td>Sin servidor</td>
+<td>La página servida es la versión actual, no una copia antigua (INC-018)</td>
+<td>Correcto</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Pantalla de acceso servida como PWA instalable" src="../../capturas/fase-8/2026-11-12_pwa-acceso.png" /></p>
+<p><img alt="Página sin conexión que muestra el service worker con el backend detenido" src="../../capturas/fase-8/2026-11-12_pwa-sin-servidor.png" /></p>
+<p><strong>Instalar ARVI en Windows:</strong> con el backend en marcha, abrir <code>http://127.0.0.1:8765</code> en Edge o
+Chrome y elegir <em>Instalar ARVI</em> (icono de la barra de direcciones o menú → <em>Aplicaciones</em>).
+[PENDIENTE] Captura de la aplicación instalada en el equipo del alumno: la prueba automática usa un
+navegador sin interfaz, que no muestra la ventana de instalación.</p>
+<h2 id="154-aplicacion-de-escritorio-con-tauri-2">15.4 Aplicación de escritorio con Tauri 2<a class="headerlink" href="#154-aplicacion-de-escritorio-con-tauri-2" title="Permanent link">&para;</a></h2>
+<p><code>frontend/src-tauri/</code> (Rust, Tauri 2.12) contiene un <strong>envoltorio fino</strong>: una ventana nativa con
+WebView2 que carga la misma interfaz que sirve el backend (<code>http://127.0.0.1:8765</code>). No duplica
+ninguna lógica y añade lo que una PWA no puede hacer:</p>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Cómo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arranca el backend si no está en marcha</td>
+<td>Comprueba el puerto 8765; si nadie escucha, lanza <code>uv run --no-sync arvi-server</code> sin consola y espera hasta 45 s</td>
+</tr>
+<tr>
+<td>Lo detiene al salir, solo si lo arrancó ella</td>
+<td><code>taskkill /T</code> sobre el árbol de procesos (<code>uv</code> lanza Python como hijo)</td>
+</tr>
+<tr>
+<td>Icono en la bandeja</td>
+<td>Clic izquierdo: mostrar. Menú: «Mostrar ARVI» y «Salir de ARVI»</td>
+</tr>
+<tr>
+<td>Cerrar oculta</td>
+<td>La ventana se oculta en la bandeja y ARVI sigue disponible</td>
+</tr>
+<tr>
+<td>Instancia única</td>
+<td>Plugin oficial <code>single-instance</code>: abrir ARVI otra vez muestra la ventana existente</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Seguridad.</strong> La ventana carga una URL externa (aunque sea local) y <strong>no se le concede ninguna
+<em>capability</em></strong>, así que la página no puede usar las API nativas de Tauri (archivos, procesos…). El
+backend sigue siendo el único que decide qué se ejecuta. La ruta del repositorio se fija al compilar
+y se puede cambiar con la variable <code>ARVI_REPO</code>.</p>
+<p><strong>Compilación:</strong> <code>npm run desktop:build</code> en <code>frontend/</code>. La primera compilación tardó 2 min 41 s. El
+resultado es <code>arvi-desktop.exe</code> (3,1 MB) y el instalador NSIS <code>ARVI_0.1.0_x64-setup.exe</code> (1,2 MB).</p>
+<p><strong>Pruebas</strong> (<code>scripts/e2e/tauri_escritorio.ps1</code>, REAL):</p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Resultado (2026-11-12)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend ya en marcha (P-034)</td>
+<td>Ventana en 0,3 s; no se arranca otro backend; único hijo <code>msedgewebview2.exe</code>; 23 MB de RAM</td>
+</tr>
+<tr>
+<td>Cerrar la ventana (P-034)</td>
+<td>Se oculta y el proceso sigue vivo</td>
+</tr>
+<tr>
+<td>Abrir ARVI otra vez (P-034)</td>
+<td>La segunda instancia termina y reaparece la ventana original (1 instancia)</td>
+</tr>
+<tr>
+<td>Backend detenido (P-035)</td>
+<td>La aplicación lanza <code>uv</code>, el backend responde y la ventana aparece en 2,8 s</td>
+</tr>
+</tbody>
+</table>
+<p>Las capturas se hacen con <code>PrintWindow</code> sobre la ventana de ARVI (<code>scripts/e2e/capturar_ventana.ps1</code>),
+así que en la imagen no puede aparecer ninguna otra ventana del escritorio.</p>
+<p><img alt="Ventana nativa de ARVI con Tauri 2 (WebView2)" src="../../capturas/fase-4b/2026-11-12_tauri-ventana.png" /></p>
+<p>[PENDIENTE] Comprobar a mano «Salir de ARVI» desde la bandeja: la prueba automática no puede pulsar
+el menú de la bandeja, así que cierra el proceso a la fuerza y limpia el backend ella misma.</p>
+<h2 id="155-acceso-desde-el-movil">15.5 Acceso desde el móvil<a class="headerlink" href="#155-acceso-desde-el-movil" title="Permanent link">&para;</a></h2>
+<p>Un navegador solo permite instalar una PWA y usar el micrófono en un <strong>contexto seguro</strong>: HTTPS, o
+<code>127.0.0.1</code>/<code>localhost</code> en el propio equipo. Por eso, en el móvil hace falta HTTPS. El diseño previsto:</p>
+<ul>
+<li><strong>Tailscale Serve</strong> publica ARVI con HTTPS y un certificado válido <strong>solo dentro de la red privada
+  del alumno</strong> (<em>tailnet</em>), no en Internet. El backend sigue escuchando en <code>127.0.0.1</code> (capítulo 17:
+  <code>ARVI_ALLOW_REMOTE</code> no hace falta, porque Tailscale hace de proxy local).</li>
+<li>El token de ARVI sigue siendo obligatorio como segunda capa.</li>
+<li>Pulsar para hablar como experiencia principal.</li>
+</ul>
+<p>Los navegadores móviles no permiten mantener el micrófono abierto en segundo plano ni con la pantalla
+bloqueada, así que la PWA no ofrecerá escucha permanente en el móvil.</p>
+<h2 id="156-estado">15.6 Estado<a class="headerlink" href="#156-estado" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PWA instalable en el escritorio</td>
+<td><strong>Hecho</strong> (P-029, P-030)</td>
+</tr>
+<tr>
+<td>Aplicación Tauri e instalador</td>
+<td><strong>Hecho</strong> (P-034, P-035)</td>
+</tr>
+<tr>
+<td>Tailscale</td>
+<td>Instalado (1.104.6) y <strong>Tailscale Serve activo</strong>: <code>https://servidor.&lt;tailnet&gt;.ts.net</code> → <code>127.0.0.1:8765</code>, solo dentro de la <em>tailnet</em> (nunca <code>funnel</code>). Comprobado en la auditoría final (P-057): salud por HTTPS y 401 sin token. [PENDIENTE] Instalar la PWA en el teléfono del alumno</td>
+</tr>
+<tr>
+<td>Pruebas desde el móvil</td>
+<td>[PENDIENTE] Dependen del paso anterior</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../14-interfaz/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 14. Interfaz gráfica y animaciones">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                14. Interfaz gráfica y animaciones
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../16-integraciones/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 16. Integraciones externas">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                16. Integraciones externas
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
