@@ -176,7 +176,7 @@ def process(route, body):
                 if m:
                     ch = next((r for r, l in MEMORIA if l.startswith(m.group(1) + ". ")), None)
                     if ch:
-                        a = soup.new_tag("a", href="../" + ch.split("/")[-1] + "/")
+                        a = soup.new_tag("a", href=ch.split("/")[-1] + "/")
                         a["class"] = "row-link"; a.string = td.get_text(strip=True)
                         td.clear(); td.append(a)
         for td in t.find_all("td"):
