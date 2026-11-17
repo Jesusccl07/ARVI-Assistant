@@ -1,0 +1,3605 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Asistente de Respuesta por Voz e Integraciones — Proyecto Final de Grado Superior">
+      
+      
+      
+      
+        <link rel="prev" href="../memoria-academica/anexo-uso-ia/">
+      
+      
+        <link rel="next" href="../01-analisis-entorno/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../web/assets/arvi-logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Diario de desarrollo - ARVI — Documentación técnica</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Archivo";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../web/stylesheets/arvi.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diario-de-desarrollo-de-arvi" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="ARVI — Documentación técnica" class="md-header__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
+      
+  <img src="../web/assets/arvi-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ARVI — Documentación técnica
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Diario de desarrollo
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ARVI — Documentación técnica" class="md-nav__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
+      
+  <img src="../web/assets/arvi-logo.svg" alt="logo">
+
+    </a>
+    ARVI — Documentación técnica
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../memoria-academica/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memoria académica
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Memoria académica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/01-introduccion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introducción y motivación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/02-objetivos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Objetivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/03-requisitos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Análisis de requisitos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/04-tecnologias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Estudio de tecnologías
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/05-diseno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Diseño y arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/06-planificacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Planificación del proyecto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/07-entorno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Preparación del entorno
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/08-backend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Desarrollo del backend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/09-openai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Integración con OpenAI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/10-voz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Sistema de voz
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/11-memoria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Memoria persistente con Obsidian
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/12-n8n/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Integración con n8n
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/13-herramientas-permisos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13. Sistema de herramientas y permisos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/14-interfaz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. Interfaz gráfica y animaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/15-movil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/16-integraciones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    16. Integraciones externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/17-seguridad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    17. Seguridad y privacidad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/18-pruebas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18. Pruebas y resultados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/19-incidencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    19. Incidencias y soluciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/20-presupuesto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    20. Presupuesto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/21-conclusiones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    21. Conclusiones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/22-mejoras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    22. Posibles mejoras futuras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/23-bibliografia-anexos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    23. Bibliografía y anexos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/24-domotica/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    24. Ampliación: hogar inteligente con Home Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/25-control-remoto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    25. Ampliación: control de varios ordenadores (ARVI Remote)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/26-aprendizaje-voz/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    26. Ampliación: aprendizaje continuo de la voz («Mi voz»)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memoria-academica/anexo-uso-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Anexo — Registro del uso de herramientas de IA en el desarrollo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Desarrollo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Desarrollo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de desarrollo
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diario de desarrollo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos-de-la-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de la sesión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tareas-realizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tareas realizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#herramientas-instaladas-con-autorizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herramientas instaladas (con autorización)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problemas-encontrados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas encontrados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones-tomadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisiones tomadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-continuacion-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (continuación) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (continuación) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#archivos-principales-creados-o-modificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archivos principales creados o modificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tecnologias-utilizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tecnologías utilizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problemas-encontrados_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas encontrados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruebas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pruebas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capturas-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capturas disponibles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estado-de-las-funcionalidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estado de las funcionalidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proximas-tareas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximas tareas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-cambio-de-modelo-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (cambio de modelo) — 2026-11-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-primera-prueba-real-con-openai-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (primera prueba real con OpenAI) — 2026-11-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-3-voz-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 3: voz) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 3: voz) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisiones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-4-interfaz-con-esfera-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 4: interfaz con esfera) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 4: interfaz con esfera) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-6-integracion-con-n8n-sin-clave-api-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 6: integración con n8n, sin clave API) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 6: integración con n8n, sin clave API) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado-primera-parte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado (primera parte)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prueba-real-con-la-clave-del-alumno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prueba real (con la clave del alumno)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-pruebas-de-seguridad-owasp-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (pruebas de seguridad OWASP) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (pruebas de seguridad OWASP) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-4b-pwa-instalable-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 4b → PWA instalable) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 4b → PWA instalable) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-7-tauri-y-tailscale-va-a-todo-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 7, Tauri y Tailscale: «va a todo») — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 7, Tauri y Tailscale: «va a todo») — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prueba-real-de-github-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prueba real de GitHub (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fases-9-y-10-consolidacion-y-entrega-todo-lo-pendiente-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fases 9 y 10: consolidación y entrega, «todo lo pendiente») — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fases 9 y 10: consolidación y entrega, «todo lo pendiente») — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-auditoria-final-hogar-inteligente-varios-pcs-mi-voz-y-rediseno-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (auditoría final, hogar inteligente, varios PCs, «Mi voz» y rediseño) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (auditoría final, hogar inteligente, varios PCs, «Mi voz» y rediseño) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicacion-de-la-web-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicación de la web (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-libre-en-el-pc-de-edicion-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminal libre en el PC de edición (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-13-voz-elevenlabs-y-google-en-lectura-y-escritura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-13 — Voz ElevenLabs y Google en lectura y escritura
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-17-rediseno-visual-de-la-interfaz-el-logotipo-y-la-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-17 — Rediseño visual de la interfaz, el logotipo y la web
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-analisis-entorno/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Análisis del entorno
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arquitectura/decisiones-tecnologicas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decisiones tecnológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../desarrollo/HERRAMIENTAS_CLAUDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Herramientas de Claude Code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pruebas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Pruebas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pruebas/registro-pruebas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registro de pruebas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pruebas/incidencias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Incidencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capturas/figuras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capturas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gestión
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Gestión
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gestion/presupuesto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Presupuesto y licencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../telefonia/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Investigación
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Investigación
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos-de-la-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de la sesión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tareas-realizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tareas realizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#herramientas-instaladas-con-autorizacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herramientas instaladas (con autorización)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problemas-encontrados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas encontrados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones-tomadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisiones tomadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-continuacion-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (continuación) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (continuación) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#archivos-principales-creados-o-modificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archivos principales creados o modificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tecnologias-utilizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tecnologías utilizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problemas-encontrados_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas encontrados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pruebas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pruebas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capturas-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capturas disponibles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estado-de-las-funcionalidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estado de las funcionalidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proximas-tareas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximas tareas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-cambio-de-modelo-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (cambio de modelo) — 2026-11-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-primera-prueba-real-con-openai-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (primera prueba real con OpenAI) — 2026-11-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-3-voz-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 3: voz) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 3: voz) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objetivos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisiones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-4-interfaz-con-esfera-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 4: interfaz con esfera) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 4: interfaz con esfera) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-6-integracion-con-n8n-sin-clave-api-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 6: integración con n8n, sin clave API) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 6: integración con n8n, sin clave API) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado-primera-parte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado (primera parte)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prueba-real-con-la-clave-del-alumno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prueba real (con la clave del alumno)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-pruebas-de-seguridad-owasp-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (pruebas de seguridad OWASP) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (pruebas de seguridad OWASP) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-4b-pwa-instalable-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 4b → PWA instalable) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 4b → PWA instalable) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fase-7-tauri-y-tailscale-va-a-todo-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fase 7, Tauri y Tailscale: «va a todo») — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fase 7, Tauri y Tailscale: «va a todo») — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prueba-real-de-github-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prueba real de GitHub (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-fases-9-y-10-consolidacion-y-entrega-todo-lo-pendiente-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (Fases 9 y 10: consolidación y entrega, «todo lo pendiente») — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (Fases 9 y 10: consolidación y entrega, «todo lo pendiente») — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesion-1-auditoria-final-hogar-inteligente-varios-pcs-mi-voz-y-rediseno-2026-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesión 1 (auditoría final, hogar inteligente, varios PCs, «Mi voz» y rediseño) — 2026-11-12
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sesión 1 (auditoría final, hogar inteligente, varios PCs, «Mi voz» y rediseño) — 2026-11-12">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trabajo-realizado_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trabajo realizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultado_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicacion-de-la-web-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicación de la web (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminal-libre-en-el-pc-de-edicion-mismo-dia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminal libre en el PC de edición (mismo día)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-13-voz-elevenlabs-y-google-en-lectura-y-escritura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-13 — Voz ElevenLabs y Google en lectura y escritura
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026-11-17-rediseno-visual-de-la-interfaz-el-logotipo-y-la-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2026-11-17 — Rediseño visual de la interfaz, el logotipo y la web
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="diario-de-desarrollo-de-arvi">Diario de desarrollo de ARVI<a class="headerlink" href="#diario-de-desarrollo-de-arvi" title="Permanent link">&para;</a></h1>
+<p>Registro cronológico de cada sesión de trabajo. Cada entrada recoge solo actividades realmente
+realizadas y verificables. Las incidencias técnicas se detallan en
+<a href="../pruebas/incidencias/"><code>pruebas/incidencias.md</code></a> y las pruebas en
+<a href="../pruebas/registro-pruebas/"><code>pruebas/registro-pruebas.md</code></a>.</p>
+<p><strong>Convención:</strong> el desarrollo se realiza con asistencia de IA (Claude Code, modelo Claude Opus 5.5),
+bajo dirección y supervisión del alumno. Ver <a href="../memoria-academica/anexo-uso-ia/"><code>memoria-academica/anexo-uso-ia.md</code></a>.</p>
+<hr />
+<h2 id="sesion-1-2026-11-12">Sesión 1 — 2026-11-12<a class="headerlink" href="#sesion-1-2026-11-12" title="Permanent link">&para;</a></h2>
+<p><strong>Fase:</strong> 0 (Preparación) → inicio de la Fase 1 (Núcleo funcional).</p>
+<h3 id="objetivos-de-la-sesion">Objetivos de la sesión<a class="headerlink" href="#objetivos-de-la-sesion" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Reconocer el entorno del PC sin modificarlo.</li>
+<li>Reutilizar la infraestructura existente (Obsidian, n8n en Docker).</li>
+<li>Instalar las herramientas imprescindibles con autorización.</li>
+<li>Verificar VoiceStudio y su documentación oficial.</li>
+<li>Crear la estructura del repositorio y el sistema de documentación.</li>
+<li>Empezar el núcleo del backend.</li>
+</ul>
+<h3 id="tareas-realizadas">Tareas realizadas<a class="headerlink" href="#tareas-realizadas" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Reconocimiento del entorno</strong> con comandos de solo lectura (<code>Get-CimInstance</code>, <code>Get-Command</code>,
+   <code>docker inspect</code>, <code>Get-NetTCPConnection</code>). Resultado en <a href="../01-analisis-entorno/"><code>01-analisis-entorno.md</code></a>.</li>
+<li><strong>Detección de Obsidian</strong> (v1.15.0) y de la bóveda existente <code>Documents\Obsidian Vault</code>, leyendo
+   únicamente <code>%APPDATA%\obsidian\obsidian.json</code>. No se ha abierto ni modificado la bóveda.</li>
+<li><strong>Inspección del contenedor <code>n8n-local</code></strong> sin mostrar los valores de las variables de entorno.
+   Se encontraba detenido; se arrancó con <code>docker start n8n-local</code> <strong>con autorización del usuario</strong>.
+   Verificación: <code>GET /healthz</code> → <code>200 {"status":"ok"}</code>.</li>
+<li><strong>Hallazgos de seguridad</strong> en la instalación de n8n (túnel público <code>trycloudflare.com</code> y puerto
+   publicado en <code>0.0.0.0</code>). Documentados, no modificados (requiere decisión del usuario).</li>
+<li><strong>Instalación autorizada de herramientas</strong> con <code>winget</code> (ver tabla).</li>
+<li><strong>Verificación de VoiceStudio</strong>: lectura del README, <code>docs/speech-platform.md</code>, <code>docs/api-auth.md</code>,
+   <code>docs/mcp.md</code>, <code>docs/generation-parameters.md</code> y <code>docs/licensing/model-inventory.md</code> del
+   repositorio oficial.</li>
+<li><strong>Revisión manual del instalador</strong> <code>install.ps1</code> de VoiceStudio (148 líneas, SHA-256 del script
+   <code>D0B29441…F754F</code>) antes de ejecutarlo; se lanzó en modo silencioso con autorización.</li>
+<li><strong>Consulta de documentación oficial</strong>: modelos de OpenAI (developers.openai.com) y autenticación
+   de la API pública de n8n (docs.n8n.io).</li>
+<li>Creación de la estructura del repositorio, del sistema de documentación y del esqueleto del backend.</li>
+</ol>
+<h3 id="herramientas-instaladas-con-autorizacion">Herramientas instaladas (con autorización)<a class="headerlink" href="#herramientas-instaladas-con-autorizacion" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Paquete winget</th>
+<th>Versión</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python.Python.3.12</td>
+<td>3.12.10</td>
+<td>Instalado (ámbito usuario)</td>
+</tr>
+<tr>
+<td>astral-sh.uv</td>
+<td>0.13.7</td>
+<td>Instalado</td>
+</tr>
+<tr>
+<td>Git.Git</td>
+<td>2.56.0.4</td>
+<td>Instalado (el instalador pidió elevación UAC)</td>
+</tr>
+<tr>
+<td>GitHub.cli</td>
+<td>2.103.3</td>
+<td>Instalado</td>
+</tr>
+<tr>
+<td>OpenJS.NodeJS.LTS</td>
+<td>24.20.0</td>
+<td>Instalado (LTS vigente; se había previsto la 22)</td>
+</tr>
+<tr>
+<td>Rustlang.Rustup</td>
+<td>—</td>
+<td><strong>Falló</strong> con <code>--scope user</code> → reintentado sin ámbito (ver INC-001)</td>
+</tr>
+<tr>
+<td>VoiceStudio</td>
+<td>release más reciente</td>
+<td>Instalación en curso al cierre de esta entrada</td>
+</tr>
+</tbody>
+</table>
+<h3 id="problemas-encontrados">Problemas encontrados<a class="headerlink" href="#problemas-encontrados" title="Permanent link">&para;</a></h3>
+<ul>
+<li>INC-001: rustup no ofrece instalador de ámbito usuario en winget.</li>
+<li>INC-002: <code>python</code> apuntaba al alias de la Microsoft Store (0 bytes), no a un intérprete real.</li>
+<li>INC-003: la ruta REST de síntesis de VoiceStudio no aparece en la documentación pública.</li>
+</ul>
+<h3 id="decisiones-tomadas">Decisiones tomadas<a class="headerlink" href="#decisiones-tomadas" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Arquitectura híbrida nativa en Windows (ver <a href="../arquitectura/decisiones-tecnologicas/"><code>arquitectura/decisiones-tecnologicas.md</code></a>).</li>
+<li>Bóveda de memoria en <code>%USERPROFILE%\Documents\ARVI-Memory</code> (elegida por el usuario).</li>
+<li>Modelo LLM por defecto <code>gpt-6.1-terra</code>, configurable.</li>
+</ul>
+<h3 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h3>
+<p>Entorno preparado y documentado. Pendiente al cierre: ver <code>PROJECT_STATE.md</code>.</p>
+<hr />
+<h2 id="sesion-1-continuacion-2026-11-12">Sesión 1 (continuación) — 2026-11-12<a class="headerlink" href="#sesion-1-continuacion-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="objetivos">Objetivos<a class="headerlink" href="#objetivos" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Implementar y probar el núcleo (Fases 1, 2 y 5).</li>
+<li>Crear el sistema documental pedido: memoria en Word, web MkDocs, capturas reales.</li>
+<li>Investigar el asistente telefónico (sin contratar ni activar nada).</li>
+<li>Configurar notificaciones de escritorio.</li>
+</ul>
+<h3 id="trabajo-realizado">Trabajo realizado<a class="headerlink" href="#trabajo-realizado" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Backend</strong> (<code>backend/arvi/</code>): configuración, SQLite, <code>LLMProvider</code> + OpenAI + proveedor falso,
+   memoria Obsidian con FTS5, permisos de 4 niveles, herramientas, agente y API REST/WebSocket.</li>
+<li><strong>Pruebas</strong>: 40 pruebas automatizadas superadas (P-001) y pruebas reales P-003 a P-006.</li>
+<li><strong>Bóveda real</strong> <code>Documents\ARVI-Memory</code> creada y registrada en Obsidian a petición del usuario:
+   copia de seguridad de <code>%APPDATA%\obsidian\obsidian.json</code>, cierre ordenado de Obsidian y alta solo
+   de la nueva bóveda (la bóveda personal no se modificó).</li>
+<li><strong>Grafo de Obsidian</strong> con notas índice por categoría y colores por carpeta (petición del usuario).</li>
+<li><strong>Documentación</strong>: 23 capítulos, fuentes reutilizables en <code>docs/_fuentes/</code>, <code>mkdocs.yml</code> con
+   identidad visual de ARVI, Word generado y verificado, capturas F-001 y F-002.</li>
+<li><strong>Investigación telefónica</strong> (<code>docs/telefonia/</code>): O2, Twilio, OpenAI Realtime SIP, ElevenLabs y
+   módem LTE local.</li>
+<li><strong>Notificaciones</strong>: <code>infrastructure/scripts/notify.ps1</code> + hooks <code>Notification</code> y <code>SessionEnd</code>.</li>
+<li><code>CLAUDE.md</code>, <code>PROJECT_STATE.md</code>, <code>README.md</code>, <code>CHANGELOG.md</code> y CI de GitHub Actions.</li>
+</ol>
+<h3 id="archivos-principales-creados-o-modificados">Archivos principales creados o modificados<a class="headerlink" href="#archivos-principales-creados-o-modificados" title="Permanent link">&para;</a></h3>
+<p><code>backend/arvi/**</code>, <code>tests/**</code>, <code>config/*.yaml</code>, <code>pyproject.toml</code>, <code>mkdocs.yml</code>, <code>docs/**</code>,
+<code>scripts/docs/*.py</code>, <code>infrastructure/scripts/notify.ps1</code>, <code>.github/workflows/ci.yml</code>,
+<code>.claude/settings.local.json</code> (hooks).</p>
+<h3 id="tecnologias-utilizadas">Tecnologías utilizadas<a class="headerlink" href="#tecnologias-utilizadas" title="Permanent link">&para;</a></h3>
+<p>Python 3.12, uv, FastAPI, Pydantic, SDK <code>openai</code> 3.49.0, SQLite FTS5, PyYAML, psutil, pytest, Ruff,
+Material for MkDocs, Pandoc (<code>pypandoc-binary</code>, 3.9), python-docx, Playwright + Chromium, Mermaid.</p>
+<h3 id="problemas-encontrados_1">Problemas encontrados<a class="headerlink" href="#problemas-encontrados_1" title="Permanent link">&para;</a></h3>
+<p>INC-004 (422 en FastAPI), INC-005 (recuento del reindexado), INC-006 (falso positivo al reiniciar),
+INC-007 (sobrescritura de un script de otra sesión), INC-008 (página borrada al reorganizar).
+Además: Obsidian mostró "Error" al abrir una bóveda no registrada con <code>obsidian://open?path=</code>; se
+resolvió registrándola (punto 3).</p>
+<h3 id="pruebas">Pruebas<a class="headerlink" href="#pruebas" title="Permanent link">&para;</a></h3>
+<p>P-001 a P-006. Construcción estricta de la web sin avisos. Word verificado: 23 capítulos,
+445 párrafos, 41 tablas, 11 imágenes, índice presente.</p>
+<h3 id="capturas-disponibles">Capturas disponibles<a class="headerlink" href="#capturas-disponibles" title="Permanent link">&para;</a></h3>
+<p>F-001 (OpenAPI) y F-002 (<code>/api/health</code>) en <code>docs/capturas/fase-1/</code>.</p>
+<h3 id="estado-de-las-funcionalidades">Estado de las funcionalidades<a class="headerlink" href="#estado-de-las-funcionalidades" title="Permanent link">&para;</a></h3>
+<p>Ver <code>PROJECT_STATE.md</code>.</p>
+<h3 id="proximas-tareas">Próximas tareas<a class="headerlink" href="#proximas-tareas" title="Permanent link">&para;</a></h3>
+<p>Prueba real con OpenAI (requiere clave), Fase 3 (voz), Fase 6 (n8n, requiere clave), Fase 4 (interfaz).</p>
+<hr />
+<h2 id="sesion-1-cambio-de-modelo-2026-11-12">Sesión 1 (cambio de modelo) — 2026-11-12<a class="headerlink" href="#sesion-1-cambio-de-modelo-2026-11-12" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Decisión del alumno:</strong> usar de momento el modelo de OpenAI más barato.</li>
+<li>Consultada la página oficial de precios: el vigente más barato con <em>function calling</em> y Responses
+  API es <code>gpt-6-luna</code> (0,10 $/0,50 $ por millón de tokens). <code>gpt-5-nano</code> es más barato, pero OpenAI lo
+  marca como obsoleto, así que se descarta.</li>
+<li>Cambiado el valor por defecto en <code>backend/arvi/config.py</code>, <code>.env.example</code> y <code>.env</code> local
+  (<code>ARVI_LLM_MODEL</code>), y actualizados el capítulo 9, ADR-003, el presupuesto y el anexo de IA.</li>
+<li>Verificación: 40/40 pruebas superadas; enlaces de la documentación correctos.</li>
+</ul>
+<h2 id="sesion-1-primera-prueba-real-con-openai-2026-11-12">Sesión 1 (primera prueba real con OpenAI) — 2026-11-12<a class="headerlink" href="#sesion-1-primera-prueba-real-con-openai-2026-11-12" title="Permanent link">&para;</a></h2>
+<ul>
+<li>El alumno facilitó la clave de OpenAI; se guardó solo en <code>.env</code> (comprobado que Git lo ignora).</li>
+<li>Al guardarla se detectó que la edición anterior de <code>.env</code> y <code>.env.example</code> con PowerShell había
+  dañado las tildes de los comentarios (doble codificación). Se corrigió (INC-010).</li>
+<li>Pruebas REALES P-007 a P-011: conversación con memoria, <code>memory_remember</code>, <code>system_info</code>,
+  confirmación de <code>memory_forget</code>, aprobación sin reutilización. Coste total ≈ 0,001 $.</li>
+<li>El dato de prueba «color favorito» se archivó al aprobar P-011, para no dejar información
+  inventada en la memoria activa.</li>
+<li>Criterios de aceptación 2, 5, 6 y 7: superados. <strong>Fase 1 cerrada.</strong></li>
+</ul>
+<hr />
+<h2 id="sesion-1-fase-3-voz-2026-11-12">Sesión 1 (Fase 3: voz) — 2026-11-12<a class="headerlink" href="#sesion-1-fase-3-voz-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="objetivos_1">Objetivos<a class="headerlink" href="#objetivos_1" title="Permanent link">&para;</a></h3>
+<p>Interfaces de voz, VoiceStudio como motor principal, OpenAI como respaldo y medición real.</p>
+<h3 id="trabajo-realizado_1">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Consultada la documentación oficial de OpenAI sobre audio: <code>gpt-transcribe</code> es el modelo de
+   transcripción recomendado; <code>gpt-4o-mini-tts</code> está obsoleto y deja de funcionar el 2027-01-06.</li>
+<li>Primer arranque de VoiceStudio. Descargó ~3,4 GB y cortó temporalmente otro servicio web del
+   alumno (INC-011). Se recuperó solo; se añadió la regla de avisar antes de descargas grandes.</li>
+<li>El alumno terminó la configuración de VoiceStudio. Antes de probar se comprobó que todos los
+   modelos estaban en disco (OmniVoice con su tokenizador, faster-whisper-base), para no provocar descargas.</li>
+<li>Descubierta la ruta REST <code>POST /v1/audio/speech</code> en el <code>openapi.json</code> real (resuelve INC-003).</li>
+<li>Implementado <code>backend/arvi/providers/voice/</code> (interfaces, VoiceStudio, OpenAI, respaldo, falsos)
+   y la API <code>/api/voice/{status,transcribe,speak,turn}</code>.</li>
+<li>Mediciones de latencia (<code>num_step</code> 16/8/4) y corrección de «ARVI» → «Arbito» con <code>prompt</code> (INC-012).</li>
+<li>Pruebas REALES P-012 a P-016 y batería automática P-017 (66/66).</li>
+</ol>
+<h3 id="decisiones">Decisiones<a class="headerlink" href="#decisiones" title="Permanent link">&para;</a></h3>
+<ul>
+<li>REST en lugar de MCP para la síntesis (más simple y estándar).</li>
+<li><code>ARVI_VOICESTUDIO_STEPS=8</code> por defecto, configurable; el alumno decidirá con las muestras de audio.</li>
+<li>VoiceStudio solo por <em>loopback</em>: ARVI rechaza cualquier URL remota.</li>
+</ul>
+<h3 id="resultado_1">Resultado<a class="headerlink" href="#resultado_1" title="Permanent link">&para;</a></h3>
+<p>Fase 3 completada en el backend. Quedan para la Fase 4: micrófono, reproducción con interrupción,
+amplitud para la esfera y síntesis frase a frase.</p>
+<hr />
+<h2 id="sesion-1-fase-4-interfaz-con-esfera-2026-11-12">Sesión 1 (Fase 4: interfaz con esfera) — 2026-11-12<a class="headerlink" href="#sesion-1-fase-4-interfaz-con-esfera-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_2">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Frontend en <code>frontend/</code> con React 19, TypeScript 7, Vite 8, Tailwind 4 y Three.js 0.187.
+   <code>npm install</code>: 69 MB, sin incidencias en el túnel del otro servicio web del alumno.</li>
+<li>Esfera con 8 estados y amplitud de audio real. Chat por WebSocket, micrófono con corte por
+   silencio, voz frase a frase con interrupción, panel de permisos, memoria y estado.</li>
+<li>El backend sirve <code>frontend/dist</code> en <code>/</code>.</li>
+<li>Prueba extremo a extremo con Playwright y micrófono simulado (<code>scripts/e2e/interfaz_voz.py</code>).</li>
+<li>Incidencias:</li>
+<li>INC-013: página en blanco por un <code>useEffect</code> que devolvía una Promise.</li>
+<li>INC-014: una ejecución pasó solo con el respaldo porque VoiceStudio estaba cerrado. Se descartó
+     y la prueba ahora lo detecta.</li>
+<li>INC-015: VoiceStudio responde 429 a síntesis simultáneas. Se añadió una cola en el backend.</li>
+<li>Mediciones de la voz diseñada «ARVI» (el doble de lenta). El alumno eligió: voz por defecto en
+   calidad 4 y reconocimiento con OpenAI.</li>
+<li>Pruebas: P-019 (REAL, 0 respaldos), P-020 (10 de frontend), P-021 (67 de backend).</li>
+</ol>
+<h3 id="resultado_2">Resultado<a class="headerlink" href="#resultado_2" title="Permanent link">&para;</a></h3>
+<p>Fase 4 (interfaz web) completada. Queda la aplicación de escritorio con Tauri (Fase 4b) y la PWA
+(Fase 8).</p>
+<hr />
+<h2 id="sesion-1-fase-6-integracion-con-n8n-sin-clave-api-2026-11-12">Sesión 1 (Fase 6: integración con n8n, sin clave API) — 2026-11-12<a class="headerlink" href="#sesion-1-fase-6-integracion-con-n8n-sin-clave-api-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_3">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Se comprobó dentro del contenedor <code>n8n-local</code> (2.39.5, sin modificarlo) la especificación de la
+   API pública y los parámetros reales de los nodos Webhook 2.1, Code 2, HTTP Request 4.5 y Respond to
+   Webhook 1.5.</li>
+<li><code>N8nClient</code>: solo <em>loopback</em> y solo elementos con el prefijo «ARVI». Los webhooks llevan la
+   cabecera <code>X-ARVI-Token</code> y las respuestas se recortan.</li>
+<li>Catálogo <code>config/automations.yaml</code> con «ARVI · Eco» y «ARVI · Clima» (Open-Meteo, sin clave). Cada
+   entrada se convierte en una herramienta tipada <code>n8n_&lt;id&gt;</code> con nivel de permiso.</li>
+<li>Plantillas de los workflows y un aprovisionamiento idempotente (<code>scripts/n8n/provision.py</code>). Por
+   defecto solo simula y nunca muestra el token.</li>
+<li>Ruta <code>GET /api/automations</code>.</li>
+<li>INC-016: la primera ejecución de las pruebas mostró que los argumentos no declarados se aceptaban.
+   Corregido antes de usarse.</li>
+<li>Pruebas: P-022 (15 MOCK; batería completa 82/82, Ruff sin avisos) y P-023 (la simulación contra
+   el n8n real se detiene por falta de clave).</li>
+</ol>
+<h3 id="resultado-primera-parte">Resultado (primera parte)<a class="headerlink" href="#resultado-primera-parte" title="Permanent link">&para;</a></h3>
+<p>Fase 6 implementada y probada con MOCK, a falta de la clave de n8n.</p>
+<h3 id="prueba-real-con-la-clave-del-alumno">Prueba real (con la clave del alumno)<a class="headerlink" href="#prueba-real-con-la-clave-del-alumno" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>N8N_API_KEY</code> guardada solo en <code>.env</code>. La simulación mostró el plan; <code>--aplicar</code> creó la credencial y los
+   dos workflows ARVI y generó <code>N8N_WEBHOOK_SECRET</code> (P-024).</li>
+<li>Webhooks reales: eco, clima, ciudad inexistente y token incorrecto (403) (P-025).</li>
+<li>Conversación real desde la interfaz: OpenAI eligió <code>n8n_clima</code>; ejecución n8n n.º 72 <code>success</code>
+   (P-026, F-014). Todo funcionó a la primera.</li>
+</ol>
+<h3 id="resultado_3">Resultado<a class="headerlink" href="#resultado_3" title="Permanent link">&para;</a></h3>
+<p>Fase 6 completada.</p>
+<hr />
+<h2 id="sesion-1-pruebas-de-seguridad-owasp-2026-11-12">Sesión 1 (pruebas de seguridad OWASP) — 2026-11-12<a class="headerlink" href="#sesion-1-pruebas-de-seguridad-owasp-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_4">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_4" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Revisión de las defensas existentes por categorías OWASP (web, API y LLM).</li>
+<li>Hallazgo y corrección de INC-017: un dato podía cerrar su propio envoltorio. Se creó
+   <code>wrap_untrusted()</code> y lo usan los recuerdos y los resultados de n8n.</li>
+<li>Cabeceras de seguridad HTTP en todas las respuestas y <code>no-store</code> en <code>/api</code>.</li>
+<li>El servidor se niega a escuchar fuera de <code>127.0.0.1</code> salvo con <code>ARVI_ALLOW_REMOTE=true</code>.</li>
+<li><code>tests/security/test_owasp.py</code>, 27 pruebas. Destacan:</li>
+<li>el control de acceso recorre automáticamente todas las rutas (si se añade una, entra sola en
+     la prueba);</li>
+<li>una prueba del «peor caso» con el modelo engañado;</li>
+<li>un detector de secretos sobre el repositorio, con control de que detecta claves reales;</li>
+<li>una comprobación de que ningún valor real de <code>.env</code> aparece copiado en ningún archivo.</li>
+<li>Servidor real reiniciado: cabeceras presentes y la interfaz con n8n sigue funcionando (P-028).</li>
+</ol>
+<h3 id="resultado_4">Resultado<a class="headerlink" href="#resultado_4" title="Permanent link">&para;</a></h3>
+<p>Batería completa: 109/109 pruebas de backend y Ruff sin avisos. Criterios de aceptación 11, 12 y 14
+superados.</p>
+<hr />
+<h2 id="sesion-1-fase-4b-pwa-instalable-2026-11-12">Sesión 1 (Fase 4b → PWA instalable) — 2026-11-12<a class="headerlink" href="#sesion-1-fase-4b-pwa-instalable-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_5">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_5" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Comprobación previa de Tauri: Rust 1.99, Node 24 y WebView2 están instalados, pero falta el
+   compilador de C++ de Microsoft (2-3 GB). Se informó al alumno, que eligió <strong>PWA ahora y Tauri más
+   adelante</strong> (ADR-011), para no arriesgar su otro servicio web (INC-011).</li>
+<li>Manifiesto, iconos generados a partir del logotipo (script reproducible con Chromium), <em>service
+   worker</em> mínimo que nunca toca <code>/api</code> ni <code>/ws</code>, y página sin conexión.</li>
+<li>Backend: tipo MIME del manifiesto y <code>no-cache</code> para el HTML, <code>sw.js</code> y el manifiesto.</li>
+<li>Prueba <code>scripts/e2e/pwa.py</code> en dos fases, con el servidor detenido de verdad en la segunda.
+   Chromium no devuelve ningún error de instalabilidad.</li>
+<li>INC-018: la página sin conexión no se actualizaba. Corregido, y la prueba ahora comprueba qué
+   versión se sirve.</li>
+</ol>
+<h3 id="resultado_5">Resultado<a class="headerlink" href="#resultado_5" title="Permanent link">&para;</a></h3>
+<p>PWA instalable en el escritorio (P-029, P-030). Quedan pendientes Tauri (con autorización para la
+descarga), Tailscale y la prueba en el móvil.</p>
+<hr />
+<h2 id="sesion-1-fase-7-tauri-y-tailscale-va-a-todo-2026-11-12">Sesión 1 (Fase 7, Tauri y Tailscale: «va a todo») — 2026-11-12<a class="headerlink" href="#sesion-1-fase-7-tauri-y-tailscale-va-a-todo-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_6">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_6" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Tailscale 1.104.6</strong> instalado con winget. El alumno inició sesión; el equipo aparece en su red
+   privada. Al crearse el adaptador virtual, una de las cuatro conexiones del túnel del otro servicio
+   web se reconectó en 2 s, sin corte del servicio.</li>
+<li><strong>Visual Studio Build Tools 2022</strong> (C++ y Windows 11 SDK) instaladas en segundo plano en unos
+   4 minutos. Un monitor revisó el túnel del otro servicio cada minuto durante una hora: 0 avisos
+   (P-033).</li>
+<li><strong>Fase 7:</strong></li>
+<li>GitHub: <em>token</em> de grano fino; lectura, y creación de <em>issues</em> solo en repositorios propios.</li>
+<li>Google: OAuth de escritorio con PKCE y servidor temporal en <code>127.0.0.1</code>, comprobado en la
+     documentación oficial; caducidad de 7 días en modo «Testing».</li>
+<li><em>Refresh token</em> cifrado con DPAPI (ADR-012).</li>
+<li>7 herramientas, con todo el contenido externo envuelto como dato.</li>
+<li>API e interfaz (<em>Estado → Integraciones</em>); 20 pruebas (P-031).</li>
+<li><strong>Tauri 2.12:</strong> envoltorio de 3,1 MB que arranca el backend si hace falta, con icono en la bandeja,
+   cerrar para ocultar e instancia única. Pruebas reales P-034 y P-035, e instalador NSIS de 1,2 MB.</li>
+<li>Durante la prueba de «cerrar oculta» se vio que abrir ARVI de nuevo habría creado una <strong>segunda
+   instancia</strong>. Se añadió el plugin oficial <code>single-instance</code> antes de darlo por terminado.</li>
+<li><code>tailscale serve</code> lo bloqueó el sistema de permisos de Claude Code: publicar un servicio en la red
+   lo decide el alumno. Queda el comando preparado.</li>
+</ol>
+<h3 id="resultado_6">Resultado<a class="headerlink" href="#resultado_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fase 4b (Tauri) completada.</li>
+<li>Fase 7 implementada y probada con MOCK; falta la prueba REAL con las credenciales del alumno.</li>
+<li>Fase 8, parte 2: Tailscale instalado y conectado; falta activar <code>serve</code> y probar desde el móvil.</li>
+</ul>
+<h3 id="prueba-real-de-github-mismo-dia">Prueba real de GitHub (mismo día)<a class="headerlink" href="#prueba-real-de-github-mismo-dia" title="Permanent link">&para;</a></h3>
+<ol>
+<li>El alumno facilitó un <em>token</em> de grano fino. Se guardó solo en <code>.env</code>, sin mostrarlo, y se le
+   recomendó rotarlo porque se pegó en el chat.</li>
+<li>P-036: conectado; OpenAI usa <code>github_repos</code> correctamente.</li>
+<li>P-037: las notificaciones dan 403 con <em>tokens</em> de grano fino (limitación de GitHub). Se dejó de
+   registrar esa herramienta en ese caso y se añadió una prueba.</li>
+<li>P-038: desde la interfaz, consulta de <em>issues</em> y creación de un <em>issue</em> que se queda pendiente y se
+   rechaza. Comprobado en GitHub: no se publicó nada.</li>
+</ol>
+<h2 id="sesion-1-fases-9-y-10-consolidacion-y-entrega-todo-lo-pendiente-2026-11-12">Sesión 1 (Fases 9 y 10: consolidación y entrega, «todo lo pendiente») — 2026-11-12<a class="headerlink" href="#sesion-1-fases-9-y-10-consolidacion-y-entrega-todo-lo-pendiente-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_7">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_7" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Latencia (RNF-05):</strong> <code>scripts/e2e/latencia.py</code> mide por WebSocket. Mediana de 0,64 s hasta la
+   primera palabra (P-039).</li>
+<li><strong>Accesibilidad (RNF-06):</strong> axe-core 4.14.0 instalado como dependencia de desarrollo con versión
+   exacta, y <code>scripts/e2e/accesibilidad.py</code>. Dio 0 infracciones WCAG 2.2 A/AA en las dos pantallas;
+   el teclado y el movimiento reducido también son correctos (P-040).</li>
+<li><strong>Dependencias:</strong> <code>pip-audit</code>, <code>npm audit</code> y <code>cargo audit</code>, con 0 vulnerabilidades, añadidas a la
+   CI (P-041). Al terminar de compilar <code>cargo-audit</code>, el túnel del otro servicio web del alumno se
+   cortó 13 s y se recuperó solo (INC-019). Desde entonces, los procesos pesados se lanzan con
+   prioridad baja.</li>
+<li><strong>Instalación reproducible:</strong> copia limpia del repositorio, sin secretos ni datos. Todo pasó en 73 s
+   con prioridad baja (P-042, criterio 13).</li>
+<li><strong>Respaldo de voz:</strong> según la documentación de OpenAI, <code>gpt-4o-mini-tts</code> se retira el 2027-01-06
+   y el sustituto es <code>gpt-realtime-2.1-mini</code> por la Realtime API. Se añadió un adaptador nuevo por
+   WebSocket, con 9 pruebas MOCK y una prueba REAL con transcripción: lee el texto literalmente,
+   incluso una frase con una orden incrustada (P-043).</li>
+<li><strong>Voz definitiva:</strong> el alumno pidió «USA LA VOZ DE DJ CLEMENT… Y QUE SIEMPRE RESPONDA ÉL».</li>
+<li>Configurado el perfil <code>16f3c993</code> de VoiceStudio.</li>
+<li>Nueva opción <code>ARVI_TTS_FALLBACK=false</code>, para que nunca se cambie a otra voz.</li>
+<li>4 pasos de síntesis.</li>
+<li>Funciona, pero tarda unos 35 s por frase (P-044, INC-020).</li>
+<li><strong>Documentación:</strong></li>
+<li>Actualizados los estados de los capítulos 2, 3, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16, 17 y 18.</li>
+<li>Redactados los capítulos 21 (conclusiones) y 22 (mejoras), la bibliografía (33 referencias) y
+     los anexos E (manuales) y F (glosario).</li>
+<li>Se descubrieron y corrigieron 4 filas del registro de pruebas que no se veían (INC-021).</li>
+</ol>
+<h3 id="resultado_7">Resultado<a class="headerlink" href="#resultado_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fase 9 completada (P-039 a P-044) y Fase 10 completada a falta de los datos que solo aporta el
+  alumno: portada, horas, valoración personal, credencial de Google, Tailscale y micrófono real.</li>
+<li>Batería final: 139 pruebas del backend y 10 del frontend superadas; Ruff, enlaces y MkDocs estricto
+  sin errores.</li>
+</ul>
+<h2 id="sesion-1-auditoria-final-hogar-inteligente-varios-pcs-mi-voz-y-rediseno-2026-11-12">Sesión 1 (auditoría final, hogar inteligente, varios PCs, «Mi voz» y rediseño) — 2026-11-12<a class="headerlink" href="#sesion-1-auditoria-final-hogar-inteligente-varios-pcs-mi-voz-y-rediseno-2026-11-12" title="Permanent link">&para;</a></h2>
+<h3 id="trabajo-realizado_8">Trabajo realizado<a class="headerlink" href="#trabajo-realizado_8" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Auditoría final</strong> del sistema en marcha: 14/14 comprobaciones (P-057). Tailscale Serve ya
+   publica ARVI por HTTPS solo dentro de la <em>tailnet</em>, y sin token se recibe un 401.</li>
+<li><strong>Identidad del alumno:</strong> a petición suya, 9 notas en la bóveda de ARVI (perfil, proyectos,
+   colaboradores y forma de trabajar). En una prueba real, «¿Quién soy yo?» se respondió con la nota
+   del perfil.</li>
+<li><strong>Fase 11, hogar inteligente</strong> (capítulo 24):</li>
+<li>Home Assistant 2026.11.1 en Docker (solo <code>127.0.0.1</code>) con la integración «demo»: el alumno no
+     tiene dispositivos y así se decidió.</li>
+<li>Política por dispositivo: cerraduras, alarmas, sirenas y válvulas bloqueadas; cámaras ocultas.</li>
+<li>Nombres en español y tres escenas.</li>
+<li>17 MOCK + 9 REAL (P-045, P-046; INC-022).</li>
+<li><strong>Fase 11, ARVI Remote</strong> (capítulo 25):</li>
+<li>Agente que se conecta hacia fuera por la <em>tailnet</em>, con doble lista blanca y sin terminal.</li>
+<li>Instalador visible y desinstalable.</li>
+<li>Workflow nuevo «ARVI · Coordinación de equipos» en n8n.</li>
+<li>PC-SECUNDARIO (el PC de edición) registrado.</li>
+<li>16 MOCK + 12 REAL con el agente real en ARVI-SERVER (P-047, P-048; INC-023, INC-027).</li>
+<li>La prueba desde el segundo PC físico queda <strong>[PENDIENTE]</strong> (P-054).</li>
+<li><strong>Fase 12, «Mi voz»</strong> (capítulo 26):</li>
+<li>Aprendizaje desactivado por defecto, consentimiento, indicador visible, pausa y borrado.</li>
+<li>Muestras cifradas con DPAPI y análisis en segundo plano.</li>
+<li>Perfiles candidatos por <strong>clonación por referencia</strong>: no es entrenamiento, y así se explica en
+     el capítulo.</li>
+<li>Evaluación objetiva: 9 MOCK + 10 REAL (P-049, P-050; INC-024, INC-025). El primer candidato
+     salió <strong>no apto</strong> y no se activó.</li>
+<li>Comparativa de velocidad con 2, 4 y 8 pasos (P-051).</li>
+<li>OmniVoice-GGUF no está disponible y no se descargó (INC-028).</li>
+<li><strong>Fase 13, rediseño «cristal oscuro»:</strong></li>
+<li>El alumno pidió rehacer toda la interfaz con el estilo glassmorphism en modo oscuro (referencias:
+     una imagen de la galería <em>Liquid Glass Design</em> y el repositorio <em>Glassy_DashBoard</em>, MIT). Se tomó
+     el estilo, no el código.</li>
+<li>Navegación lateral, indicadores con datos reales, barra inferior en el móvil y el mismo tema en
+     la web de documentación.</li>
+<li>Compilación correcta, Vitest 10/10, axe-core 0 infracciones y sin desbordamiento horizontal
+     (P-052, INC-026).</li>
+<li>Se repitieron todas las capturas de los paneles con el diseño nuevo (F-022 a F-029).</li>
+</ol>
+<h3 id="resultado_8">Resultado<a class="headerlink" href="#resultado_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fases 11, 12 y 13 completadas: 181 pruebas del backend y 10 del frontend superadas; Ruff sin avisos.</li>
+<li>Pendiente del alumno: instalar el agente en el PC de edición, credencial de Google para Gmail y
+  Calendar, prueba con el micrófono real y dispositivos domóticos reales.</li>
+</ul>
+<h3 id="publicacion-de-la-web-mismo-dia">Publicación de la web (mismo día)<a class="headerlink" href="#publicacion-de-la-web-mismo-dia" title="Permanent link">&para;</a></h3>
+<ul>
+<li>El alumno autorizó publicar <strong>solo la web</strong> de documentación, con los datos personales ocultos.
+  El repositorio <code>Jesusccl07/ARVI-Assistant</code> resultó ser <strong>público</strong> (no privado, como se creía).</li>
+<li>Se creó <code>mkdocs.publicar.yml</code>, que excluye las evidencias en bruto y los audios de la voz clonada,
+  y <code>scripts/docs/publicar_web.py</code>, que sustituye el nombre de la <em>tailnet</em>, busca claves y valores
+  de <code>.env</code> y sube un único commit a la rama <code>gh-pages</code> desde un repositorio temporal. El código no
+  se ha subido.</li>
+<li>Resultado: <a href="https://jesusccl07.github.io/ARVI-Assistant/">https://jesusccl07.github.io/ARVI-Assistant/</a> (P-058).</li>
+</ul>
+<h3 id="terminal-libre-en-el-pc-de-edicion-mismo-dia">Terminal libre en el PC de edición (mismo día)<a class="headerlink" href="#terminal-libre-en-el-pc-de-edicion-mismo-dia" title="Permanent link">&para;</a></h3>
+<ul>
+<li>El alumno pidió control total del PC remoto. Se le explicó el riesgo de inyección de instrucciones
+  y se le dieron cuatro opciones; eligió la <strong>terminal libre sin aprobación</strong>.</li>
+<li>Se implementó la capacidad <code>terminal</code> (PowerShell) con estas salvaguardas: activación solo en el
+  <code>agente.yaml</code> del propio PC, paso a nivel 3 si la conversación leyó contenido de terceros, registro,
+  tiempo máximo y cierre del árbol de procesos (capítulo 25.9).</li>
+<li>Se actualizó la regla 6 de <code>CLAUDE.md</code> para recoger la decisión.</li>
+<li>Pruebas: 3 MOCK y 5 REAL (P-059), tras corregir el catálogo (INC-029). Total: 184 pruebas del
+  backend.</li>
+<li>El agente del PC de edición aún no se ha conectado: el servidor no ha recibido ningún intento desde
+  ese equipo, aunque sí lo usa el navegador de ese PC (P-054 sigue pendiente).</li>
+</ul>
+<h2 id="2026-11-13-voz-elevenlabs-y-google-en-lectura-y-escritura">2026-11-13 — Voz ElevenLabs y Google en lectura y escritura<a class="headerlink" href="#2026-11-13-voz-elevenlabs-y-google-en-lectura-y-escritura" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Voz</strong>: nuevo proveedor <code>providers/voice/elevenlabs.py</code> (httpx, PCM 24 kHz → WAV). Voz elegida por el
+  alumno: «Guillermo Brazález - Multilingual», modelo <code>eleven_v4_turbo</code>. Con el plan gratuito la API
+  devolvía 402 <code>paid_plan_required</code> (las voces de la biblioteca no se pueden usar por API); tras pasar al
+  plan Starter funciona en ~0,8 s por frase (VoiceStudio en CPU: ~20 s). VoiceStudio (DJ CLEMENT) queda
+  como respaldo (P-060).</li>
+<li><strong>Google</strong>: el primer cliente OAuth era de tipo «Aplicación web» → <code>Error 400: redirect_uri_mismatch</code>;
+  se creó uno de tipo «App de escritorio». Por decisión del alumno («mete todo en lectura y escritura»)
+  se amplían los permisos a <code>calendar</code>, <code>gmail.modify</code>, <code>drive</code>, <code>contacts</code> y <code>tasks</code>, con 24
+  herramientas. Las escrituras siguen pasando por <code>ToolRegistry</code>: enviar, borrar y sobrescribir piden
+  confirmación (nivel 2); compartir en Drive es nivel 3, y enviar correo sube a nivel 3 si la
+  conversación leyó contenido de terceros (P-061).</li>
+<li><strong>Móvil</strong>: el teléfono estaba desconectado de Tailscale; se aclaró el mensaje de <code>offline.html</code>.</li>
+</ul>
+<h2 id="2026-11-17-rediseno-visual-de-la-interfaz-el-logotipo-y-la-web">2026-11-17 — Rediseño visual de la interfaz, el logotipo y la web<a class="headerlink" href="#2026-11-17-rediseno-visual-de-la-interfaz-el-logotipo-y-la-web" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Petición del alumno</strong>: la interfaz y la web de GitHub «son una mierda»; se pidió mejorar el aspecto
+  de todo con las herramientas de diseño instaladas.</li>
+<li><strong>Dirección</strong>: sistema «catálogo» inspirado en las fichas de Factory Records. Tinta negra fría, hueso,
+  <strong>una sola señal amarilla</strong> de aviso, filetes finos, códigos de catálogo (<code>A·01</code>…) y tipografía
+  condensada para los titulares. Se descartaron el cristal esmerilado, las luces difuminadas y los
+  degradados. Se mantiene el estilo oscuro, que fue lo único que el alumno pidió conservar.</li>
+<li><strong>Señal de voz</strong>: la esfera 3D (Three.js) se sustituye por líneas apiladas dibujadas en un <code>canvas</code>
+  (<code>frontend/src/components/Signal.tsx</code>). Cada línea es una muestra real del nivel de audio (micrófono al
+  escuchar, voz de ARVI al hablar) y la pila es la historia de los últimos segundos. Con movimiento
+  reducido se muestra una imagen fija. La aplicación pesa 278 kB en lugar de 1,1 MB al dejar de cargar
+  Three.js (la dependencia sigue en <code>package.json</code>; quitarla requiere el visto bueno del alumno).</li>
+<li><strong>Interfaz</strong>: registro de conversación con columna de códigos en lugar de burbujas, indicadores en
+  cuadrícula, micrófono cuadrado que se llena de amarillo al grabar, barra lateral numerada y
+  superficies planas. Los colores de Tailwind que usan los paneles se reasignan a la paleta en
+  <code>index.css</code>, de modo que todas las secciones comparten estilo.</li>
+<li><strong>Logotipo</strong>: primero cinco líneas apiladas; el alumno pidió otro y eligió entre cuatro propuestas la
+  «A con pulso» (una A geométrica con un latido de voz amarillo en el travesaño). Se regeneran los
+  iconos de la PWA, de Tauri y el <code>.ico</code>. El <code>.icns</code> de macOS no se ha regenerado.</li>
+<li><strong>Web de documentación</strong>: nueva portada (cartel, catálogo de capacidades, niveles de permiso,
+  capturas reales y cifras de ejecuciones reales), tipografía Archivo Narrow, modo claro como
+  alternativa de lectura y avisos y tablas sin cristal. Se retiró de la portada el estado antiguo
+  («40 pruebas», «pendiente: prueba real con OpenAI»), que estaba desactualizado.</li>
+<li><strong>Verificación</strong>: P-062 (0 infracciones axe, 10 Vitest, 190 pruebas backend, MkDocs estricto, enlaces).</li>
+<li>
+<p><strong>Pendiente</strong>: publicar la web en GitHub Pages (requiere autorización del alumno), regenerar el Word y
+  actualizar el capítulo 14 de la memoria, que aún describe la interfaz de «cristal oscuro».</p>
+</li>
+<li>
+<p><strong>Botón «Voz»</strong> (a petición del alumno): en la cabecera de la interfaz, un selector para cambiar la
+  voz con la que habla ARVI y el modelo. Ofrece las dos voces de ElevenLabs configuradas, la voz clonada
+  DJ CLEMENT (VoiceStudio) y las voces de OpenAI Realtime como respaldo, además de los modelos de
+  ElevenLabs (v4 Turbo, Flash v2.5 y Turbo v2.5). Al elegir, ARVI dice una frase de prueba y la elección
+  se guarda en <code>data/voz-seleccion.json</code> (sin claves), de modo que sobrevive a los reinicios.
+  Las voces y modelos de ElevenLabs se editan en <code>config/voces.yaml</code>. Backend: <code>GET /api/voice/options</code>
+  y <code>POST /api/voice/select</code> (<code>providers/voice/catalog.py</code>). Solo cambia la síntesis: el reconocimiento y
+  el aprendizaje de voz no se tocan. Prueba REAL P-063 (<code>scripts/e2e/seleccion_voz.py</code>).</p>
+</li>
+<li>
+<p><strong>Voces</strong>: el botón «Voz» solo ofrece voces de ElevenLabs, a petición del alumno: CLEMENT, SOANEZ,
+  GUILLERMO, LOCUTOR y NICO (<code>config/voces.yaml</code>). VoiceStudio y OpenAI siguen solo como respaldo.</p>
+</li>
+<li><strong>Corrección del correo</strong>: tras aprobar un envío, ARVI seguía diciendo que estaba pendiente porque la
+  conversación no se enteraba de la aprobación. Ahora <code>POST /api/actions/{id}</code> anota en la conversación
+  que la acción fue aprobada y ejecutada (o rechazada o fallida), y la interfaz quita el aviso y lo deja
+  escrito en el chat.</li>
+<li><strong>Modo llamada</strong>: botón de teléfono junto al micrófono. Abre una pantalla con la señal a tamaño completo,
+  el micrófono siempre abierto (por turnos: mientras ARVI habla no escucha, para no oírse a sí mismo),
+  cronómetro, silenciar y colgar (botón rojo o X). Tocar la señal interrumpe a ARVI.</li>
+<li><strong>Móvil</strong>: los filtros de «Mi Casa» y el botón «Registrar» se cortaban en pantallas estrechas; cabecera
+  más compacta, zona segura del teléfono (<code>viewport-fit=cover</code>), caja de mensaje en su propia fila y
+  versión nueva de los iconos de la PWA (<code>?v=3</code>) para que el teléfono recoja el logotipo nuevo.</li>
+<li><strong>Ficheros por el chat</strong> (<code>backend/arvi/files.py</code>, <code>tools/file_tools.py</code>): el usuario adjunta ficheros
+  (clip o arrastrar y soltar, hasta 25 MB) y ARVI los lee (texto), los guarda en carpetas autorizadas, crea
+  ficheros nuevos y se los ofrece con un botón de descarga. Mover y borrar (a la Papelera) solo dentro de
+  <code>ARVI_ALLOWED_DIRS</code>; borrar es de nivel 3. Un adjunto cuenta como contenido de terceros.</li>
+<li><strong>Control del escritorio</strong> (decisión del alumno: «que pueda hacer de todo»): <code>ARVI_DESKTOP_CONTROL=true</code>
+  activa <code>pc_screen_view</code>, <code>pc_mouse</code>, <code>pc_type</code> y <code>pc_key</code> (<code>desktop.py</code>, solo <code>ctypes</code>, sin dependencias
+  nuevas). Son de nivel 2 y piden confirmación; el <strong>piloto automático</strong> (botón en la cabecera, 15 min, se
+  apaga cuando quiera) las ejecuta sin preguntar, salvo que la conversación haya leído contenido de
+  terceros, en cuyo caso vuelven a pedir confirmación. El texto marcado como sensible (contraseñas) no se
+  guarda en la auditoría. ARVI ve la pantalla enviando la captura al modelo como imagen.</li>
+<li><strong>Verificación</strong>: P-064 (202 pruebas backend, REAL 8/8, axe 0 infracciones).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Pie" >
+        
+          
+          <a href="../memoria-academica/anexo-uso-ia/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Anexo — Registro del uso de herramientas de IA en el desarrollo">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Anexo — Registro del uso de herramientas de IA en el desarrollo
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../01-analisis-entorno/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Análisis del entorno">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Siguiente
+              </span>
+              <div class="md-ellipsis">
+                Análisis del entorno
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

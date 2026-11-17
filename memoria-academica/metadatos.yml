@@ -1,0 +1,10 @@
+# Datos de la portada de la memoria. Edítalos y vuelve a generar el Word.
+# (También puedes editarlos directamente en el .docx: aparecen como campos resaltados.)
+titulo: "ARVI"
+subtitulo: "Asistente de Respuesta por Voz e Integraciones"
+tipo: "Memoria del Proyecto Final de Ciclo Formativo de Grado Superior"
+alumno: "[Nombre y apellidos del alumno]"
+centro: "[Centro educativo]"
+ciclo: "[Ciclo formativo]"
+tutor: "[Tutor/a del proyecto]"
+curso: "[Curso académico]"
