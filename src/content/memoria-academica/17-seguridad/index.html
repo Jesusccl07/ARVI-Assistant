@@ -1,0 +1,178 @@
+<h2 id="171-modelo-de-amenazas-resumen">17.1 Modelo de amenazas (resumen)</h2>
+<p>Referencias: OWASP Top 10 (2021), OWASP Top 10 para aplicaciones con LLM y OWASP API Security Top 10.
+La columna «Prueba» remite a <code>tests/security/test_owasp.py</code> (P-027) o a otras baterías.</p>
+<table>
+<thead>
+<tr>
+<th>Amenaza</th>
+<th>Referencia</th>
+<th>Mitigación implementada</th>
+<th>Prueba</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Prompt injection</em> (instrucciones ocultas en datos)</td>
+<td>OWASP LLM01</td>
+<td>Datos envueltos con <code>wrap_untrusted()</code> (<code>&lt;recuerdo&gt;</code>, <code>&lt;resultado_automatizacion&gt;</code>) y declarados «no instrucciones»; el contenido no puede cerrar el envoltorio (INC-017); permisos decididos en el backend</td>
+<td>P-027</td>
+</tr>
+<tr>
+<td>Agencia excesiva del modelo</td>
+<td>OWASP LLM06</td>
+<td>Herramientas con lista blanca, niveles 0-3, confirmación, sin terminal libre, herramientas inventadas denegadas</td>
+<td>P-027, P-001</td>
+</tr>
+<tr>
+<td>Revelación de información sensible</td>
+<td>OWASP LLM02 / A02</td>
+<td>Filtro de secretos en la memoria; <code>SecretStr</code>; <code>.env</code> y <code>data/</code> fuera de Git; detector de secretos sobre todo el repositorio</td>
+<td>P-027, P-001</td>
+</tr>
+<tr>
+<td>Acceso no autorizado a la API</td>
+<td>OWASP A01 / A07</td>
+<td>Token Bearer en <strong>todas</strong> las rutas <code>/api</code> salvo la salud, comparación en tiempo constante, WebSocket autenticado en el primer mensaje</td>
+<td>P-027 (recorre todas las rutas)</td>
+</tr>
+<tr>
+<td>Abuso por volumen</td>
+<td>OWASP API4</td>
+<td>Limitador de 120 peticiones/min por cliente; tamaños máximos de mensaje (8 000) y audio (25 MB)</td>
+<td>P-027</td>
+</tr>
+<tr>
+<td>Peticiones desde otras webs</td>
+<td>OWASP A05 (CORS)</td>
+<td>Solo orígenes locales de la interfaz y de Tauri</td>
+<td>P-027</td>
+</tr>
+<tr>
+<td>Cabeceras de seguridad ausentes</td>
+<td>OWASP A05</td>
+<td><code>nosniff</code>, <code>X-Frame-Options: DENY</code>, <code>Referrer-Policy</code>, <code>COOP</code>, <code>Permissions-Policy</code>; <code>no-store</code> en <code>/api</code></td>
+<td>P-027 y servidor real</td>
+</tr>
+<tr>
+<td>Exposición del backend a la red</td>
+<td>OWASP A05</td>
+<td>Escucha en <code>127.0.0.1</code>; cualquier otra dirección exige <code>ARVI_ALLOW_REMOTE=true</code></td>
+<td>P-027</td>
+</tr>
+<tr>
+<td><em>Path traversal</em> en la bóveda</td>
+<td>OWASP A01</td>
+<td><code>resolve_rel()</code> rechaza rutas fuera de la bóveda; identificadores de la API no navegan rutas</td>
+<td>P-001, P-027</td>
+</tr>
+<tr>
+<td><em>Zip slip</em> al restaurar</td>
+<td>CWE-22</td>
+<td>Validación de cada entrada del ZIP</td>
+<td>P-001</td>
+</tr>
+<tr>
+<td>Ejecución de comandos arbitrarios</td>
+<td>CWE-78</td>
+<td><code>subprocess</code> con <code>shell=False</code>, ejecutables de la lista blanca, <code>open_url</code> solo <code>http(s)</code></td>
+<td>P-027</td>
+</tr>
+<tr>
+<td>Automatizaciones ajenas</td>
+<td>—</td>
+<td>Cliente n8n limitado a elementos «ARVI», <em>loopback</em> y webhooks con token</td>
+<td>P-022, P-025</td>
+</tr>
+<tr>
+<td>Suplantación por identificador de llamada</td>
+<td>—</td>
+<td>PIN obligatorio (diseño telefónico)</td>
+<td>Diseño</td>
+</tr>
+</tbody>
+</table>
+<h2 id="172-defensa-en-profundidad-frente-a-la-inyeccion-de-instrucciones">17.2 Defensa en profundidad frente a la inyección de instrucciones</h2>
+<p>Ninguna técnica garantiza que un modelo de lenguaje ignore órdenes escondidas en los datos. ARVI
+combina tres capas:</p>
+<ol>
+<li><strong>Marcado de datos.</strong> Todo contenido externo llega al modelo dentro de una etiqueta que las reglas
+   de <code>config/personality.yaml</code> declaran como datos. <code>wrap_untrusted()</code> neutraliza dentro del
+   contenido cualquier apertura o cierre de esa etiqueta (también con mayúsculas o espacios) y escapa
+   los atributos.</li>
+<li><strong>Herramientas cerradas.</strong> El modelo no puede pedir nada que no esté en el catálogo, y los
+   argumentos se validan con esquemas cerrados.</li>
+<li><strong>Permisos en el backend.</strong> Las acciones sensibles necesitan la aprobación del usuario. La prueba
+   <code>test_even_if_model_obeys_injection_sensitive_action_needs_approval</code> simula el peor caso: el
+   modelo obedece la orden inyectada y pide borrar una nota. La nota queda intacta hasta que el
+   usuario lo aprueba.</li>
+</ol>
+<h2 id="173-hallazgos-sobre-la-infraestructura-existente">17.3 Hallazgos sobre la infraestructura existente</h2>
+<p>Ver el capítulo 12: túnel público de Cloudflare hacia n8n y puerto 5678 en <code>0.0.0.0</code>. Se han
+comunicado al usuario sin modificar nada. Los webhooks de ARVI exigen token, así que no se pueden
+lanzar desde el túnel sin conocerlo (comprobado en P-025: token incorrecto → 403).</p>
+<h2 id="174-proteccion-de-datos-rgpd">17.4 Protección de datos (RGPD)</h2>
+<p>ARVI trata datos personales de un único usuario, que es a la vez el responsable del tratamiento. Se
+aplican los principios de <strong>minimización</strong> (no se guardan conversaciones completas en la bóveda),
+<strong>limitación de la finalidad</strong>, <strong>derecho de supresión</strong> (borrado de conversaciones y recuerdos
+desde la API) e <strong>integridad y confidencialidad</strong>. Los datos enviados a OpenAI se limitan al contexto
+de cada petición, con <code>store=False</code>. No hay todavía una política de retención configurable: el
+historial se borra a mano desde la API (capítulo 22).</p>
+<h2 id="175-cadena-de-suministro-owasp-a06">17.5 Cadena de suministro (OWASP A06)</h2>
+<p>El 2026-11-12 se auditaron todas las dependencias (P-041):</p>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Alcance</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pip-audit</code></td>
+<td>69 paquetes Python (exportados de <code>uv.lock</code>)</td>
+<td>0 vulnerabilidades</td>
+</tr>
+<tr>
+<td><code>npm audit</code></td>
+<td>187 paquetes del frontend</td>
+<td>0 vulnerabilidades</td>
+</tr>
+<tr>
+<td><code>cargo audit</code></td>
+<td>458 <em>crates</em> de Tauri</td>
+<td>0 vulnerabilidades; 5 avisos en dependencias solo de Linux (GTK, D-Bus), que no se compilan en Windows</td>
+</tr>
+</tbody>
+</table>
+<p>Las tres auditorías se ejecutan además en la integración continua (<code>.github/workflows/ci.yml</code>), así
+que una vulnerabilidad nueva publicada en una dependencia hará fallar la CI. Las versiones están
+fijadas con archivos de bloqueo (<code>uv.lock</code>, <code>package-lock.json</code>, <code>Cargo.lock</code>), y la instalación
+limpia los respeta (<code>uv sync --frozen</code>, <code>npm ci</code>; P-042).</p>
+<h2 id="176-estado">17.6 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Revocación de conexiones OAuth</td>
+<td>Hecho («Desconectar y revocar», capítulo 16)</td>
+</tr>
+<tr>
+<td>Análisis de dependencias en la CI</td>
+<td>Hecho (17.5)</td>
+</tr>
+<tr>
+<td>TLS para el acceso remoto</td>
+<td>Diseñado con Tailscale Serve (capítulo 15). Falta que el alumno lo active</td>
+</tr>
+<tr>
+<td>Autenticación con varios usuarios y sesiones</td>
+<td>Fuera de alcance: un único usuario con token (capítulo 22)</td>
+</tr>
+</tbody>
+</table>

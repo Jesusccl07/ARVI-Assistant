@@ -1,0 +1,286 @@
+<h2 id="261-objetivo-y-planteamiento-honesto">26.1 Objetivo y planteamiento honesto</h2>
+<p>ARVI habla con la voz clonada del alumno, el perfil «DJ CLEMENT» de VoiceStudio (capítulo 10). El
+objetivo de esta ampliación es que esa voz <strong>mejore con el uso</strong>, aprovechando lo que el alumno dice al
+hablar con ARVI.</p>
+<p>Antes de diseñar nada había que aclarar qué significa «aprender» con OmniVoice, el modelo que usa
+VoiceStudio:</p>
+<table>
+<thead>
+<tr>
+<th>Técnica</th>
+<th>Qué cambia</th>
+<th>¿Viable aquí?</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clonación por referencia</strong></td>
+<td>Solo el audio y el texto de referencia del perfil. El modelo <strong>no cambia</strong></td>
+<td>Sí: la API de perfiles de VoiceStudio la permite</td>
+<td><strong>Implementada</strong></td>
+</tr>
+<tr>
+<td>Ajuste de parámetros (pasos de difusión, velocidad)</td>
+<td>La configuración de inferencia</td>
+<td>Sí</td>
+<td>Medida (26.6); se mantienen 4 pasos</td>
+</tr>
+<tr>
+<td>Ajuste fino (<em>fine-tuning</em>, LoRA)</td>
+<td>Los <strong>pesos</strong> del modelo</td>
+<td>No en este equipo: no hay GPU dedicada, VoiceStudio no lo expone y requeriría horas de cómputo</td>
+<td><strong>No realizado</strong></td>
+</tr>
+<tr>
+<td>Entrenamiento desde cero</td>
+<td>Todo el modelo</td>
+<td>No: miles de horas de audio y GPU</td>
+<td>Descartado</td>
+</tr>
+</tbody>
+</table>
+<p>Por tanto, en esta memoria <strong>no se afirma que el modelo aprenda mediante entrenamiento</strong>. Lo que hace
+ARVI es seleccionar automáticamente los mejores fragmentos de la voz real del alumno, construir con
+ellos un <strong>perfil candidato</strong> (una nueva referencia) y medir objetivamente si suena mejor que el actual.</p>
+<p>Tampoco se ejecutó ningún entrenamiento pesado ni se contrataron recursos externos. La variante
+cuantizada OmniVoice-GGUF quedó sin probar: su ejecutable (<code>omnivoice-tts</code>) no está instalado en
+VoiceStudio. Se decidió no descargar los 660 MB del modelo por no poder ejecutarlo y para no afectar
+al túnel de djbota.</p>
+<h2 id="262-flujo">26.2 Flujo</h2>
+<pre class="mermaid">%% figura: Flujo del aprendizaje continuo de voz
+flowchart TD
+  C{¿Consentimiento y no en pausa?} --&gt;|no| X[No se recoge nada]
+  C --&gt;|sí| T[Turno de voz del USUARIO] --&gt; Q[Cola en segundo plano]
+  Q --&gt;|8 s sin conversación| A[Análisis: VAD, SNR, recorte, nivel, huella, tono]
+  A --&gt; R[STT local: ¿coincide con el texto? ¿es eco de ARVI?]
+  R --&gt;|no apta| D[Descartada: solo métricas, sin audio]
+  R --&gt;|apta| G[Guardada cifrada DPAPI en data/voz]
+  G --&gt; K[Perfil candidato en VoiceStudio]
+  K --&gt; E[Evaluación: WER, parecido, RTF frente al perfil activo]
+  E --&gt;|apto| Act[Activación manual o automática opcional]
+  E --&gt;|no apto| Keep[Se mantiene el perfil actual]</pre>
+<h2 id="263-privacidad-y-consentimiento">26.3 Privacidad y consentimiento</h2>
+<ul>
+<li><strong>Desactivado por defecto.</strong> Sin consentimiento explícito, la API rechaza cualquier muestra (409).</li>
+<li><strong>Indicador visible.</strong> Mientras recoge, la cabecera muestra «Aprendiendo tu voz» con un punto rojo
+  pulsante. Al pulsarlo se pausa.</li>
+<li><strong>Solo los turnos del usuario.</strong> Se adjunta la última respuesta de ARVI únicamente para descartar
+  ecos.</li>
+<li><strong>Almacenamiento.</strong> Muestras cifradas con DPAPI en <code>data/voz/</code> (fuera de Git y fuera de Obsidian),
+  más una base de datos propia <code>data/voz/voz.db</code> con registro de operaciones.</li>
+<li><strong>Retención.</strong> El audio descartado no se guarda (solo sus métricas). La voz aceptada se limita a
+  30 minutos; si se supera, se retiran las peores muestras.</li>
+<li><strong>Borrado.</strong> Botones para borrar una muestra, las descartadas o todo. «Borrar todo» elimina también
+  los perfiles candidatos de VoiceStudio; solo puede borrar perfiles con el prefijo «ARVI
+  aprendizaje», nunca el original.</li>
+<li><strong>La voz no autentica.</strong> La voz clonada <strong>no se usa como contraseña</strong> ni para autorizar acciones.
+  Esto consta en el consentimiento y en las reglas de personalidad del agente.</li>
+</ul>
+<h2 id="264-calidad-de-las-muestras">26.4 Calidad de las muestras</h2>
+<p>Umbrales en <code>config/voice_learning.yaml</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Umbral</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Voz útil (VAD por energía)</td>
+<td>≥ 1,5 s</td>
+<td>Fragmentos muy cortos no aportan</td>
+</tr>
+<tr>
+<td>SNR estimada</td>
+<td>≥ 15 dB</td>
+<td>Ruido de fondo</td>
+</tr>
+<tr>
+<td>Recorte</td>
+<td>≤ 0,5 %</td>
+<td>Saturación</td>
+</tr>
+<tr>
+<td>Nivel</td>
+<td>≥ −40 dBFS</td>
+<td>Volumen demasiado bajo</td>
+</tr>
+<tr>
+<td>Coincidencia STT-texto</td>
+<td>≥ 0,6</td>
+<td>Que el audio diga lo que dice el turno</td>
+</tr>
+<tr>
+<td>Huella de locutor (log-mel, heurística)</td>
+<td>≥ 0,80 frente a la referencia original</td>
+<td>Que sea la voz del alumno y no otra persona</td>
+</tr>
+<tr>
+<td>Parecido con la última respuesta de ARVI</td>
+<td>&lt; 0,8</td>
+<td>Eco del altavoz</td>
+</tr>
+</tbody>
+</table>
+<p>La huella de locutor es una <strong>heurística</strong> (promedio de espectro log-mel). No es un sistema
+biométrico y no se usa para autenticar.</p>
+<h2 id="265-evaluacion-de-candidatos">26.5 Evaluación de candidatos</h2>
+<p>Cada candidato sintetiza tres frases fijas. Se compara con el perfil activo en tres medidas:
+inteligibilidad (WER con el reconocimiento local), parecido con la voz original y velocidad (RTF,
+segundos de cálculo por segundo de audio).</p>
+<p>Criterios (en <code>config/voice_learning.yaml</code>):</p>
+<ul>
+<li>WER no peor que +5 puntos;</li>
+<li>parecido no menor de −0,02;</li>
+<li>RTF no mayor que ×1,25.</li>
+</ul>
+<p>Un candidato <strong>no apto nunca sustituye</strong> al perfil activo, ni siquiera con la actualización automática
+activada. El perfil original se conserva siempre y se puede restaurar. Además, el alumno puede votar
+la escucha A/B.</p>
+<h2 id="266-pruebas">26.6 Pruebas</h2>
+<p>La prueba se hizo con <strong>audio real del alumno</strong>: fragmentos de la referencia original de su perfil, no
+micrófono en vivo (<code>scripts/e2e/mi_voz.py</code>, evidencia
+<code>docs/pruebas/evidencias/mi-voz-2026-11-12.json</code>).</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Prueba</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td>Desactivado por defecto</td>
+<td>OK — 409 sin consentimiento</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Consentimiento explícito</td>
+<td>OK — activo e indicador «recogiendo»</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Pausa</td>
+<td>OK — 409 en pausa</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Análisis en segundo plano</td>
+<td>OK — 6 fragmentos: 5 aceptados, 1 descartado (poca voz). SNR media 58,8 dB; parecido medio 0,992; la API siguió respondiendo en menos de 10 ms</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Silencio y ruido</td>
+<td>OK — descartados y sin audio guardado</td>
+</tr>
+<tr>
+<td>V6</td>
+<td>Voz sintetizada de ARVI</td>
+<td>OK — rechazada como eco</td>
+</tr>
+<tr>
+<td>V7</td>
+<td>Cifrado y ubicación</td>
+<td>OK — 5 archivos cifrados, ignorados por Git, fuera de Obsidian</td>
+</tr>
+<tr>
+<td>V8</td>
+<td>Candidato</td>
+<td>OK — referencia de 14,58 s con 4 muestras, creado en VoiceStudio</td>
+</tr>
+<tr>
+<td>V9</td>
+<td>Evaluación</td>
+<td>OK — <strong>no apto</strong>, no activado (detalle abajo)</td>
+</tr>
+<tr>
+<td>V10</td>
+<td>Borrar todo</td>
+<td>OK — 9 muestras y 1 candidato borrados; original intacto y activo</td>
+</tr>
+</tbody>
+</table>
+<p>Resultado de la evaluación (V9):</p>
+<table>
+<thead>
+<tr>
+<th>Perfil</th>
+<th>WER</th>
+<th>Parecido</th>
+<th>RTF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original (DJ CLEMENT)</td>
+<td>0,293</td>
+<td>0,968</td>
+<td>7,16</td>
+</tr>
+<tr>
+<td>Candidato 1</td>
+<td>0,372</td>
+<td>0,976</td>
+<td>11,44</td>
+</tr>
+</tbody>
+</table>
+<p>El candidato se parece algo más a la voz original, pero se entiende peor y es un 60 % más lento. El
+sistema lo marcó <strong>no apto</strong> y mantuvo el original, que es el comportamiento esperado. Es decir: con
+solo 14,6 s de muestras sacadas de la misma grabación, el candidato no mejora la voz. Hace falta más
+audio variado del uso real.</p>
+<h3 id="velocidad-frente-a-calidad-perfil-dj-clement-cpu">Velocidad frente a calidad (perfil DJ CLEMENT, CPU)</h3>
+<p>Evidencia <code>docs/pruebas/evidencias/velocidad-voz-2026-11-12.json</code>, dos frases por configuración:</p>
+<table>
+<thead>
+<tr>
+<th>Pasos de difusión</th>
+<th>Tiempo por frase</th>
+<th>RTF medio</th>
+<th>WER medio</th>
+<th>Conclusión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>13,3–13,9 s</td>
+<td>3,87</td>
+<td>0,952</td>
+<td>Rápido pero ininteligible</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>25,2–26,3 s</td>
+<td>7,40</td>
+<td>0,231</td>
+<td><strong>Compromiso elegido</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td>49,4–51,7 s</td>
+<td>15,72</td>
+<td>0,118</td>
+<td>Mejor calidad, el doble de lento</td>
+</tr>
+</tbody>
+</table>
+<p>Con la CPU (i9-12900HK) la voz clonada no puede ir en tiempo real. La mejora real pasa por una GPU
+(capítulo 22).</p>
+<p>Pruebas MOCK: 9 en <code>tests/unit/test_voicelearn.py</code> (análisis, umbrales, eco, retención, criterios y
+borrado). Registro: P-049 a P-051.</p>
+<p><img alt="Figura F-026. Panel «Mi voz»: el aprendizaje está desactivado hasta aceptar el consentimiento" src="../../capturas/fase-12/2026-11-12_mi-voz-consentimiento.png"/></p>
+<p><img alt="Figura F-027. «Mi voz» en el móvil a través de Tailscale" src="../../capturas/fase-12/2026-11-12_mi-voz-movil.png"/></p>
+<h2 id="267-limitaciones-y-pendientes">26.7 Limitaciones y pendientes</h2>
+<ul>
+<li><strong>[PENDIENTE]</strong> Prueba con el micrófono real durante conversaciones de uso diario. Las pruebas
+  usaron fragmentos de la grabación original.</li>
+<li><strong>[PENDIENTE]</strong> Token de Hugging Face para evaluar PocketTTS como alternativa más rápida.</li>
+<li>OmniVoice-GGUF no está disponible en esta instalación de VoiceStudio.</li>
+<li>No hay ajuste fino de pesos: solo selección de referencia.</li>
+</ul>

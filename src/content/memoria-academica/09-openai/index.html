@@ -1,0 +1,122 @@
+<h2 id="91-interfaz-llmprovider">9.1 Interfaz <code>LLMProvider</code></h2>
+<p>El agente se comunica con el modelo a través de una interfaz neutra (<code>providers/llm/base.py</code>):</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">LLMProvider</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">instructions</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ChatItem</span><span class="p">],</span>
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>                       <span class="n">tools</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ToolSpec</span><span class="p">],</span>
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>                       <span class="n">on_text_delta</span><span class="p">:</span> <span class="n">TextDeltaCallback</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LLMResponse</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+<p><code>ChatItem</code> representa mensajes, llamadas a herramientas y resultados en un formato propio de ARVI.
+Cada proveedor lo traduce al formato de su API. Sustituir el modelo o el proveedor solo exige una
+nueva clase que implemente <code>complete</code>.</p>
+<h2 id="92-responses-api">9.2 Responses API</h2>
+<p><code>OpenAIProvider</code> usa la <strong>Responses API</strong> oficial con el SDK <code>openai</code> 3.49.0. La firma de
+<code>responses.create</code> y los tipos de eventos se comprobaron en el paquete instalado antes de
+programar, para no basarse en supuestos:</p>
+<ul>
+<li>Eventos usados: <code>response.output_text.delta</code> (fragmentos de texto) y <code>response.completed</code>
+  (respuesta final con <code>usage</code>).</li>
+<li>Llamadas a herramientas: elementos <code>function_call</code> con <code>call_id</code>, <code>name</code> y <code>arguments</code>; los
+  resultados se devuelven como <code>function_call_output</code>.</li>
+<li><code>store=False</code>: OpenAI no conserva la conversación en su plataforma. ARVI envía en cada petición el
+  contexto necesario. Se prioriza la privacidad sobre la comodidad de encadenar respuestas en el
+  servidor (<code>previous_response_id</code>).</li>
+</ul>
+<h2 id="93-eleccion-del-modelo">9.3 Elección del modelo</h2>
+<p>Según la página oficial de precios y modelos (consultada el 2026-11-12):</p>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Entrada / salida ($ por millón de tokens)</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gpt-6-luna</code></td>
+<td>0,10 / 0,50</td>
+<td>"Nuestro modelo más eficiente para tareas acotadas y de alto volumen"; <em>function calling</em>, <em>streaming</em> y Responses API</td>
+</tr>
+<tr>
+<td><code>gpt-5-nano</code></td>
+<td>0,05 / 0,40</td>
+<td>Más barato, pero <strong>obsoleto</strong> según OpenAI</td>
+</tr>
+<tr>
+<td><code>gpt-6.1-terra</code></td>
+<td>1,00 / 5,00</td>
+<td>Elección inicial; 10 veces más caro que <code>gpt-6-luna</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisión (2026-11-12, a petición del alumno):</strong> durante el desarrollo se usa <code>gpt-6-luna</code>, el modelo
+vigente más barato compatible con herramientas. Se descarta <code>gpt-5-nano</code> por estar obsoleto. Si la
+calidad no basta, se sube de modelo cambiando <code>ARVI_LLM_MODEL</code>, sin tocar el código.</p>
+<h2 id="94-gestion-de-errores">9.4 Gestión de errores</h2>
+<p>Los errores del SDK se traducen a mensajes en español sin datos sensibles:</p>
+<table>
+<thead>
+<tr>
+<th>Excepción del SDK</th>
+<th>Mensaje al usuario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AuthenticationError</code></td>
+<td>La clave de OpenAI no es válida o ha sido revocada</td>
+</tr>
+<tr>
+<td><code>RateLimitError</code></td>
+<td>Límite de uso o de crédito alcanzado</td>
+</tr>
+<tr>
+<td><code>NotFoundError</code></td>
+<td>El modelo no está disponible para esta cuenta</td>
+</tr>
+<tr>
+<td><code>APIConnectionError</code> / <code>APITimeoutError</code></td>
+<td>No se puede conectar con OpenAI</td>
+</tr>
+</tbody>
+</table>
+<p>Si falta la clave, el servidor arranca igualmente y <code>/api/health</code> lo indica (<code>llm.ready: false</code>), lo
+que se comprobó en la prueba P-003.</p>
+<h2 id="95-metricas">9.5 Métricas</h2>
+<p>Cada llamada registra en <code>llm_usage</code> el modelo, los tokens de entrada y salida y la latencia. Nunca se
+guardan claves ni el contenido de la petición. <code>/api/usage</code> ofrece el acumulado, que alimentará el
+cálculo de costes del capítulo 20.</p>
+<h2 id="96-estado">9.6 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conversación real con <code>gpt-6-luna</code> y uso de un recuerdo</td>
+<td><strong>Superada</strong> (P-007)</td>
+</tr>
+<tr>
+<td>Llamadas a herramientas reales (memoria, sistema, n8n, GitHub)</td>
+<td><strong>Superadas</strong> (P-008, P-009, P-026, P-036)</td>
+</tr>
+<tr>
+<td>Confirmación de acciones sensibles con el modelo real</td>
+<td><strong>Superada</strong> (P-010, P-011, P-038)</td>
+</tr>
+<tr>
+<td>Latencia hasta la primera palabra (RNF-05)</td>
+<td><strong>Cumplida</strong>: mediana de 0,64 s (P-039)</td>
+</tr>
+<tr>
+<td>Voz de respaldo con la Realtime API (<code>gpt-realtime-2.1-mini</code>)</td>
+<td><strong>Superada</strong> (P-043, capítulo 10)</td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,101 @@
+<h2 id="81-organizacion-del-codigo">8.1 Organización del código</h2>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>backend/arvi/
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>├── api/          main.py (rutas), security.py (token, rate limit), services.py (composición)
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>├── core/         agent.py (orquestación de cada turno)
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>├── providers/llm base.py (interfaz), openai_provider.py, fake.py (pruebas)
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>├── memory/       vault.py (Markdown+YAML), service.py (CRUD, FTS5), secrets_filter.py
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>├── tools/        base.py (registro y ejecutor), memory_tools.py, system_tools.py
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>├── security/     permissions.py (niveles 0-3)
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>├── storage/      db.py (SQLite)
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>├── schemas/      api.py (modelos de entrada)
+<a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>└── config.py     configuración por variables de entorno
+<a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>config/           personality.yaml, permissions.yaml, apps.yaml  (editables sin tocar código)
+<a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>tests/            unit/ e integration/
+</code></pre></div>
+<p>Se agrupan en <code>backend/arvi/</code> los paquetes previstos en el enunciado (<code>api</code>, <code>core</code>, <code>providers</code>,
+<code>memory</code>, <code>tools</code>, <code>security</code>, <code>schemas</code>) para que formen un único paquete Python importable.</p>
+<h2 id="82-configuracion">8.2 Configuración</h2>
+<p><code>config.py</code> usa <code>pydantic-settings</code>: cada opción se lee de una variable de entorno o del archivo
+<code>.env</code>, que Git ignora. Los secretos se declaran como <code>SecretStr</code>, así que no aparecen al imprimir la
+configuración ni en los registros.</p>
+<h2 id="83-composicion-de-servicios">8.3 Composición de servicios</h2>
+<p><code>services.py</code> construye explícitamente los objetos y los conecta (inyección de dependencias
+manual). Así las pruebas pueden sustituir el proveedor LLM por uno falso:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_services</span><span class="p">(</span><span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">llm</span><span class="p">:</span> <span class="n">LLMProvider</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Services</span><span class="p">:</span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">vault_inside_repo</span><span class="p">():</span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ARVI_VAULT_PATH no puede estar dentro del repositorio Git."</span><span class="p">)</span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">db_path</span><span class="p">)</span>
+<a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="n">memory</span> <span class="o">=</span> <span class="n">MemoryService</span><span class="p">(</span><span class="n">Vault</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">arvi_vault_path</span><span class="p">),</span> <span class="n">db</span><span class="p">)</span>
+<a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>La comprobación <code>vault_inside_repo()</code> impide por diseño que los recuerdos personales acaben en el
+repositorio.</p>
+<h2 id="84-agente">8.4 Agente</h2>
+<p><code>Agent.run_turn()</code> implementa el flujo del diagrama de secuencia del capítulo 5:</p>
+<ol>
+<li>Guarda el mensaje del usuario.</li>
+<li>Recupera hasta 4 recuerdos relevantes (FTS5) y los 20 mensajes más recientes.</li>
+<li>Construye las instrucciones con la personalidad (<code>config/personality.yaml</code>) y los recuerdos,
+   marcados como <code>&lt;recuerdo&gt;</code> y declarados como <strong>datos, no instrucciones</strong>.</li>
+<li>Llama al modelo con las herramientas permitidas. Si pide herramientas, las ejecuta a través del
+   <code>ToolRegistry</code> y devuelve los resultados. Como máximo hace <code>ARVI_MAX_TOOL_ROUNDS</code> rondas; la
+   última se hace sin herramientas para garantizar una respuesta final.</li>
+<li>Emite eventos (<code>state</code>, <code>memories</code>, <code>text_delta</code>, <code>tool_start</code>, <code>tool_end</code>,
+   <code>confirmation_required</code>, <code>done</code>) que la interfaz usará para animar la esfera.</li>
+<li>Si la conversación se alarga, resume la parte que queda fuera de la ventana de historial.</li>
+</ol>
+<h2 id="85-api-y-websocket">8.5 API y WebSocket</h2>
+<p>El WebSocket <code>/ws/chat</code> exige que el <strong>primer mensaje</strong> sea <code>{"type":"auth","token":...}</code>. El token
+no viaja en la URL porque las URL suelen quedar registradas en <em>logs</em> e historiales. Las respuestas
+llegan en streaming como eventos JSON, y un mensaje <code>{"type":"cancel"}</code> interrumpe la respuesta en
+curso.</p>
+<h2 id="86-autenticacion-y-limitacion-de-frecuencia">8.6 Autenticación y limitación de frecuencia</h2>
+<p>Todas las rutas salvo <code>/api/health</code> exigen <code>Authorization: Bearer &lt;token&gt;</code>. El token se compara en
+tiempo constante (<code>hmac.compare_digest</code>) para evitar ataques de temporización. Si el usuario no
+define <code>ARVI_API_TOKEN</code>, el servidor genera uno aleatorio en <code>data/api_token</code>, fuera de Git. Un
+limitador de ventana deslizante admite 120 peticiones por minuto y cliente.</p>
+<h2 id="87-evidencias">8.7 Evidencias</h2>
+<p><img alt="Documentación OpenAPI de la API de ARVI generada automáticamente por FastAPI (captura F-001, 2026-11-12)" src="../../capturas/fase-1/2026-11-12_api-openapi.png"/></p>
+<p><img alt="Respuesta real de GET /api/health: servicio activo, LLM pendiente de clave y bóveda accesible (captura F-002, 2026-11-12)" src="../../capturas/fase-1/2026-11-12_api-health.png"/></p>
+<h2 id="88-estado">8.8 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Funcionalidad</th>
+<th>Estado</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arranque y salud</td>
+<td>Probado (REAL)</td>
+<td>P-003</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>Probada (REAL y MOCK)</td>
+<td>P-001, P-004</td>
+</tr>
+<tr>
+<td>Chat REST y WebSocket con streaming</td>
+<td>Probado (MOCK y REAL)</td>
+<td>P-001, P-039</td>
+</tr>
+<tr>
+<td>Conversación real con OpenAI</td>
+<td>Probada (REAL)</td>
+<td>P-007 a P-011</td>
+</tr>
+<tr>
+<td>Cabeceras de seguridad, escucha solo local, límites</td>
+<td>Probado</td>
+<td>P-027, P-028</td>
+</tr>
+<tr>
+<td>Instalación limpia desde cero</td>
+<td>Probada</td>
+<td>P-042</td>
+</tr>
+</tbody>
+</table>

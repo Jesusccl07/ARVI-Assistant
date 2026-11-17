@@ -1,0 +1,42 @@
+<p>Servidor ARVI local (<code>127.0.0.1:8765</code>), modelo <code>gpt-6-luna</code>, peticiones <code>POST /api/chat</code> con el token
+local. Salida copiada de la consola. No incluye la clave de OpenAI ni el token de ARVI.</p>
+<h2 id="get-apihealth"><code>GET /api/health</code></h2>
+<p><code>llm.ready=True model=gpt-6-luna</code></p>
+<h2 id="p-007-conversacion-recuperacion-de-memoria">P-007 — Conversación + recuperación de memoria</h2>
+<ul>
+<li><strong>Entrada:</strong> «Hola ARVI. Preséntate en una frase. Después dime: ¿cómo se llama mi proyecto final?»</li>
+<li><strong>Respuesta:</strong> «Soy ARVI, tu asistente personal para ayudarte con respuestas e integraciones. Tu
+  proyecto final se llama ARVI; lo sé por la nota «proyecto-final».»</li>
+<li><strong>Memorias usadas:</strong> <code>03-Proyectos/proyecto-final--24aa4aa3f9.md</code></li>
+<li><strong>Latencia:</strong> 4266 ms (primera petición, en frío) · <strong>Tokens:</strong> 950 de entrada / 38 de salida</li>
+</ul>
+<h2 id="p-008-herramienta-de-memoria-nivel-1-automatica">P-008 — Herramienta de memoria (nivel 1, automática)</h2>
+<ul>
+<li><strong>Entrada:</strong> «Recuerda que mi color favorito es el azul eléctrico.» (dato de prueba)</li>
+<li><strong>Respuesta:</strong> «Recordado: tu color favorito es el azul eléctrico.»</li>
+<li><strong>Herramientas:</strong> <code>memory_remember:ok</code> · <strong>Tokens:</strong> 1807 / 61</li>
+</ul>
+<h2 id="p-009-herramienta-local-del-pc-nivel-0">P-009 — Herramienta local del PC (nivel 0)</h2>
+<ul>
+<li><strong>Entrada:</strong> «¿Cuánta memoria RAM tiene mi PC y cuánta está libre?»</li>
+<li><strong>Respuesta:</strong> «Tu PC tiene 25,5 GB de RAM en total. Hay unos 13,3 GB libres; actualmente se están
+  usando 12,2 GB.»</li>
+<li><strong>Herramientas:</strong> <code>system_info:ok</code></li>
+</ul>
+<h2 id="p-010-accion-que-requiere-confirmacion-nivel-2-politica-confirm">P-010 — Acción que requiere confirmación (nivel 2, política <code>confirm</code>)</h2>
+<ul>
+<li><strong>Entrada:</strong> «Olvida el recuerdo de mi color favorito.»</li>
+<li><strong>Respuesta:</strong> «Para olvidar ese dato, tengo que archivar el recuerdo «Color favorito»; se moverá a
+  la carpeta 99-Archivo, pero no se borrará. La acción aún no se ha ejecutado: apruébala en el centro
+  de permisos.»</li>
+<li><strong>Herramientas:</strong> <code>memory_search:ok</code>, <code>memory_forget:needs_confirmation</code> → acción pendiente <code>3358ae85aeef</code></li>
+</ul>
+<h2 id="p-011-aprobacion-y-no-reutilizacion">P-011 — Aprobación y no reutilización</h2>
+<ul>
+<li><code>POST /api/actions/3358ae85aeef {"approve":true}</code> → <code>{"status":"ok","output":"{\"resultado\": \"archivado en 99-Archivo\", \"titulo\": \"Color favorito\"}"}</code></li>
+<li>Segundo intento con la misma acción → <code>{"status":"error","output":"La acción no existe o ya fue resuelta."}</code></li>
+<li>La nota quedó en <code>ARVI-Memory\99-Archivo\color-favorito--b53afc7a5c.md</code> (archivada, no borrada).</li>
+</ul>
+<h2 id="consumo-acumulado-get-apiusage">Consumo acumulado (<code>GET /api/usage</code>)</h2>
+<p><code>calls=8, input_tokens=8203, output_tokens=285, avg_latency_ms=2505</code>
+→ coste estimado con la tarifa oficial (0,10 $/0,50 $ por millón): <strong>≈ 0,001 $</strong>.</p>

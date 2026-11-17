@@ -1,0 +1,205 @@
+<h2 id="31-actores">3.1 Actores</h2>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuario</td>
+<td>Propietario del PC. Único usuario humano autorizado</td>
+</tr>
+<tr>
+<td>Modelo de lenguaje (OpenAI)</td>
+<td>Sistema externo que interpreta las peticiones y propone llamadas a herramientas</td>
+</tr>
+<tr>
+<td>Servicios externos</td>
+<td>n8n, Obsidian (archivos), VoiceStudio, Google, GitHub</td>
+</tr>
+</tbody>
+</table>
+<h2 id="32-requisitos-funcionales">3.2 Requisitos funcionales</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requisito</th>
+<th>Prioridad</th>
+<th>Estado al cierre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RF-01</td>
+<td>Conversar por texto con respuestas en streaming</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-007, P-039)</td>
+</tr>
+<tr>
+<td>RF-02</td>
+<td>Mantener el historial y resumir conversaciones largas</td>
+<td>Alta</td>
+<td>Implementado (MOCK)</td>
+</tr>
+<tr>
+<td>RF-03</td>
+<td>Crear, consultar, actualizar y archivar recuerdos</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-005, P-008, P-011)</td>
+</tr>
+<tr>
+<td>RF-04</td>
+<td>Buscar recuerdos y mostrar la nota de origen</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-007)</td>
+</tr>
+<tr>
+<td>RF-05</td>
+<td>Reindexar los cambios hechos desde Obsidian</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-001)</td>
+</tr>
+<tr>
+<td>RF-06</td>
+<td>Rechazar secretos en la memoria</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-001)</td>
+</tr>
+<tr>
+<td>RF-07</td>
+<td>Ejecutar herramientas locales permitidas</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-009)</td>
+</tr>
+<tr>
+<td>RF-08</td>
+<td>Pedir confirmación antes de acciones sensibles</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-010, P-011, P-038)</td>
+</tr>
+<tr>
+<td>RF-09</td>
+<td>Registrar en auditoría cada decisión sobre herramientas</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> (P-001)</td>
+</tr>
+<tr>
+<td>RF-10</td>
+<td>Hablar por micrófono y recibir respuesta hablada</td>
+<td>Alta</td>
+<td><strong>Cumplido</strong> con micrófono simulado (P-019). Falta repetirlo con el micrófono real</td>
+</tr>
+<tr>
+<td>RF-11</td>
+<td>Lanzar automatizaciones de n8n</td>
+<td>Media</td>
+<td><strong>Cumplido</strong> (P-026)</td>
+</tr>
+<tr>
+<td>RF-12</td>
+<td>Consultar Google Calendar y Gmail (solo lectura)</td>
+<td>Media</td>
+<td>Implementado (MOCK, P-031); la prueba REAL espera la credencial</td>
+</tr>
+<tr>
+<td>RF-13</td>
+<td>Usar ARVI desde el móvil</td>
+<td>Media</td>
+<td>Parcial: PWA lista (P-029); falta activar <code>tailscale serve</code></td>
+</tr>
+<tr>
+<td>RF-14</td>
+<td>Copia de seguridad y restauración de la memoria</td>
+<td>Media</td>
+<td><strong>Cumplido</strong> (P-001)</td>
+</tr>
+<tr>
+<td>RF-15</td>
+<td>Atender llamadas telefónicas</td>
+<td>Baja</td>
+<td>No abordado (investigado, 16.8)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-requisitos-no-funcionales">3.3 Requisitos no funcionales</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requisito</th>
+<th>Cómo se verifica</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RNF-01</td>
+<td>Seguridad: ninguna acción sensible sin confirmación</td>
+<td>Pruebas de permisos</td>
+<td><strong>Cumplido</strong> (P-027, P-038)</td>
+</tr>
+<tr>
+<td>RNF-02</td>
+<td>Privacidad: secretos fuera de Git y de la bóveda</td>
+<td>Filtro de secretos y revisión previa al commit</td>
+<td><strong>Cumplido</strong> (P-027)</td>
+</tr>
+<tr>
+<td>RNF-03</td>
+<td>Mantenibilidad: proveedores intercambiables tras interfaces</td>
+<td>Pruebas con proveedor falso</td>
+<td><strong>Cumplido</strong>: el motor de voz de respaldo se cambió sin tocar el agente (P-043)</td>
+</tr>
+<tr>
+<td>RNF-04</td>
+<td>Portabilidad de los datos: memoria en formato abierto (Markdown)</td>
+<td>Notas abiertas en Obsidian</td>
+<td><strong>Cumplido</strong></td>
+</tr>
+<tr>
+<td>RNF-05</td>
+<td>Rendimiento: primera palabra de respuesta en menos de 2 s (texto)</td>
+<td><code>scripts/e2e/latencia.py</code></td>
+<td><strong>Cumplido</strong>: mediana de 0,64 s (P-039)</td>
+</tr>
+<tr>
+<td>RNF-06</td>
+<td>Accesibilidad: teclado, contraste y movimiento reducido</td>
+<td>axe-core (WCAG 2.2 AA) y recorrido con teclado</td>
+<td><strong>Cumplido</strong>: 0 infracciones (P-040)</td>
+</tr>
+<tr>
+<td>RNF-07</td>
+<td>Coste: sin coste recurrente por la voz</td>
+<td>Motor local VoiceStudio</td>
+<td><strong>Cumplido</strong>: el respaldo de pago está desactivado</td>
+</tr>
+</tbody>
+</table>
+<h2 id="34-historias-de-usuario">3.4 Historias de usuario</h2>
+<ul>
+<li><strong>HU-01.</strong> Como usuario, quiero decir "Arvi, recuerda que mi proyecto final se llama ARVI" para
+  que lo recuerde en futuras sesiones.</li>
+<li><strong>HU-02.</strong> Como usuario, quiero preguntar "¿cómo se llama mi proyecto final?" y que ARVI me diga
+  de qué nota ha sacado la respuesta.</li>
+<li><strong>HU-03.</strong> Como usuario, quiero decir "abre Visual Studio Code" y que se abra si está permitido.</li>
+<li><strong>HU-04.</strong> Como usuario, quiero que ARVI me pida confirmación antes de archivar o borrar algo.</li>
+<li><strong>HU-05.</strong> Como usuario, quiero hablar con ARVI desde el móvil cuando estoy fuera de casa.</li>
+</ul>
+<h2 id="35-casos-de-uso">3.5 Casos de uso</h2>
+<pre class="mermaid">%% figura: Casos de uso principales de ARVI
+flowchart LR
+    U((Usuario))
+    U --&gt; CU1[Conversar por texto o voz]
+    U --&gt; CU2[Gestionar recuerdos]
+    U --&gt; CU3[Ejecutar acciones en el PC]
+    U --&gt; CU4[Aprobar o rechazar acciones]
+    U --&gt; CU5[Lanzar automatizaciones]
+    U --&gt; CU6[Consultar el historial y la auditoría]
+    CU1 -. incluye .-&gt; CU7[Recuperar recuerdos relevantes]
+    CU3 -. incluye .-&gt; CU8[Comprobar permisos]
+    CU5 -. incluye .-&gt; CU8
+    CU8 -. extiende .-&gt; CU4</pre>

@@ -1,0 +1,182 @@
+<h2 id="121-instalacion-existente">12.1 Instalación existente</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contenedor</td>
+<td><code>n8n-local</code> (<code>n8nio/n8n:latest</code>, versión 2.39.5 comprobada el 2026-11-12), proyecto Compose en <code>%USERPROFILE%\n8n-local</code></td>
+</tr>
+<tr>
+<td>Puerto</td>
+<td>5678</td>
+</tr>
+<tr>
+<td>Persistencia</td>
+<td>Volumen <code>n8n-local_n8n_data</code></td>
+</tr>
+<tr>
+<td>Salud</td>
+<td><code>GET /healthz</code> → 200 (prueba P-000)</td>
+</tr>
+</tbody>
+</table>
+<p>La versión y los parámetros de los nodos se comprobaron <strong>dentro del propio contenedor</strong> y con la
+especificación OpenAPI que sirve el servidor (<code>GET /api/v1/openapi.yml</code>), no de memoria. En n8n 2.x,
+«activar» un workflow se llama <strong>publicar</strong> (<code>POST /workflows/{id}/publish</code>).</p>
+<h2 id="122-hallazgos-de-seguridad">12.2 Hallazgos de seguridad</h2>
+<ol>
+<li><code>WEBHOOK_URL</code> apunta a un <strong>túnel rápido de Cloudflare</strong> (<code>*.trycloudflare.com</code>): mientras el
+   túnel esté activo, el panel y los webhooks de n8n son accesibles desde Internet.</li>
+<li>El puerto 5678 se publica en <strong>todas las interfaces</strong> (<code>0.0.0.0</code>).</li>
+</ol>
+<p>Recomendación: ARVI se conecta solo por <code>127.0.0.1</code>. Se propone publicar el puerto como
+<code>127.0.0.1:5678:5678</code> y no usar el túnel para ARVI. <strong>No se ha modificado nada</strong>: recrear el
+contenedor requiere la autorización del usuario. Como mitigación, todos los webhooks de ARVI exigen
+un token (apartado 12.3), así que no se pueden lanzar desde el túnel sin conocerlo.</p>
+<h2 id="123-diseno-de-la-integracion">12.3 Diseño de la integración</h2>
+<pre class="mermaid">%% figura: Flujo de una automatización de n8n lanzada por ARVI
+sequenceDiagram
+    participant U as Usuario
+    participant A as Agente ARVI
+    participant R as ToolRegistry (permisos)
+    participant C as N8nClient
+    participant N as n8n (127.0.0.1:5678)
+    U-&gt;&gt;A: «¿Qué tiempo hará en Sevilla?»
+    A-&gt;&gt;R: n8n_clima(ciudad="Sevilla", dias=1)
+    R-&gt;&gt;R: valida argumentos (esquema cerrado) y nivel
+    R-&gt;&gt;C: trigger("clima", {...})
+    C-&gt;&gt;N: POST /webhook/arvi/clima + X-ARVI-Token
+    N-&gt;&gt;N: Header Auth → Open-Meteo → resumen
+    N--&gt;&gt;C: JSON (recortado a 8 000 caracteres)
+    C--&gt;&gt;A: &lt;resultado_automatizacion&gt; datos &lt;/resultado_automatizacion&gt;
+    A--&gt;&gt;U: respuesta en lenguaje natural</pre>
+<table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Archivo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cliente</td>
+<td><code>backend/arvi/integrations/n8n.py</code></td>
+<td>API pública (<code>/api/v1</code>, cabecera <code>X-N8N-API-KEY</code>) y webhooks</td>
+</tr>
+<tr>
+<td>Catálogo</td>
+<td><code>config/automations.yaml</code></td>
+<td>Automatizaciones que el modelo puede usar, con argumentos y nivel</td>
+</tr>
+<tr>
+<td>Herramientas</td>
+<td><code>backend/arvi/tools/automation_tools.py</code></td>
+<td>Una herramienta tipada <code>n8n_&lt;id&gt;</code> por entrada del catálogo</td>
+</tr>
+<tr>
+<td>Plantillas</td>
+<td><code>infrastructure/n8n/workflows/*.json</code></td>
+<td>Workflows «ARVI · Eco» y «ARVI · Clima»</td>
+</tr>
+<tr>
+<td>Aprovisionamiento</td>
+<td><code>backend/arvi/integrations/n8n_provision.py</code>, <code>scripts/n8n/provision.py</code></td>
+<td>Crea la credencial y los workflows de ARVI</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Garantías de seguridad</strong>, todas cubiertas por pruebas automáticas (P-022):</p>
+<ul>
+<li><strong>Solo elementos de ARVI.</strong> El cliente se niega a leer, publicar o consultar ejecuciones de
+  workflows cuyo nombre no empiece por <code>ARVI</code>, y solo crea workflows y credenciales con ese prefijo.
+  El listado se filtra también en el cliente, por si el filtro del servidor fuese más amplio.</li>
+<li><strong>Solo por <em>loopback</em>.</strong> <code>N8N_BASE_URL</code> debe ser <code>127.0.0.1</code>/<code>localhost</code>; ARVI nunca usa el túnel.</li>
+<li><strong>Webhooks autenticados.</strong> Cada llamada lleva la cabecera <code>X-ARVI-Token</code> (<code>N8N_WEBHOOK_SECRET</code>),
+  que n8n comprueba con una credencial <em>Header Auth</em> llamada «ARVI · Webhook token».</li>
+<li><strong>Sin webhook libre.</strong> No existe una herramienta del tipo «llama al webhook que quieras». El modelo
+  solo ve las automatizaciones declaradas en el catálogo, con un esquema cerrado: los argumentos no
+  declarados o fuera de rango se rechazan antes de llamar a n8n (INC-016).</li>
+<li><strong>Resultados como datos.</strong> La respuesta de n8n se recorta a 8 000 caracteres y se entrega al
+  modelo dentro de <code>&lt;resultado_automatizacion&gt;</code>, como dato externo y no como instrucción.</li>
+<li><strong>Niveles de permiso.</strong> Cada automatización declara su nivel (0-3) y pasa por <code>ToolRegistry</code>
+  igual que cualquier otra herramienta; las de nivel 2 o más piden confirmación.</li>
+</ul>
+<h3 id="workflows-iniciales">Workflows iniciales</h3>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>Webhook</th>
+<th>Qué hace</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARVI · Eco</td>
+<td><code>POST /webhook/arvi/eco</code></td>
+<td>Devuelve el mensaje recibido; sirve para comprobar la conexión</td>
+<td>0</td>
+</tr>
+<tr>
+<td>ARVI · Clima</td>
+<td><code>POST /webhook/arvi/clima</code></td>
+<td>Geocodifica la ciudad y consulta la previsión en Open-Meteo (gratuito, sin clave)</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="aprovisionamiento">Aprovisionamiento</h3>
+<p><code>scripts/n8n/provision.py</code> funciona por defecto en <strong>modo simulación</strong>: muestra qué crearía sin
+cambiar nada. Con <code>--aplicar</code>:</p>
+<ol>
+<li>Si <code>N8N_WEBHOOK_SECRET</code> está vacío, genera un token aleatorio y lo guarda en <code>.env</code>. Nunca lo
+   muestra por pantalla.</li>
+<li>Crea la credencial <em>Header Auth</em> «ARVI · Webhook token».</li>
+<li>Crea y publica los workflows de las plantillas que aún no existan. Si ya existe un workflow ARVI
+   con el mismo nombre, lo deja como está, así que el script es <strong>idempotente</strong>.</li>
+<li>Guarda en <code>data/n8n/aprovisionamiento.json</code> (ignorado por Git) los identificadores y una huella
+   SHA-256 del token, nunca el token.</li>
+</ol>
+<p>Respecto al diseño inicial, se descartaron el identificador de idempotencia por llamada y la etiqueta
+<code>arvi</code>: los dos workflows actuales solo consultan datos, así que repetir una llamada no tiene
+efectos. Se revisará cuando haya automatizaciones que cambien cosas.</p>
+<h2 id="124-pruebas-reales">12.4 Pruebas reales</h2>
+<p>El 2026-11-12, con la clave de API creada por el alumno, se ejecutó el aprovisionamiento y se probó
+la cadena completa:</p>
+<table>
+<thead>
+<tr>
+<th>Prueba</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aprovisionamiento (P-024)</td>
+<td>Credencial «ARVI · Webhook token» y workflows «ARVI · Eco» y «ARVI · Clima» creados y publicados. Los workflows del usuario no se tocaron</td>
+</tr>
+<tr>
+<td>Webhooks (P-025)</td>
+<td>Eco en 269 ms; clima de Sevilla en 624 ms; ciudad inexistente → error claro; <strong>token incorrecto → 403</strong></td>
+</tr>
+<tr>
+<td>Conversación (P-026)</td>
+<td>El modelo eligió por sí mismo <code>n8n_clima(ciudad="Sevilla", dias=2)</code> y respondió con los datos de n8n en 5,5 s</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Conversación real: ARVI responde al tiempo con la automatización «ARVI · Clima» de n8n" src="../../capturas/fase-6/2026-11-12_conversacion-clima-n8n.png"/></p>
+<p>Las ejecuciones aparecen en n8n con estado <code>success</code> y modo <code>webhook</code> (ids 69 a 73; la 73 corresponde a la repetición de la prueba tras añadir las cabeceras de seguridad). Se leyeron por
+la API pública y se guardaron en <code>docs/pruebas/evidencias/n8n-real-2026-11-12.json</code>. No se ha
+capturado el editor de n8n: requiere la sesión del alumno y mostraría también sus workflows
+personales.</p>
+<h2 id="125-estado">12.5 Estado</h2>
+<p>Fase 6 <strong>completada</strong>. Pendiente para más adelante: automatizaciones que modifiquen datos (con nivel
+2 o más e identificador de idempotencia) y la decisión del alumno sobre el túnel público de n8n.</p>

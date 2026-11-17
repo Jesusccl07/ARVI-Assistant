@@ -1,0 +1,200 @@
+<h2 id="61-metodologia">6.1 Metodología</h2>
+<p>Se sigue un desarrollo <strong>incremental e iterativo</strong> por fases. Cada fase entrega un incremento
+funcional que se prueba y se documenta antes de pasar a la siguiente. La regla de cierre es
+estricta: <strong>una fase no se considera terminada sin pruebas ejecutadas y documentación actualizada</strong>.</p>
+<p>El desarrollo se apoya en un asistente de programación con IA (ver el anexo de uso de IA), bajo la
+dirección del alumno, que define los requisitos, autoriza cada acción sobre el sistema y revisa los
+resultados.</p>
+<h2 id="62-fases">6.2 Fases</h2>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Contenido</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Preparación: análisis del entorno, herramientas, estructura, documentación</td>
+<td><strong>Completada</strong> (2026-11-12)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Núcleo: FastAPI, OpenAI, chat, historial, streaming</td>
+<td><strong>Completada</strong> (P-007, P-039)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Memoria: bóveda Obsidian, indexación, recuperación</td>
+<td><strong>Completada</strong> (P-005 a P-008)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Voz: VoiceStudio, STT/TTS, interrupciones</td>
+<td><strong>Completada</strong> (P-012 a P-016; voz definitiva en P-044)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Interfaz: React, esfera</td>
+<td><strong>Completada</strong> (P-019, P-040)</td>
+</tr>
+<tr>
+<td>4b</td>
+<td>Escritorio: Tauri 2</td>
+<td><strong>Completada</strong> (P-034, P-035)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Herramientas y seguridad: permisos, auditoría, OWASP</td>
+<td><strong>Completada</strong> (P-009 a P-011, P-027)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Automatizaciones: n8n</td>
+<td><strong>Completada</strong> (P-024 a P-026)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Servicios externos: Google, GitHub</td>
+<td><strong>Parcial</strong>: GitHub REAL; Google pendiente de la credencial del alumno</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Acceso móvil: PWA, Tailscale</td>
+<td><strong>Parcial</strong>: PWA completa; falta que el alumno active <code>tailscale serve</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Consolidación: accesibilidad, latencia, auditoría de dependencias, instalación limpia, sustitución del TTS obsoleto</td>
+<td><strong>Completada</strong> (P-039 a P-044)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Entrega académica: conclusiones, mejoras, anexos, Word y web</td>
+<td><strong>Completada</strong>; faltan los datos de portada y las horas, que aporta el alumno</td>
+</tr>
+</tbody>
+</table>
+<h2 id="63-cronograma-y-registro-de-horas">6.3 Cronograma y registro de horas</h2>
+<p>Las fechas y las horas se toman exclusivamente del diario de desarrollo. <strong>No se estiman horas que no
+se hayan registrado.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sesión</th>
+<th>Fecha</th>
+<th>Fases trabajadas</th>
+<th>Horas registradas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2026-11-12</td>
+<td>0 a 10 (sesión continua, con varias reanudaciones; ver el diario)</td>
+<td>[PENDIENTE: el alumno debe anotar la duración real]</td>
+</tr>
+</tbody>
+</table>
+<p>El diario registra el orden real del trabajo en esa sesión: núcleo, prueba real con OpenAI, voz,
+interfaz, n8n, seguridad OWASP, PWA, Tauri, GitHub, consolidación y entrega. Las horas no se
+reconstruyen a posteriori.</p>
+<h2 id="64-hitos">6.4 Hitos</h2>
+<table>
+<thead>
+<tr>
+<th>Hito</th>
+<th>Criterio</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1</td>
+<td>Backend con salud y memoria persistente</td>
+<td>Alcanzado (P-003, P-005, P-006)</td>
+</tr>
+<tr>
+<td>H2</td>
+<td>Primera conversación real con OpenAI</td>
+<td>Alcanzado (P-007)</td>
+</tr>
+<tr>
+<td>H3</td>
+<td>Conversación por voz completa</td>
+<td>Alcanzado (P-014, P-019)</td>
+</tr>
+<tr>
+<td>H4</td>
+<td>Interfaz con esfera</td>
+<td>Alcanzado (P-019)</td>
+</tr>
+<tr>
+<td>H5</td>
+<td>Acceso desde el móvil</td>
+<td>Parcial: PWA lista; falta el paso de Tailscale del alumno</td>
+</tr>
+<tr>
+<td>H6</td>
+<td>Instalación reproducible y sin vulnerabilidades conocidas</td>
+<td>Alcanzado (P-041, P-042)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="65-riesgos">6.5 Riesgos</h2>
+<table>
+<thead>
+<tr>
+<th>Riesgo</th>
+<th>Probabilidad</th>
+<th>Impacto</th>
+<th>Mitigación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Latencia alta de la voz local sin GPU</td>
+<td>Alta</td>
+<td>Media</td>
+<td>Se materializó con la voz clonada (INC-020): síntesis frase a frase, 4 pasos, el texto llega antes</td>
+</tr>
+<tr>
+<td>Retirada de modelos de OpenAI</td>
+<td>Alta</td>
+<td>Media</td>
+<td>Se materializó con el TTS (retirado el 2027-01-06): sustituido por la Realtime API (P-043)</td>
+</tr>
+<tr>
+<td>Servicio crítico del alumno en el mismo equipo</td>
+<td>Media</td>
+<td>Alta</td>
+<td>Vigilancia del túnel; descargas avisadas; procesos pesados con prioridad baja (INC-011, INC-019)</td>
+</tr>
+<tr>
+<td>Coste de la API de OpenAI</td>
+<td>Media</td>
+<td>Media</td>
+<td>Registro de tokens por petición; modelo eficiente por defecto</td>
+</tr>
+<tr>
+<td><em>Prompt injection</em> a través de datos</td>
+<td>Media</td>
+<td>Alta</td>
+<td>Permisos en backend; datos marcados como no instrucciones</td>
+</tr>
+<tr>
+<td>Exposición de n8n a Internet (túnel existente)</td>
+<td>Media</td>
+<td>Alta</td>
+<td>ARVI usa solo loopback; recomendación documentada</td>
+</tr>
+<tr>
+<td>Cambios en APIs externas</td>
+<td>Media</td>
+<td>Media</td>
+<td>Adaptadores aislados tras interfaces</td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,133 @@
+<h2 id="131-herramientas-tipadas">13.1 Herramientas tipadas</h2>
+<p>Cada herramienta es un objeto <code>Tool</code> con nombre, descripción, un <strong>modelo Pydantic</strong> para sus
+argumentos, un nivel de permiso, una función asíncrona y un <em>timeout</em>. El esquema JSON que recibe el
+modelo de lenguaje se genera a partir del modelo Pydantic, de modo que la validación y la descripción
+no pueden desincronizarse.</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">OpenUrlArgs</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    <span class="nd">@classmethod</span>
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_http_only</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>        <span class="n">p</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"http"</span><span class="p">,</span> <span class="s2">"https"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Solo se permiten URLs http(s) completas"</span><span class="p">)</span>
+<a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>        <span class="k">return</span> <span class="n">v</span>
+</code></pre></div>
+<h2 id="132-catalogo-actual">13.2 Catálogo actual</h2>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Nivel</th>
+<th>Qué hace</th>
+<th>Restricción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory_search</code></td>
+<td>0</td>
+<td>Busca recuerdos</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>system_info</code></td>
+<td>0</td>
+<td>CPU, RAM, disco, hora</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>list_processes</code></td>
+<td>0</td>
+<td>Procesos con más memoria</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>search_files</code></td>
+<td>0</td>
+<td>Busca archivos por nombre</td>
+<td>Solo en <code>ARVI_ALLOWED_DIRS</code></td>
+</tr>
+<tr>
+<td><code>memory_remember</code></td>
+<td>1</td>
+<td>Guarda o actualiza un recuerdo</td>
+<td>Filtro de secretos</td>
+</tr>
+<tr>
+<td><code>open_url</code></td>
+<td>1</td>
+<td>Abre una URL en el navegador</td>
+<td>Solo <code>http</code>/<code>https</code></td>
+</tr>
+<tr>
+<td><code>open_app</code></td>
+<td>1</td>
+<td>Abre una aplicación</td>
+<td>Solo la lista blanca de <code>config/apps.yaml</code></td>
+</tr>
+<tr>
+<td><code>memory_forget</code></td>
+<td>2</td>
+<td>Archiva un recuerdo</td>
+<td>Confirmación (configurada en <code>permissions.yaml</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><code>open_app</code> lanza el ejecutable con <code>subprocess.Popen([...], shell=False)</code>: el modelo elige un
+<strong>identificador</strong> de la lista blanca, nunca una ruta ni un comando. No existe ninguna herramienta de
+terminal libre.</p>
+<h2 id="133-niveles-y-politica">13.3 Niveles y política</h2>
+<p>Ver el diagrama de decisión del capítulo 5. La política (<code>PermissionPolicy.decide</code>) admite permisos
+ampliados por herramienta en <code>config/permissions.yaml</code> (<code>auto</code>, <code>confirm</code>, <code>disabled</code>), pero el
+<strong>nivel 3 siempre exige confirmación</strong>, aunque se marque como <code>auto</code>.</p>
+<h2 id="134-confirmaciones">13.4 Confirmaciones</h2>
+<p>Cuando una acción necesita confirmación:</p>
+<ol>
+<li>Se crea una fila en <code>pending_actions</code> con una <strong>vista previa</strong> legible (p. ej., "Archivar el
+   recuerdo «X» (se mueve a 99-Archivo, no se borra)").</li>
+<li>El modelo recibe un texto explícito: <code>ACCIÓN NO EJECUTADA TODAVÍA. Requiere confirmación…</code>. Así
+   no puede afirmar que la ha realizado.</li>
+<li>El usuario aprueba o rechaza con <code>POST /api/actions/{id}</code>. Cada acción se resuelve una sola vez.</li>
+</ol>
+<h2 id="135-auditoria">13.5 Auditoría</h2>
+<p>Cada decisión queda registrada en <code>audit_log</code>: herramienta desconocida, argumentos inválidos,
+denegación, pendiente, aprobada, rechazada, ejecutada, error o <em>timeout</em>. Se consulta en
+<code>GET /api/audit</code>.</p>
+<h2 id="136-pruebas">13.6 Pruebas</h2>
+<p>8 pruebas de permisos y 3 del agente cubren estos casos. Por ejemplo, el modelo falso "pide"
+ejecutar una herramienta inexistente <code>run_shell</code> con <code>format c:</code> y el sistema la deniega
+(<code>test_unknown_tool_requested_by_model_is_denied</code>).</p>
+<p>Las pruebas REAL con OpenAI confirmaron el comportamiento con el modelo de verdad: herramienta
+permitida (P-009), acción de nivel 2 que queda pendiente y se aprueba sin poder reutilizar la
+aprobación (P-010, P-011), y creación de un <em>issue</em> de GitHub rechazada desde el centro de permisos
+de la interfaz (P-038). La batería OWASP (P-027) añade el peor caso: un modelo «engañado» por
+inyección de instrucciones que pide una acción sensible tampoco consigue ejecutarla sin aprobación.</p>
+<h2 id="137-estado">13.7 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Niveles 0-3, confirmación, auditoría</td>
+<td>Hecho (P-001, P-027)</td>
+</tr>
+<tr>
+<td>Centro de permisos en la interfaz</td>
+<td>Hecho (capítulo 14, P-019, P-038)</td>
+</tr>
+<tr>
+<td>Prueba real con OpenAI (criterios 6, 7 y 11)</td>
+<td><strong>Superada</strong> (P-009 a P-011)</td>
+</tr>
+<tr>
+<td>Capacidades avanzadas (control de ventanas, scripts aprobados)</td>
+<td>No implementadas; ver el capítulo 22</td>
+</tr>
+</tbody>
+</table>

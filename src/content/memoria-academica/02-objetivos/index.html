@@ -1,0 +1,80 @@
+<h2 id="21-objetivo-general">2.1 Objetivo general</h2>
+<p>Diseñar, implementar, probar y documentar un asistente personal por voz y texto, ejecutado en el PC
+del usuario, con memoria persistente transparente, acciones autorizadas sobre el ordenador e
+integraciones externas, accesible desde el escritorio y desde el móvil.</p>
+<h2 id="22-objetivos-especificos">2.2 Objetivos específicos</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Objetivo</th>
+<th>Estado al cierre (2026-11-12)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OE1</td>
+<td>Backend modular con API REST y WebSocket y proveedor LLM intercambiable</td>
+<td><strong>Cumplido</strong>: MOCK y REAL con OpenAI (P-007); primera palabra en 0,64 s (P-039)</td>
+</tr>
+<tr>
+<td>OE2</td>
+<td>Memoria persistente en Markdown (Obsidian) con búsqueda y trazabilidad del origen</td>
+<td><strong>Cumplido</strong> (P-005 a P-008)</td>
+</tr>
+<tr>
+<td>OE3</td>
+<td>Conversación por voz con motor local (VoiceStudio) y motor alternativo</td>
+<td><strong>Cumplido</strong> (P-014, P-019, P-043, P-044). Falta repetirlo con el micrófono real del alumno</td>
+</tr>
+<tr>
+<td>OE4</td>
+<td>Interfaz futurista con esfera sincronizada con el audio real</td>
+<td><strong>Cumplido</strong> (P-019, P-040); escritorio con Tauri (P-034, P-035)</td>
+</tr>
+<tr>
+<td>OE5</td>
+<td>Herramientas locales con permisos de cuatro niveles, confirmaciones y auditoría</td>
+<td><strong>Cumplido</strong>: MOCK y REAL (P-009 a P-011, P-027, P-038)</td>
+</tr>
+<tr>
+<td>OE6</td>
+<td>Automatizaciones mediante n8n</td>
+<td><strong>Cumplido</strong> (P-024 a P-026)</td>
+</tr>
+<tr>
+<td>OE7</td>
+<td>Al menos dos integraciones externas reales (Google y GitHub)</td>
+<td><strong>Parcial</strong>: GitHub REAL (P-036 a P-038). Google está implementado y probado con MOCK y con el servidor OAuth real (P-031), a falta de la credencial del alumno</td>
+</tr>
+<tr>
+<td>OE8</td>
+<td>Acceso móvil seguro mediante PWA y Tailscale</td>
+<td><strong>Parcial</strong>: PWA instalable y con modo sin conexión (P-029, P-030), Tailscale instalado. Falta activar HTTPS en la tailnet y probar desde el móvil</td>
+</tr>
+<tr>
+<td>OE9</td>
+<td>Asistente telefónico (llamadas a un número dedicado)</td>
+<td><strong>No abordado</strong>: investigado y documentado (16.8); requiere contratar un número</td>
+</tr>
+<tr>
+<td>OE10</td>
+<td>Documentación técnica y académica completa y verificable</td>
+<td><strong>Cumplido</strong>: memoria, web, 45 pruebas registradas, 21 incidencias, capturas reales</td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-alcance">2.3 Alcance</h2>
+<ul>
+<li>Un único usuario y un único servidor (el PC del usuario).</li>
+<li>Interfaz en español; código e identificadores internos en inglés.</li>
+<li>Integraciones solo mediante APIs oficiales.</li>
+</ul>
+<h2 id="24-limitaciones-conocidas">2.4 Limitaciones conocidas</h2>
+<ul>
+<li>Sin GPU NVIDIA, la voz local se ejecuta en CPU y tarda: de unos 6 s por frase con la voz por
+  defecto a unos 35 s con la voz clonada definitiva (10.4, 10.10).</li>
+<li>Los navegadores móviles no permiten la escucha permanente en segundo plano.</li>
+<li>WhatsApp e Instagram solo ofrecen lo que permiten las APIs oficiales de Meta.</li>
+<li>El modelo de voz por defecto de VoiceStudio (OmniVoice) tiene licencia no comercial.</li>
+</ul>

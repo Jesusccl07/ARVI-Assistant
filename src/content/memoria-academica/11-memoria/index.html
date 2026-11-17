@@ -1,0 +1,175 @@
+<h2 id="111-principio-de-diseno">11.1 Principio de diseño</h2>
+<p>La memoria duradera de ARVI son <strong>archivos Markdown en una bóveda de Obsidian</strong>. El usuario puede
+leerlos, corregirlos o borrarlos con Obsidian, y ARVI detecta esos cambios. El índice de búsqueda de
+SQLite es secundario y se puede reconstruir.</p>
+<p>La bóveda (<code>Documents\ARVI-Memory</code>) está <strong>fuera del repositorio Git</strong>, y el backend se niega a
+arrancar si <code>ARVI_VAULT_PATH</code> apunta dentro del repositorio (prueba
+<code>test_vault_inside_repo_is_refused</code>).</p>
+<h2 id="112-estructura-de-la-boveda">11.2 Estructura de la bóveda</h2>
+<table>
+<thead>
+<tr>
+<th>Carpeta</th>
+<th>Categoría</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00-Inbox</code></td>
+<td>inbox</td>
+<td>Recuerdos sin clasificar</td>
+</tr>
+<tr>
+<td><code>01-Perfil</code></td>
+<td>perfil</td>
+<td>Datos estables del usuario</td>
+</tr>
+<tr>
+<td><code>02-Preferencias</code></td>
+<td>preferencias</td>
+<td>Gustos y configuraciones</td>
+</tr>
+<tr>
+<td><code>03-Proyectos</code></td>
+<td>proyectos</td>
+<td>Objetivos, tareas y decisiones de proyectos</td>
+</tr>
+<tr>
+<td><code>04-Personas</code></td>
+<td>personas</td>
+<td>Contactos relevantes</td>
+</tr>
+<tr>
+<td><code>05-Conocimiento</code></td>
+<td>conocimiento</td>
+<td>Información de referencia</td>
+</tr>
+<tr>
+<td><code>06-Decisiones</code></td>
+<td>decisiones</td>
+<td>Decisiones tomadas</td>
+</tr>
+<tr>
+<td><code>07-Resúmenes</code></td>
+<td>resumenes</td>
+<td>Resúmenes episódicos</td>
+</tr>
+<tr>
+<td><code>08-Automatizaciones</code></td>
+<td>automatizaciones</td>
+<td>Notas generadas por n8n</td>
+</tr>
+<tr>
+<td><code>09-Sistema</code></td>
+<td>sistema</td>
+<td>Notas internas de ARVI</td>
+</tr>
+<tr>
+<td><code>99-Archivo</code></td>
+<td>archivo</td>
+<td>Recuerdos archivados (borrado lógico)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="113-operaciones">11.3 Operaciones</h2>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Implementación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crear</td>
+<td>Escritura <strong>atómica</strong> (archivo temporal + <code>os.replace</code>) para no dejar notas a medias</td>
+</tr>
+<tr>
+<td>Detectar duplicados</td>
+<td>Mismo título y categoría → se actualiza la nota existente en vez de duplicarla</td>
+</tr>
+<tr>
+<td>Actualizar</td>
+<td>Reescribe la nota; si cambia el título, renombra el archivo y elimina el anterior</td>
+</tr>
+<tr>
+<td>Eliminar</td>
+<td>Por defecto <strong>archiva</strong> (mueve a <code>99-Archivo</code>); el borrado físico es explícito</td>
+</tr>
+<tr>
+<td>Buscar</td>
+<td>FTS5 con <code>remove_diacritics</code> (insensible a acentos), palabras vacías filtradas y prefijos</td>
+</tr>
+<tr>
+<td>Reindexar</td>
+<td>Incremental: compara <code>mtime</code> y SHA-256 de cada archivo con el índice</td>
+</tr>
+<tr>
+<td>Obsoletos</td>
+<td><code>stale(días)</code> lista los recuerdos activos que no se han actualizado en ese plazo</td>
+</tr>
+<tr>
+<td>Backup</td>
+<td>ZIP de la bóveda; la restauración protege frente a <em>zip slip</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="114-proteccion-de-datos-sensibles">11.4 Protección de datos sensibles</h2>
+<p><code>secrets_filter.find_sensitive()</code> bloquea, <strong>en el backend</strong>, la escritura de claves de OpenAI,
+tokens de GitHub, claves de Google, claves privadas, JWT, contraseñas, IBAN y números de tarjeta
+(estos últimos validados con el algoritmo de Luhn para reducir falsos positivos):</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">(</span><span class="s2">"contraseña"</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="sa">r</span><span class="s2">"(?i)\b(contrase[ñn]a|password|passwd|pwd|clave|pin)\b\s*(es|:|=)\s*\S+"</span><span class="p">)),</span>
+</code></pre></div>
+<p>Es una defensa heurística: reduce el riesgo, pero no detecta todos los casos posibles.</p>
+<h2 id="115-recuperacion-contextual-y-procedencia">11.5 Recuperación contextual y procedencia</h2>
+<p>En cada turno el agente busca recuerdos relacionados con el mensaje del usuario y los incluye en
+las instrucciones del modelo así:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>&lt;recuerdo id="24aa4aa3f9" nota="03-Proyectos/proyecto-final--24aa4aa3f9.md" actualizado="..."&gt;
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>Mi proyecto final de Grado Superior se llama ARVI.
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>&lt;/recuerdo&gt;
+</code></pre></div>
+<p>La respuesta incluye la lista <code>memories</code> con el título y la ruta de cada nota usada, de modo que la
+interfaz puede mostrar el origen. Esto equivale a una técnica <strong>RAG</strong> (<em>Retrieval-Augmented
+Generation</em>) léxica.</p>
+<h2 id="116-politica-de-escritura">11.6 Política de escritura</h2>
+<p><code>ARVI_MEMORY_WRITE_POLICY=auto</code> permite que ARVI guarde recuerdos de nivel 1 directamente;
+<code>confirm</code> exige la aprobación del usuario para cada recuerdo nuevo. ARVI no guarda las
+conversaciones completas en la bóveda: solo lo que el modelo decide recordar mediante la
+herramienta <code>memory_remember</code>.</p>
+<h2 id="117-pruebas">11.7 Pruebas</h2>
+<p>17 pruebas automatizadas (ver capítulo 18) y una prueba real (P-005, P-006): la nota
+<code>03-Proyectos/proyecto-final--24aa4aa3f9.md</code> se creó en la bóveda real mediante la API y se
+recuperó después de reiniciar el servidor.</p>
+<h2 id="118-estado">11.8 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prueba conversacional completa («recuerda…» / «¿cómo se llama…?») con OpenAI</td>
+<td><strong>Superada</strong> (P-007, P-008)</td>
+</tr>
+<tr>
+<td>Recuerdos tratados como datos, no como instrucciones</td>
+<td>Hecho (INC-017, P-027)</td>
+</tr>
+<tr>
+<td>Buscador de memoria en la interfaz</td>
+<td>Hecho (pestaña <em>Memoria</em>, capítulo 14)</td>
+</tr>
+<tr>
+<td>Resolución de contradicciones asistida por el modelo</td>
+<td>No implementada; hoy el duplicado se sobrescribe (capítulo 22)</td>
+</tr>
+<tr>
+<td>Búsqueda semántica con <em>embeddings</em></td>
+<td>No implementada; solo se añadiría si mejora la recuperación de forma demostrada (capítulo 22)</td>
+</tr>
+</tbody>
+</table>

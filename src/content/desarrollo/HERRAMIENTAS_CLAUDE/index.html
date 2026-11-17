@@ -1,0 +1,36 @@
+<p>Este documento registra cómo se configura y usa el asistente de programación (Claude Code) en el
+desarrollo de ARVI. Complementa el <a href="../../memoria-academica/anexo-uso-ia/">anexo de uso de IA</a>.</p>
+<h2 id="skills-del-proyecto-claudeskills">Skills del proyecto (<code>.claude/skills/</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>documentar-avance</code></td>
+<td>Registrar el avance real en el diario, incidencias, pruebas y anexo de IA</td>
+</tr>
+<tr>
+<td><code>generar-memoria</code></td>
+<td>Generar el Word de la memoria y la web MkDocs a partir de <code>docs/</code></td>
+</tr>
+<tr>
+<td><code>capturar-evidencias</code></td>
+<td>Obtener capturas auténticas con Playwright, enmascarando datos sensibles</td>
+</tr>
+</tbody>
+</table>
+<p>Las tres skills se añadieron al proyecto durante la sesión 1 (2026-11-12), junto con versiones
+iniciales de <code>scripts/docs/capturar.py</code>, <code>generar_memoria.py</code> y <code>check_links.py</code>, desde una sesión de
+trabajo distinta de la que redactó el resto de la sesión 1. Ver INC-007.</p>
+<h2 id="plugins-habilitados-claudesettingslocaljson">Plugins habilitados (<code>.claude/settings.local.json</code>)</h2>
+<p><code>security-guidance</code>, <code>feature-dev</code>, <code>pyright-lsp</code>, <code>playwright</code>, <code>frontend-design</code>, <code>context7</code>.</p>
+<h2 id="hooks-de-notificacion">Hooks de notificación</h2>
+<p>Ver la sección "Notificaciones de escritorio" en <code>CLAUDE.md</code> y el script
+<code>infrastructure/scripts/notify.ps1</code>.</p>
+<h2 id="zensical">Zensical</h2>
+<p>[PENDIENTE] La skill <code>generar-memoria</code> menciona una evaluación de Zensical como alternativa a
+MkDocs. Esa evaluación todavía no se ha realizado; de momento se usa Material for MkDocs.</p>

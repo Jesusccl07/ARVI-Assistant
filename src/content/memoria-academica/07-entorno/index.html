@@ -1,0 +1,97 @@
+<h2 id="71-reconocimiento-inicial">7.1 Reconocimiento inicial</h2>
+<p>Antes de instalar nada se inspeccionó el equipo con comandos de <strong>solo lectura</strong>. El informe completo
+está en <a href="../../01-analisis-entorno/">Análisis del entorno</a>. Resumen:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sistema</td>
+<td>Windows 11 Pro 10.0.26200, 64 bits</td>
+</tr>
+<tr>
+<td>CPU / RAM</td>
+<td>Intel Core i9-12900HK (14 núcleos, 20 hilos) / 23,7 GB</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>Intel Iris Xe (sin CUDA)</td>
+</tr>
+<tr>
+<td>Ya disponible</td>
+<td>Docker 29.8.0, VS Code, Obsidian 1.15.0, n8n en Docker, winget</td>
+</tr>
+<tr>
+<td>No disponible</td>
+<td>Python real, Node.js, Git, GitHub CLI, Rust, Tailscale</td>
+</tr>
+</tbody>
+</table>
+<h2 id="72-instalaciones-realizadas">7.2 Instalaciones realizadas</h2>
+<p>Todas se hicieron con <code>winget</code>, tras la autorización expresa del usuario:</p>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Versión instalada</th>
+<th>Uso en ARVI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.12.10</td>
+<td>Backend</td>
+</tr>
+<tr>
+<td>uv</td>
+<td>0.13.7</td>
+<td>Entornos y dependencias reproducibles</td>
+</tr>
+<tr>
+<td>Git / GitHub CLI</td>
+<td>2.56.0 / 2.103.3</td>
+<td>Control de versiones</td>
+</tr>
+<tr>
+<td>Node.js LTS</td>
+<td>24.20.0</td>
+<td>Frontend</td>
+</tr>
+<tr>
+<td>Rust (rustup)</td>
+<td>rustc 1.99.1</td>
+<td>Aplicación de escritorio Tauri</td>
+</tr>
+<tr>
+<td>VoiceStudio</td>
+<td>0.5.8 (instalador verificado por SHA-256)</td>
+<td>Motor de voz local</td>
+</tr>
+<tr>
+<td>Chromium de Playwright</td>
+<td>—</td>
+<td>Capturas y pruebas de interfaz</td>
+</tr>
+</tbody>
+</table>
+<h2 id="73-reutilizacion-de-la-infraestructura-existente">7.3 Reutilización de la infraestructura existente</h2>
+<ul>
+<li><strong>Obsidian:</strong> solo se leyó <code>obsidian.json</code> para localizar las bóvedas. La bóveda personal no se
+  abrió ni se modificó. Se creó una bóveda nueva y separada: <code>Documents\ARVI-Memory</code>.</li>
+<li><strong>n8n:</strong> el contenedor <code>n8n-local</code> estaba detenido. Se arrancó con <code>docker start</code> (autorizado), sin
+  recrearlo ni cambiar su configuración. Se inspeccionó sin revelar los valores de sus variables.</li>
+</ul>
+<h2 id="74-revision-del-instalador-de-voicestudio">7.4 Revisión del instalador de VoiceStudio</h2>
+<p>El instalador oficial se ejecuta con <code>irm https://voicestudio.sh/install.ps1 | iex</code>, que descarga y
+ejecuta código remoto. Por seguridad no se ejecutó así: se descargó el script, se leyó entero
+(148 líneas) y se comprobó que solo descarga el instalador de la <em>release</em> oficial de GitHub,
+<strong>verifica su SHA-256</strong> contra <code>SHA256SUMS.txt</code> y lanza el asistente de instalación. Después se
+ejecutó la copia revisada.</p>
+<h2 id="75-incidencias-del-entorno">7.5 Incidencias del entorno</h2>
+<p>Ver INC-001 (rustup y <code>--scope user</code>) e INC-002 (alias de Python de la Microsoft Store) en el
+capítulo 19.</p>

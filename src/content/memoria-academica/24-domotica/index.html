@@ -1,0 +1,240 @@
+<h2 id="241-justificacion">24.1 Justificación</h2>
+<p>ARVI ya podía actuar sobre el PC (capítulo 13) y sobre servicios en la nube (capítulos 12 y 16). El
+siguiente paso natural de un asistente de voz es la casa: luces, enchufes, persianas, climatización y
+escenas. En lugar de hablar con cada fabricante, ARVI se integra con <strong>Home Assistant</strong>, la plataforma
+domótica de código abierto más extendida, que ya traduce cientos de marcas a una API común.</p>
+<p>Decisiones principales:</p>
+<table>
+<thead>
+<tr>
+<th>Decisión</th>
+<th>Alternativas</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home Assistant en Docker (<code>arvi-homeassistant</code>, solo <code>127.0.0.1:8123</code>)</td>
+<td>Home Assistant OS en una máquina virtual; integrar cada marca</td>
+<td>Convive con n8n y djbota sin tocarlos; se arranca y se borra sin afectar al sistema</td>
+</tr>
+<tr>
+<td>Integración <code>demo</code> (entidades <strong>simuladas</strong>)</td>
+<td>Esperar a tener dispositivos</td>
+<td>El alumno no tiene aún dispositivos domóticos; la integración <code>demo</code> es oficial y ofrece luces, ventiladores, cerraduras o alarmas reales a nivel de API. Todo lo simulado se marca así en la interfaz y en las pruebas</td>
+</tr>
+<tr>
+<td>REST para leer y actuar + WebSocket para eventos</td>
+<td>Solo REST con sondeo</td>
+<td>El WebSocket <code>state_changed</code> mantiene el estado al día sin sondear</td>
+</tr>
+<tr>
+<td>Token de larga duración en <code>.env</code> (<code>HOMEASSISTANT_TOKEN</code>)</td>
+<td>Usuario y contraseña</td>
+<td>Es el mecanismo recomendado por Home Assistant; se revoca desde su perfil</td>
+</tr>
+</tbody>
+</table>
+<h2 id="242-arquitectura">24.2 Arquitectura</h2>
+<pre class="mermaid">%% figura: Arquitectura del módulo de hogar inteligente
+flowchart LR
+  U[Usuario: voz o texto] --&gt; A[Agente ARVI]
+  A --&gt;|casa_dispositivos / casa_estado / casa_controlar / casa_escena| R[ToolRegistry + niveles 0-3]
+  R --&gt; S[SmartHome: resolución de nombres + política casa.yaml]
+  S --&gt;|REST /api/services| HA[(Home Assistant :8123)]
+  HA --&gt;|WebSocket state_changed| S
+  S --&gt; P[Panel «Mi Casa»]
+  S --&gt;|pasos app / equipo / n8n| X[Apps del PC, ARVI Remote, n8n]</pre>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Archivo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cliente</td>
+<td><code>backend/arvi/integrations/homeassistant.py</code></td>
+<td>REST (<code>/api/states</code>, <code>/api/services/&lt;dominio&gt;/&lt;servicio&gt;</code>) y WebSocket con reconexión</td>
+</tr>
+<tr>
+<td>Núcleo</td>
+<td><code>backend/arvi/smarthome/core.py</code></td>
+<td><code>HomePolicy</code> (niveles por dominio y entidad), <code>resolve()</code> (nombres en español, alias, grupos, ambigüedad), <code>build_call()</code> (acción → servicio de HA), escenas</td>
+</tr>
+<tr>
+<td>Herramientas</td>
+<td><code>backend/arvi/tools/home_tools.py</code></td>
+<td><code>casa_dispositivos</code> (0), <code>casa_estado</code> (0), <code>casa_controlar</code> (nivel de la entidad), <code>casa_escena</code> (el mayor de sus pasos)</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td><code>config/casa.yaml</code>, <code>config/escenas.yaml</code></td>
+<td>Permisos, alias y escenas editables</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>GET /api/casa</code>, <code>POST /api/casa/accion</code>, <code>POST /api/casa/escenas/{id}</code></td>
+<td>Panel «Mi Casa»</td>
+</tr>
+</tbody>
+</table>
+<h3 id="resolucion-de-nombres">Resolución de nombres</h3>
+<p>El usuario no dice <code>light.bed_light</code>, dice «la luz de mi habitación». <code>resolve()</code> normaliza el texto
+(sin acentos ni artículos), lo compara con los alias de <code>casa.yaml</code> y con el nombre amigable de Home
+Assistant, y devuelve:</p>
+<ul>
+<li>una entidad, si la coincidencia es clara;</li>
+<li>un <strong>grupo</strong> («luces de la casa», «todas las luces»);</li>
+<li>una lista de candidatas (<strong>ambigüedad</strong>). Si solo se dice el tipo de dispositivo («enciende el
+  ventilador») y hay varios, ARVI pregunta cuál en vez de elegir uno.</li>
+</ul>
+<p>ARVI <strong>nunca da por hecho que un dispositivo existe</strong>: si no se encuentra, el paso se marca como
+«omitido» y se informa.</p>
+<h2 id="243-permisos-por-dispositivo-y-seguridad-fisica">24.3 Permisos por dispositivo y seguridad física</h2>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Dominios por defecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 (consulta)</td>
+<td>Todos los sensores y estados</td>
+</tr>
+<tr>
+<td>1 (preaprobado)</td>
+<td><code>light</code>, <code>fan</code>, <code>media_player</code>, <code>scene</code>, <code>remote</code></td>
+</tr>
+<tr>
+<td>2 (confirmación)</td>
+<td><code>switch</code>, <code>cover</code>, <code>climate</code>, <code>humidifier</code>, <code>vacuum</code>, <code>script</code>, <code>automation</code></td>
+</tr>
+<tr>
+<td>3 (confirmación siempre)</td>
+<td><code>lawn_mower</code>, <code>water_heater</code></td>
+</tr>
+<tr>
+<td><strong>bloqueado</strong></td>
+<td><code>lock</code>, <code>alarm_control_panel</code>, <code>siren</code>, <code>valve</code></td>
+</tr>
+<tr>
+<td><strong>oculto</strong></td>
+<td><code>camera</code> (ARVI ni siquiera lee su estado)</td>
+</tr>
+</tbody>
+</table>
+<p>Regla del proyecto: <strong>ARVI no desactiva sistemas de seguridad ni abre accesos físicos por una orden de
+voz.</strong> Las cerraduras, alarmas, sirenas y válvulas están bloqueadas incluso con confirmación. Para
+desbloquearlas hay que editar <code>config/casa.yaml</code> en el PC (no basta una orden de voz) y, aun así, se
+recomienda nivel 3. Además, <code>HomePolicy.load</code> solo permite <strong>endurecer</strong> el nivel de una entidad
+respecto a su dominio, nunca rebajar uno bloqueado.</p>
+<h2 id="244-escenas">24.4 Escenas</h2>
+<p>Una escena combina pasos de Home Assistant, aplicaciones del PC (<code>app</code>), equipos remotos (<code>equipo</code>,
+capítulo 25) y automatizaciones de n8n. Su nivel es el <strong>mayor</strong> de sus pasos; si una escena incluye un
+enchufe, pide confirmación aunque el resto sean luces. Cada paso se verifica leyendo el estado después
+de actuar.</p>
+<table>
+<thead>
+<tr>
+<th>Escena</th>
+<th>Pasos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modo noche</td>
+<td>Apaga las luces, deja la de la habitación al 15 % y apaga la tele</td>
+</tr>
+<tr>
+<td>Modo estudio</td>
+<td>Luz del escritorio al 100 % y 4500 K, pausa la tele, abre Visual Studio Code</td>
+</tr>
+<tr>
+<td>Modo cine</td>
+<td>Salón apagado, tira LED azul al 10 %, persiana cerrada, tele encendida</td>
+</tr>
+</tbody>
+</table>
+<h2 id="245-casos-de-uso">24.5 Casos de uso</h2>
+<ul>
+<li>«¿Qué temperatura hace fuera?» → <code>casa_estado</code> → «15,6 °C (sensor simulado)».</li>
+<li>«Pon la luz de mi habitación al 60 %» → <code>casa_controlar</code> (nivel 1) → verificación en HA.</li>
+<li>«Activa el modo noche» → <code>casa_escena</code> → resumen por pasos (completado, omitido, fallido…).</li>
+<li>«Abre la puerta de la entrada» → <strong>rechazado</strong>: cerradura bloqueada.</li>
+</ul>
+<h2 id="246-pruebas">24.6 Pruebas</h2>
+<p>Las pruebas REAL se ejecutan contra Home Assistant 2026.11.1 con las entidades simuladas de <code>demo</code>
+(<code>scripts/e2e/domotica.py</code>, evidencia <code>docs/pruebas/evidencias/domotica-2026-11-12.json</code>):</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Prueba</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Conexión REST + WebSocket</td>
+<td>OK — versión 2026.11.1, 32 ms</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Descubrimiento</td>
+<td>OK — 122 entidades visibles (73 simuladas), 0 cámaras visibles</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Consulta en lenguaje natural</td>
+<td>OK — 15,6 °C, igual que Home Assistant</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Encender y apagar una luz</td>
+<td>OK — verificado <code>on</code> y <code>off</code> en HA</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Tiempo real</td>
+<td>OK — eventos 7 → 8 tras el cambio</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Escena «modo noche»</td>
+<td>OK — 3/3 pasos completados, habitación al 15 %</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>Cerradura y alarma</td>
+<td>OK — rechazadas por chat y por panel; estados <code>locked</code> y <code>disarmed</code> sin cambios</td>
+</tr>
+<tr>
+<td>D8</td>
+<td>Orden con valor (brillo 60 %)</td>
+<td>OK — 60 % en HA</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>Nombre ambiguo</td>
+<td>OK — «Hay varios ventiladores… ¿Cuál quieres que encienda?»</td>
+</tr>
+</tbody>
+</table>
+<p>Además, 17 pruebas MOCK (<code>tests/unit/test_homeassistant.py</code>) cubren la política, la resolución de
+nombres, las escenas y el cliente con REST y WebSocket simulados. Registro: P-045 y P-046.</p>
+<p><img alt="Figura F-022. Panel «Mi Casa» con las luces simuladas, sus permisos y las escenas" src="../../capturas/fase-11/2026-11-12_mi-casa-escritorio.png"/></p>
+<p><img alt="Figura F-023. Orden en lenguaje natural ejecutada con casa_controlar y verificada en Home Assistant" src="../../capturas/fase-11/2026-11-12_mi-casa-orden-voz.png"/></p>
+<p><img alt="Figura F-025. «Mi Casa» en el móvil a través de Tailscale Serve" src="../../capturas/fase-11/2026-11-12_mi-casa-movil.png"/></p>
+<h2 id="247-limitaciones">24.7 Limitaciones</h2>
+<ul>
+<li><strong>Sin dispositivos reales.</strong> Todo se ha probado con la integración <code>demo</code>. <strong>[PENDIENTE]</strong> Cuando el
+  alumno tenga dispositivos, sustituir las entidades de <code>config/casa.yaml</code> y repetir D1–D9.</li>
+<li><strong>[PENDIENTE]</strong> Cambiar la contraseña inicial de la cuenta local de Home Assistant.</li>
+<li>La resolución de nombres es léxica (alias y palabras), no semántica: los alias deben mantenerse al día.</li>
+</ul>

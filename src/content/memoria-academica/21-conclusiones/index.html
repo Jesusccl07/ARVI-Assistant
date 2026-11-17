@@ -1,0 +1,85 @@
+<h2 id="211-grado-de-cumplimiento">21.1 Grado de cumplimiento</h2>
+<p>De los diez objetivos específicos del capítulo 2:</p>
+<ul>
+<li><strong>siete se han cumplido</strong> y están verificados con pruebas reales: backend, memoria, voz, interfaz,
+  permisos, n8n y documentación;</li>
+<li><strong>dos están parcialmente cumplidos</strong> porque falta un paso que solo puede dar el alumno: la
+  credencial de Google y la activación de HTTPS en Tailscale;</li>
+<li><strong>uno no se ha abordado</strong>: el asistente telefónico, que se investigó pero requiere contratar un
+  número.</li>
+</ul>
+<p>De los quince criterios de aceptación del proyecto (capítulo 18), doce están superados y tres
+parcialmente. Dos de los parciales dependen de esos mismos pasos del alumno, y el tercero es repetir
+la prueba de voz con su micrófono real.</p>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pruebas registradas (P-000 a P-057)</td>
+<td>58: 55 ejecutadas y 3 marcadas [PENDIENTE] (segundo PC, micrófono real y dispositivos domóticos reales); ninguna marcada como superada sin ejecutarse</td>
+</tr>
+<tr>
+<td>Pruebas automatizadas</td>
+<td>181 en el backend (unitarias, integración y seguridad) + 10 en el frontend</td>
+</tr>
+<tr>
+<td>Incidencias documentadas con causa y solución</td>
+<td>28</td>
+</tr>
+<tr>
+<td>Primera palabra de la respuesta (texto)</td>
+<td>0,64 s de mediana (objetivo: &lt; 2 s)</td>
+</tr>
+<tr>
+<td>Infracciones de accesibilidad (axe-core, WCAG 2.2 AA)</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Vulnerabilidades conocidas en dependencias</td>
+<td>0 (Python, npm y Rust)</td>
+</tr>
+<tr>
+<td>Instalación desde cero en una copia limpia</td>
+<td>Correcta en 73 s</td>
+</tr>
+</tbody>
+</table>
+<h2 id="212-lo-que-funciono-bien">21.2 Lo que funcionó bien</h2>
+<ul>
+<li><strong>Los permisos fuera del modelo.</strong> El modelo propone y el backend decide. Una prueba de seguridad
+  simula un modelo engañado por inyección de instrucciones que pide una acción sensible: no consigue
+  ejecutarla sin aprobación. Esta barrera no depende de que el modelo «se porte bien».</li>
+<li><strong>Las interfaces entre piezas.</strong> Cambiar el motor de voz de respaldo cuando OpenAI anunció su
+  retirada fue añadir un adaptador. No hubo que tocar el agente, la API ni la interfaz.</li>
+<li><strong>La memoria en Markdown.</strong> El alumno puede leer, corregir o borrar sus recuerdos desde Obsidian,
+  y ARVI lo detecta. No hay una «caja negra» de datos personales.</li>
+<li><strong>Probar contra servicios reales.</strong> Varios errores solo aparecieron así. Por ejemplo, GitHub
+  devuelve 403 en las notificaciones con <em>tokens</em> de grano fino (P-037), y VoiceStudio rechaza dos
+  síntesis a la vez (INC-015). Con dobles de prueba no se habrían visto.</li>
+</ul>
+<h2 id="213-dificultades-y-aprendizajes">21.3 Dificultades y aprendizajes</h2>
+<ul>
+<li><strong>La voz local en CPU es el cuello de botella.</strong> El texto llega en menos de un segundo, pero
+  la voz clonada tarda más de medio minuto por frase (INC-020). Ninguna optimización de código lo
+  compensa: depende del hardware y de la muestra de referencia.</li>
+<li><strong>Un servicio crítico en el mismo equipo.</strong> La web del alumno comparte máquina con ARVI. Dos
+  veces hubo cortes breves de su túnel: por ancho de banda (INC-011) y por CPU (INC-019). Proteger un
+  servicio no es solo no tocar su configuración.</li>
+<li><strong>Las plataformas cambian durante el proyecto.</strong> El modelo de síntesis de OpenAI quedó obsoleto
+  en mitad del desarrollo, y Google limita a 7 días los permisos de las aplicaciones en pruebas.
+  Hay que consultar la documentación oficial con fecha y aislar cada servicio tras un adaptador.</li>
+<li><strong>La seguridad de los datos que lee el modelo.</strong> Marcar el contenido externo como «datos» solo
+  protege si el propio dato no puede cerrar la marca (INC-017). Se encontró en la revisión, antes de
+  que nadie lo explotara.</li>
+<li><strong>Documentar mientras se desarrolla.</strong> El diario, las incidencias y el registro de pruebas se
+  escribieron en el momento, con evidencias. Eso evitó reconstruir de memoria y permitió detectar
+  errores en la propia documentación (INC-014, INC-021).</li>
+</ul>
+<h2 id="214-valoracion-personal">21.4 Valoración personal</h2>
+<p>[PENDIENTE] Apartado reservado al alumno: valoración personal del proyecto, qué ha aprendido y cómo
+lo relaciona con los módulos del ciclo.</p>

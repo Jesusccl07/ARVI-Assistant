@@ -1,2383 +1,38 @@
-
 <!doctype html>
-<html lang="es" class="no-js">
-  <head>
-    
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      
-        <meta name="description" content="Asistente de Respuesta por Voz e Integraciones — Proyecto Final de Grado Superior">
-      
-      
-      
-      
-        <link rel="prev" href="../registro-pruebas/">
-      
-      
-        <link rel="next" href="../../capturas/figuras/">
-      
-      
-        
-      
-      
-      <link rel="icon" href="../../web/assets/arvi-logo.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
-    
-    
-      
-        <title>Incidencias - ARVI — Documentación técnica</title>
-      
-    
-    
-      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
-      
-        
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
-      
-      
-
-
-    
-    
-      
-    
-    
-      
-        
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
-      
-    
-    
-      <link rel="stylesheet" href="../../web/stylesheets/arvi.css">
-    
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-    
-      
-
-    
-    
-  </head>
-  
-  
-    
-    
-      
-    
-    
-    
-    
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="cyan">
-  
-    
-    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
-    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
-    <div data-md-component="skip">
-      
-        
-        <a href="#registro-de-incidencias-y-soluciones" class="md-skip">
-          Saltar a contenido
-        </a>
-      
-    </div>
-    <div data-md-component="announce">
-      
-    </div>
-    
-    
-      
-
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href="../.." title="ARVI — Documentación técnica" class="md-header__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
-      
-  <img src="../../web/assets/arvi-logo.svg" alt="logo">
-
-    </a>
-    <label class="md-header__button md-icon" for="__drawer">
-      
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-    </label>
-    <div class="md-header__title" data-md-component="header-title">
-      <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
-            ARVI — Documentación técnica
-          </span>
-        </div>
-        <div class="md-header__topic" data-md-component="header-topic">
-          <span class="md-ellipsis">
-            
-              Incidencias
-            
-          </span>
-        </div>
-      </div>
-    </div>
-    
-      
-        <form class="md-header__option" data-md-component="palette">
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="cyan"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_0">
-    
-      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
-      </label>
-    
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="cyan"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_1">
-    
-      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
-      </label>
-    
-  
-</form>
-      
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-    
-    
-    
-      
-      
-        <label class="md-header__button md-icon" for="__search">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Buscar">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-        <div class="md-search__suggest" data-md-component="search-suggest"></div>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Inicializando búsqueda
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      
-    
-    
-  </nav>
-  
-</header>
-    
-    <div class="md-container" data-md-component="container">
-      
-      
-        
-          
-        
-      
-      <main class="md-main" data-md-component="main">
-        <div class="md-main__inner md-grid">
-          
-            
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-
-<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
-  <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ARVI — Documentación técnica" class="md-nav__button md-logo" aria-label="ARVI — Documentación técnica" data-md-component="logo">
-      
-  <img src="../../web/assets/arvi-logo.svg" alt="logo">
-
-    </a>
-    ARVI — Documentación técnica
-  </label>
-  
-  <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Inicio
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../memoria-academica/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Memoria académica
-  
-
-    
-  </span>
-  
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Memoria académica
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/01-introduccion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    1. Introducción y motivación
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/02-objetivos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    2. Objetivos
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/03-requisitos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    3. Análisis de requisitos
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/04-tecnologias/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    4. Estudio de tecnologías
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/05-diseno/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    5. Diseño y arquitectura
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/06-planificacion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    6. Planificación del proyecto
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/07-entorno/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    7. Preparación del entorno
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/08-backend/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    8. Desarrollo del backend
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/09-openai/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    9. Integración con OpenAI
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/10-voz/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    10. Sistema de voz
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/11-memoria/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    11. Memoria persistente con Obsidian
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/12-n8n/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    12. Integración con n8n
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/13-herramientas-permisos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    13. Sistema de herramientas y permisos
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/14-interfaz/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    14. Interfaz gráfica y animaciones
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/15-movil/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/16-integraciones/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    16. Integraciones externas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/17-seguridad/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    17. Seguridad y privacidad
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/18-pruebas/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    18. Pruebas y resultados
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/19-incidencias/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    19. Incidencias y soluciones
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/20-presupuesto/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    20. Presupuesto
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/21-conclusiones/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    21. Conclusiones
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/22-mejoras/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    22. Posibles mejoras futuras
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/23-bibliografia-anexos/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    23. Bibliografía y anexos
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/24-domotica/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    24. Ampliación: hogar inteligente con Home Assistant
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/25-control-remoto/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    25. Ampliación: control de varios ordenadores (ARVI Remote)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/26-aprendizaje-voz/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    26. Ampliación: aprendizaje continuo de la voz («Mi voz»)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../memoria-academica/anexo-uso-ia/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Anexo — Registro del uso de herramientas de IA en el desarrollo
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Desarrollo
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Desarrollo
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../DIARIO_DESARROLLO/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Diario de desarrollo
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../01-analisis-entorno/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Análisis del entorno
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../arquitectura/decisiones-tecnologicas/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Decisiones tecnológicas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../desarrollo/HERRAMIENTAS_CLAUDE/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Herramientas de Claude Code
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Pruebas
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Pruebas
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../registro-pruebas/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Registro de pruebas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Incidencias
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Incidencias
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#inc-001-rustup-no-se-instala-con-scope-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-001 — rustup no se instala con --scope user
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-002-python-no-era-un-interprete-real" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-002 — python no era un intérprete real
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-003 — Ruta REST de síntesis de VoiceStudio no documentada
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-004-la-api-respondia-422-a-peticiones-post-validas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-004 — La API respondía 422 a peticiones POST válidas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-005-la-reindexacion-contaba-una-nota-de-mas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-005 — La reindexación contaba una nota de más
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-006 — Aviso de "proceso antiguo vivo" al reiniciar el servidor
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-007 — Sobrescritura de check_links.py creado por otra sesión
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-008 — Página del anexo de IA borrada por error al reorganizar
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-009 — Rutas personales dentro del Word y de la documentación
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-010-tildes-danadas-en-env-y-envexample" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-010 — Tildes dañadas en .env y .env.example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#resolucion-de-inc-003-2026-11-12" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Resolución de INC-003 (2026-11-12)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-012-whisper-transcribia-arvi-como-arbito" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-012 — Whisper transcribía «ARVI» como «Arbito»
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-013 — La interfaz se quedaba en blanco al enviar un mensaje
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-014 — Prueba de la interfaz completada solo con el motor de respaldo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-015 — VoiceStudio rechaza síntesis simultáneas (429) y la voz pasaba al respaldo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-016 — Las herramientas de n8n aceptaban argumentos no declarados
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-017 — Un dato podía cerrar su propio envoltorio y hacerse pasar por instrucciones
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-018 — La página «sin conexión» de la PWA no se actualizaba
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-019 — Una compilación pesada cortó 13 s el túnel del otro servicio web
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-020 — La voz clonada «DJ CLEMENT» tarda más de medio minuto por frase
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-021 — Filas del registro de pruebas pegadas en la misma línea
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-022 — «Enciende el ventilador» no encontraba ningún dispositivo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-023 — ARVI respondía con los datos de ARVI-SERVER cuando se le preguntaba por «el ordenador»
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-024 — uv add no podía actualizar el entorno con el backend en marcha
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-025 — La voz sintetizada de ARVI solo se descartaba por ruido, no como eco
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-026-desplazamiento-horizontal-en-el-movil" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-026 — Desplazamiento horizontal en el móvil
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-027 — El informe de coordinación de n8n no mostraba la capacidad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-028 — OmniVoice-GGUF no se puede ejecutar en esta instalación de VoiceStudio
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../capturas/figuras/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Capturas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Gestión
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Gestión
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../gestion/presupuesto/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Presupuesto y licencias
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-    
-    
-    
-      
-        
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../telefonia/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Investigación
-  
-
-    
-  </span>
-  
-  
-
-            </a>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Investigación
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-  </ul>
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-            
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#inc-001-rustup-no-se-instala-con-scope-user" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-001 — rustup no se instala con --scope user
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-002-python-no-era-un-interprete-real" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-002 — python no era un intérprete real
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-003 — Ruta REST de síntesis de VoiceStudio no documentada
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-004-la-api-respondia-422-a-peticiones-post-validas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-004 — La API respondía 422 a peticiones POST válidas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-005-la-reindexacion-contaba-una-nota-de-mas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-005 — La reindexación contaba una nota de más
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-006 — Aviso de "proceso antiguo vivo" al reiniciar el servidor
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-007 — Sobrescritura de check_links.py creado por otra sesión
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-008 — Página del anexo de IA borrada por error al reorganizar
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-009 — Rutas personales dentro del Word y de la documentación
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-010-tildes-danadas-en-env-y-envexample" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-010 — Tildes dañadas en .env y .env.example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#resolucion-de-inc-003-2026-11-12" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Resolución de INC-003 (2026-11-12)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-012-whisper-transcribia-arvi-como-arbito" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-012 — Whisper transcribía «ARVI» como «Arbito»
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-013 — La interfaz se quedaba en blanco al enviar un mensaje
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-014 — Prueba de la interfaz completada solo con el motor de respaldo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-015 — VoiceStudio rechaza síntesis simultáneas (429) y la voz pasaba al respaldo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-016 — Las herramientas de n8n aceptaban argumentos no declarados
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-017 — Un dato podía cerrar su propio envoltorio y hacerse pasar por instrucciones
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-018 — La página «sin conexión» de la PWA no se actualizaba
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-019 — Una compilación pesada cortó 13 s el túnel del otro servicio web
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-020 — La voz clonada «DJ CLEMENT» tarda más de medio minuto por frase
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-021 — Filas del registro de pruebas pegadas en la misma línea
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-022 — «Enciende el ventilador» no encontraba ningún dispositivo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-023 — ARVI respondía con los datos de ARVI-SERVER cuando se le preguntaba por «el ordenador»
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-024 — uv add no podía actualizar el entorno con el backend en marcha
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-025 — La voz sintetizada de ARVI solo se descartaba por ruido, no como eco
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-026-desplazamiento-horizontal-en-el-movil" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-026 — Desplazamiento horizontal en el móvil
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-027 — El informe de coordinación de n8n no mostraba la capacidad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        INC-028 — OmniVoice-GGUF no se puede ejecutar en esta instalación de VoiceStudio
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
-          
-          
-            <div class="md-content" data-md-component="content">
-              
-              <article class="md-content__inner md-typeset">
-                
-                  
-
-
-
-<h1 id="registro-de-incidencias-y-soluciones">Registro de incidencias y soluciones<a class="headerlink" href="#registro-de-incidencias-y-soluciones" title="Permanent link">&para;</a></h1>
-<p>Errores reales aparecidos durante la instalación, el desarrollo y las pruebas. Cada incidencia
+<html lang="es" data-root="../../" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registro de incidencias y soluciones · ARVI</title>
+<meta name="description" content="Errores reales aparecidos durante la instalación, el desarrollo y las pruebas. Cada incidencia incluye el mensaje observado (o un extracto fiel), la causa y la solución aplicada.">
+<meta name="theme-color" content="#060914">
+<meta property="og:title" content="Registro de incidencias y soluciones · ARVI"><meta property="og:description" content="Errores reales aparecidos durante la instalación, el desarrollo y las pruebas. Cada incidencia incluye el mensaje observado (o un extracto fiel), la causa y la solución aplicada."><meta property="og:type" content="website"><meta property="og:url" content="https://jesusccl07.github.io/ARVI-Assistant/pruebas/incidencias/">
+<link rel="canonical" href="https://jesusccl07.github.io/ARVI-Assistant/pruebas/incidencias/">
+<link rel="icon" href="../../assets/img/arvi-logo.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('arvi-theme');document.documentElement.dataset.theme=t||'dark'}catch(e){document.documentElement.dataset.theme='dark'}})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@500..700&display=swap">
+<link rel="stylesheet" href="../../assets/css/arvi.css">
+</head>
+<body class="">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div id="progress" aria-hidden="true"></div>
+<header class="hdr"><div class="hdr-in">
+<button class="ico-btn burger" type="button" aria-label="Abrir menú" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" ><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<a class="brand" href="../../" aria-label="ARVI, inicio"><img src="../../assets/img/arvi-logo.svg" alt="" width="30" height="30">ARVI</a>
+<nav class="topnav" aria-label="Secciones"><a href="../../memoria-academica/">Memoria</a><a href="../../DIARIO_DESARROLLO/">Desarrollo</a><a href="../../pruebas/registro-pruebas/" aria-current="page">Pruebas</a><a href="../../gestion/presupuesto/">Gestión</a></nav>
+<span class="hdr-sp"></span>
+<button class="btn-search" type="button" data-search aria-label="Buscar"><svg width="18" height="18" style="stroke:currentColor;fill:none;stroke-width:1.8" viewBox="0 0 24 24" aria-hidden="true" ><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="t">Buscar</span><kbd>Ctrl K</kbd></button>
+<button class="ico-btn theme-t" type="button" aria-label="Cambiar entre tema claro y oscuro"><svg viewBox="0 0 24 24" aria-hidden="true" class="moon"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" class="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+<a class="ico-btn" href="https://github.com/Jesusccl07/ARVI-Assistant" aria-label="Repositorio en GitHub" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" ><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a>
+</div></header>
+<div class="scrim"></div><div class="shell">
+<aside class="side" aria-label="Capítulos"><h2>Pruebas</h2><div class="grp"><ul><li><a href="../../pruebas/registro-pruebas/">Registro de pruebas</a></li><li><a href="../../pruebas/incidencias/" aria-current="page">Incidencias</a></li><li><a href="../../pruebas/evidencias/openai-real-2026-11-12/">Evidencias · OpenAI real</a></li><li><a href="../../pruebas/evidencias/voz-real-2026-11-12/">Evidencias · voz real</a></li><li><a href="../../capturas/figuras/">Capturas</a></li></ul></div></aside>
+<main id="contenido">
+<div class="crumbs"><a href="../../">Inicio</a><i>/</i><a href="../../pruebas/registro-pruebas/">Pruebas</a><i>/</i><span>Incidencias</span></div>
+<h1 class="page-h">Registro de incidencias y soluciones</h1>
+<div class="page-meta"><span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true" ><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 15 min de lectura</span></div>
+<article class="prose"><p>Errores reales aparecidos durante la instalación, el desarrollo y las pruebas. Cada incidencia
 incluye el mensaje observado (o un extracto fiel), la causa y la solución aplicada.</p>
-<table>
+<div class="table-wrap"><table>
 <thead>
 <tr>
 <th>ID</th>
@@ -2391,13 +46,13 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-001</td>
 <td>2026-11-12</td>
 <td>0</td>
-<td>Resuelta (ver detalle)</td>
+<td><span class="pill ok">Resuelta (ver detalle)</span></td>
 </tr>
 <tr>
 <td>INC-002</td>
 <td>2026-11-12</td>
 <td>0</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-003</td>
@@ -2409,13 +64,13 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-004</td>
 <td>2026-11-12</td>
 <td>1</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-005</td>
 <td>2026-11-12</td>
 <td>2</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-006</td>
@@ -2433,19 +88,19 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-008</td>
 <td>2026-11-12</td>
 <td>0</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-009</td>
 <td>2026-11-12</td>
 <td>0</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-010</td>
 <td>2026-11-12</td>
 <td>1</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-011</td>
@@ -2457,13 +112,13 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-012</td>
 <td>2026-11-12</td>
 <td>3</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-013</td>
 <td>2026-11-12</td>
 <td>4</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-014</td>
@@ -2475,7 +130,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-015</td>
 <td>2026-11-12</td>
 <td>4</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 <tr>
 <td>INC-016</td>
@@ -2493,12 +148,12 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <td>INC-018</td>
 <td>2026-11-12</td>
 <td>8</td>
-<td>Resuelta</td>
+<td><span class="pill ok">Resuelta</span></td>
 </tr>
 </tbody>
-</table>
-<hr />
-<h2 id="inc-001-rustup-no-se-instala-con-scope-user">INC-001 — rustup no se instala con <code>--scope user</code><a class="headerlink" href="#inc-001-rustup-no-se-instala-con-scope-user" title="Permanent link">&para;</a></h2>
+</table></div>
+<hr/>
+<h2 id="inc-001-rustup-no-se-instala-con-scope-user"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-001-rustup-no-se-instala-con-scope-user">#</a>INC-001 — rustup no se instala con <code>--scope user</code></h2>
 <ul>
 <li><strong>Contexto:</strong> instalación de Rust (necesario para Tauri 2) con
   <code>winget install --id Rustlang.Rustup -e --scope user</code>.</li>
@@ -2510,7 +165,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
   usuario, <code>%USERPROFILE%\.cargo</code>).</li>
 <li><strong>Lección:</strong> <code>--scope user</code> no es universal en winget; comprobar el manifiesto con <code>winget show</code>.</li>
 </ul>
-<h2 id="inc-002-python-no-era-un-interprete-real">INC-002 — <code>python</code> no era un intérprete real<a class="headerlink" href="#inc-002-python-no-era-un-interprete-real" title="Permanent link">&para;</a></h2>
+<h2 id="inc-002-python-no-era-un-interprete-real"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-002-python-no-era-un-interprete-real">#</a>INC-002 — <code>python</code> no era un intérprete real</h2>
 <ul>
 <li><strong>Contexto:</strong> comprobación inicial de herramientas.</li>
 <li><strong>Error observado:</strong> <code>no se encontró Python; ejecutar sin argumentos para instalar desde el
@@ -2520,7 +175,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
   PATH del usuario, por lo que <code>python</code> resuelve ya a
   <code>%LOCALAPPDATA%\Programs\Python\Python312\python.exe</code>.</li>
 </ul>
-<h2 id="inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada">INC-003 — Ruta REST de síntesis de VoiceStudio no documentada<a class="headerlink" href="#inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada" title="Permanent link">&para;</a></h2>
+<h2 id="inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada">#</a>INC-003 — Ruta REST de síntesis de VoiceStudio no documentada</h2>
 <ul>
 <li><strong>Contexto:</strong> diseño del adaptador <code>VoiceStudioTTS</code>.</li>
 <li><strong>Observación:</strong> la documentación pública documenta la transcripción REST compatible con OpenAI
@@ -2529,7 +184,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Decisión:</strong> no presuponer endpoints. Se consultará el <code>openapi.json</code> del servidor instalado y,
   si no existe ruta REST, se usará el transporte MCP oficial.</li>
 </ul>
-<h2 id="inc-004-la-api-respondia-422-a-peticiones-post-validas">INC-004 — La API respondía 422 a peticiones POST válidas<a class="headerlink" href="#inc-004-la-api-respondia-422-a-peticiones-post-validas" title="Permanent link">&para;</a></h2>
+<h2 id="inc-004-la-api-respondia-422-a-peticiones-post-validas"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-004-la-api-respondia-422-a-peticiones-post-validas">#</a>INC-004 — La API respondía 422 a peticiones POST válidas</h2>
 <ul>
 <li><strong>Contexto:</strong> primera ejecución de <code>tests/integration/test_api.py</code>.</li>
 <li><strong>Error observado:</strong> <code>assert 422 == 200</code> en <code>POST /api/chat</code> y <code>POST /api/memories</code>.</li>
@@ -2540,7 +195,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Solución:</strong> mover los esquemas a un módulo propio (<code>backend/arvi/schemas/api.py</code>).</li>
 <li><strong>Lección:</strong> los modelos de entrada de FastAPI deben definirse a nivel de módulo.</li>
 </ul>
-<h2 id="inc-005-la-reindexacion-contaba-una-nota-de-mas">INC-005 — La reindexación contaba una nota de más<a class="headerlink" href="#inc-005-la-reindexacion-contaba-una-nota-de-mas" title="Permanent link">&para;</a></h2>
+<h2 id="inc-005-la-reindexacion-contaba-una-nota-de-mas"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-005-la-reindexacion-contaba-una-nota-de-mas">#</a>INC-005 — La reindexación contaba una nota de más</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba <code>test_reindex_picks_up_handwritten_notes_and_deletions</code>.</li>
 <li><strong>Error observado:</strong> <code>assert 2 == 1</code> (se esperaba 1 nota añadida).</li>
@@ -2549,7 +204,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Solución:</strong> <code>MemoryService</code> reindexa al construirse, de modo que el índice refleja la bóveda
   desde el primer momento.</li>
 </ul>
-<h2 id="inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor">INC-006 — Aviso de "proceso antiguo vivo" al reiniciar el servidor<a class="headerlink" href="#inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor" title="Permanent link">&para;</a></h2>
+<h2 id="inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor">#</a>INC-006 — Aviso de "proceso antiguo vivo" al reiniciar el servidor</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba P-006 (persistencia tras reinicio).</li>
 <li><strong>Observación:</strong> el script de verificación avisó de que el servidor anterior seguía respondiendo.</li>
@@ -2560,7 +215,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Conclusión:</strong> falso positivo de la verificación; la prueba es válida.</li>
 <li><strong>Lección:</strong> verificar qué proceso sirve la petición, no solo que haya respuesta.</li>
 </ul>
-<h2 id="inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion">INC-007 — Sobrescritura de <code>check_links.py</code> creado por otra sesión<a class="headerlink" href="#inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion" title="Permanent link">&para;</a></h2>
+<h2 id="inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion">#</a>INC-007 — Sobrescritura de <code>check_links.py</code> creado por otra sesión</h2>
 <ul>
 <li><strong>Contexto:</strong> creación de los scripts de documentación.</li>
 <li><strong>Observación:</strong> la herramienta de escritura respondió <em>"has been updated"</em> en lugar de <em>"created"</em>:
@@ -2574,7 +229,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Solución aplicada:</strong> los otros dos scripts se leyeron y se <strong>ampliaron</strong> conservando su interfaz.</li>
 <li><strong>Lección:</strong> comprobar la existencia de un archivo antes de crearlo y hacer commits frecuentes.</li>
 </ul>
-<h2 id="inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar">INC-008 — Página del anexo de IA borrada por error al reorganizar<a class="headerlink" href="#inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar" title="Permanent link">&para;</a></h2>
+<h2 id="inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar">#</a>INC-008 — Página del anexo de IA borrada por error al reorganizar</h2>
 <ul>
 <li><strong>Contexto:</strong> traslado de los contenidos reutilizables a <code>docs/_fuentes/</code>.</li>
 <li><strong>Error observado:</strong> <code>mkdocs build --strict</code> → <code>A reference to 'memoria-academica/anexo-uso-ia.md'
@@ -2585,7 +240,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
   corrigió el enlace del diario a la nueva ubicación de incidencias.</li>
 <li><strong>Lección:</strong> los dos comprobadores (enlaces y MkDocs estricto) detectaron el fallo antes de publicar.</li>
 </ul>
-<h2 id="inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion">INC-009 — Rutas personales dentro del Word y de la documentación<a class="headerlink" href="#inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion" title="Permanent link">&para;</a></h2>
+<h2 id="inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion">#</a>INC-009 — Rutas personales dentro del Word y de la documentación</h2>
 <ul>
 <li><strong>Contexto:</strong> revisión de secretos y datos personales antes del primer commit.</li>
 <li><strong>Observación:</strong> el nombre de usuario de Windows aparecía 10 veces dentro de
@@ -2596,7 +251,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
   documentos. Verificación: 0 apariciones en todos los XML del <code>.docx</code>.</li>
 <li><strong>Lección:</strong> revisar también los binarios generados (un <code>.docx</code> es un ZIP con XML).</li>
 </ul>
-<h2 id="inc-010-tildes-danadas-en-env-y-envexample">INC-010 — Tildes dañadas en <code>.env</code> y <code>.env.example</code><a class="headerlink" href="#inc-010-tildes-danadas-en-env-y-envexample" title="Permanent link">&para;</a></h2>
+<h2 id="inc-010-tildes-danadas-en-env-y-envexample"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-010-tildes-danadas-en-env-y-envexample">#</a>INC-010 — Tildes dañadas en <code>.env</code> y <code>.env.example</code></h2>
 <ul>
 <li><strong>Contexto:</strong> cambio del modelo por defecto con <code>Get-Content -Raw</code> / <code>Set-Content</code> en PowerShell 5.1.</li>
 <li><strong>Observación:</strong> los comentarios mostraban <code>ConfiguraciÃ³n</code>, <code>bÃ³veda</code>, <code>â€”</code>…</li>
@@ -2607,7 +262,7 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Lección:</strong> en PowerShell 5.1, leer y escribir siempre con codificación explícita
   (<code>[IO.File]::ReadAllText(..., UTF8)</code>) o usar las herramientas de edición del entorno.</li>
 </ul>
-<h2 id="inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio">INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio<a class="headerlink" href="#inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio" title="Permanent link">&para;</a></h2>
+<h2 id="inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio">#</a>INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio</h2>
 <ul>
 <li><strong>Contexto:</strong> primer arranque de VoiceStudio (2026-11-12, 15:41 hora local) para preparar la Fase 3.</li>
 <li><strong>Observación:</strong> el usuario avisó de que su web (servida desde este PC con un túnel de Cloudflare)
@@ -2620,12 +275,12 @@ incluye el mensaje observado (o un extracto fiel), la causa y la solución aplic
 <li><strong>Lección:</strong> antes de cualquier acción que consuma mucho ancho de banda (modelos, instaladores,
   imágenes Docker), avisar al usuario y pedir confirmación; después, revisar el túnel.</li>
 </ul>
-<h3 id="resolucion-de-inc-003-2026-11-12">Resolución de INC-003 (2026-11-12)<a class="headerlink" href="#resolucion-de-inc-003-2026-11-12" title="Permanent link">&para;</a></h3>
+<h3 id="resolucion-de-inc-003-2026-11-12"><a aria-label="Enlace a esta sección" class="anchor" href="#resolucion-de-inc-003-2026-11-12">#</a>Resolución de INC-003 (2026-11-12)</h3>
 <p>Con VoiceStudio 0.5.8 instalado se descargó su <code>openapi.json</code> local (320 rutas) y apareció
 <strong><code>POST /v1/audio/speech</code></strong>, compatible con OpenAI y no documentada en la web del proyecto. ARVI la
 usa en lugar del MCP. <strong>Lección:</strong> cuando la documentación no basta, la especificación OpenAPI del
 servidor real es la fuente más fiable.</p>
-<h2 id="inc-012-whisper-transcribia-arvi-como-arbito">INC-012 — Whisper transcribía «ARVI» como «Arbito»<a class="headerlink" href="#inc-012-whisper-transcribia-arvi-como-arbito" title="Permanent link">&para;</a></h2>
+<h2 id="inc-012-whisper-transcribia-arvi-como-arbito"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-012-whisper-transcribia-arvi-como-arbito">#</a>INC-012 — Whisper transcribía «ARVI» como «Arbito»</h2>
 <ul>
 <li><strong>Contexto:</strong> primera prueba real de transcripción con VoiceStudio (faster-whisper-base).</li>
 <li><strong>Observación:</strong> «Hola, soy ARVI…» se transcribió como «Hola, soy Arbito…».</li>
@@ -2634,7 +289,7 @@ servidor real es la fuente más fiable.</p>
   Resultado: transcripción exacta, y además más rápida (0,9 s frente a 1,3 s).</li>
 <li><strong>Lección:</strong> los nombres propios del dominio deben pasarse como pista al reconocedor.</li>
 </ul>
-<h2 id="inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje">INC-013 — La interfaz se quedaba en blanco al enviar un mensaje<a class="headerlink" href="#inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje" title="Permanent link">&para;</a></h2>
+<h2 id="inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje">#</a>INC-013 — La interfaz se quedaba en blanco al enviar un mensaje</h2>
 <ul>
 <li><strong>Contexto:</strong> primera prueba de la interfaz React en Chromium (Playwright).</li>
 <li><strong>Observación:</strong> al enviar el primer mensaje la página se quedaba vacía. Error en la página:
@@ -2646,7 +301,7 @@ servidor real es la fuente más fiable.</p>
   minificar y capturando el evento <code>pageerror</code> con su pila.</li>
 <li><strong>Lección:</strong> un efecto de React solo debe devolver una función de limpieza o nada.</li>
 </ul>
-<h2 id="inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo">INC-014 — Prueba de la interfaz completada solo con el motor de respaldo<a class="headerlink" href="#inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo" title="Permanent link">&para;</a></h2>
+<h2 id="inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo">#</a>INC-014 — Prueba de la interfaz completada solo con el motor de respaldo</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba extremo a extremo de la interfaz (Fase 4).</li>
 <li><strong>Observación:</strong> la prueba pasó, pero el servidor registró <code>TTS voicestudio falló … se usa el
@@ -2659,7 +314,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Lección:</strong> un respaldo automático puede ocultar que el componente principal no funciona. Las
   pruebas deben comprobar qué componente respondió, no solo que hubo respuesta.</li>
 </ul>
-<h2 id="inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo">INC-015 — VoiceStudio rechaza síntesis simultáneas (429) y la voz pasaba al respaldo<a class="headerlink" href="#inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo" title="Permanent link">&para;</a></h2>
+<h2 id="inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo">#</a>INC-015 — VoiceStudio rechaza síntesis simultáneas (429) y la voz pasaba al respaldo</h2>
 <ul>
 <li><strong>Contexto:</strong> voz frase a frase en la interfaz. Mientras suena una frase, se prepara la siguiente.</li>
 <li><strong>Observación:</strong> una medición con dos peticiones a la vez a <code>/v1/audio/speech</code> devolvió
@@ -2671,7 +326,7 @@ servidor real es la fuente más fiable.</p>
   peticiones a la vez. Tras el cambio: 3 de 3 frases con VoiceStudio y 0 respaldos (P-019).</li>
 <li><strong>Lección:</strong> conviene medir la concurrencia que admite un servicio antes de diseñar el cliente.</li>
 </ul>
-<h2 id="inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados">INC-016 — Las herramientas de n8n aceptaban argumentos no declarados<a class="headerlink" href="#inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados" title="Permanent link">&para;</a></h2>
+<h2 id="inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados">#</a>INC-016 — Las herramientas de n8n aceptaban argumentos no declarados</h2>
 <ul>
 <li><strong>Contexto:</strong> herramientas de automatización generadas a partir de <code>config/automations.yaml</code> (Fase 6).</li>
 <li><strong>Observación:</strong> la prueba <code>test_args_model_enforces_schema</code> falló con <code>DID NOT RAISE
@@ -2686,7 +341,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Lección:</strong> las restricciones de seguridad hay que probarlas con casos que deban fallar. Leer el
   código no bastó para ver este error.</li>
 </ul>
-<h2 id="inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones">INC-017 — Un dato podía cerrar su propio envoltorio y hacerse pasar por instrucciones<a class="headerlink" href="#inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones" title="Permanent link">&para;</a></h2>
+<h2 id="inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones">#</a>INC-017 — Un dato podía cerrar su propio envoltorio y hacerse pasar por instrucciones</h2>
 <ul>
 <li><strong>Contexto:</strong> revisión de seguridad previa a las pruebas OWASP (LLM01, inyección de instrucciones).</li>
 <li><strong>Observación:</strong> los recuerdos se insertaban así: <code>&lt;recuerdo …&gt;{contenido}&lt;/recuerdo&gt;</code>. Los
@@ -2702,7 +357,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Lección:</strong> marcar los datos como «no instrucciones» solo sirve si el marcado no se puede
   falsificar desde el propio dato. Además, la última barrera debe estar fuera del modelo: los permisos.</li>
 </ul>
-<h2 id="inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba">INC-018 — La página «sin conexión» de la PWA no se actualizaba<a class="headerlink" href="#inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba" title="Permanent link">&para;</a></h2>
+<h2 id="inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba">#</a>INC-018 — La página «sin conexión» de la PWA no se actualizaba</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba de la PWA con el backend detenido (P-030).</li>
 <li><strong>Observación:</strong> después de corregir un detalle visual de <code>offline.html</code> (el comando se partía en
@@ -2718,7 +373,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Lección:</strong> el ciclo de vida de un <em>service worker</em> hace que las actualizaciones lleguen con una
   visita de retraso. Las pruebas deben comprobar qué versión se sirve, no solo que algo se sirve.</li>
 </ul>
-<h2 id="inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web">INC-019 — Una compilación pesada cortó 13 s el túnel del otro servicio web<a class="headerlink" href="#inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web" title="Permanent link">&para;</a></h2>
+<h2 id="inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web">#</a>INC-019 — Una compilación pesada cortó 13 s el túnel del otro servicio web</h2>
 <ul>
 <li><strong>Contexto:</strong> auditoría de dependencias de Rust (Fase 9), <code>cargo install cargo-audit --locked</code>.</li>
 <li><strong>Observación:</strong> en <code>djbota-cloudflared</code>, de 19:14:51 a 19:15:04 UTC, las cuatro conexiones QUIC
@@ -2732,7 +387,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Lección:</strong> proteger un servicio crítico en el mismo equipo no es solo cuidar el ancho de banda;
   la CPU también cuenta.</li>
 </ul>
-<h2 id="inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase">INC-020 — La voz clonada «DJ CLEMENT» tarda más de medio minuto por frase<a class="headerlink" href="#inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase" title="Permanent link">&para;</a></h2>
+<h2 id="inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase">#</a>INC-020 — La voz clonada «DJ CLEMENT» tarda más de medio minuto por frase</h2>
 <ul>
 <li><strong>Contexto:</strong> el alumno pidió que ARVI hable siempre con su perfil clonado de VoiceStudio (P-044).</li>
 <li><strong>Observación:</strong> 63,1 s (8 pasos) y 35,1 s (4 pasos) para una frase de unos 2 s. La voz diseñada
@@ -2743,7 +398,7 @@ servidor real es la fuente más fiable.</p>
   respuesta en texto llega de inmediato, así que la conversación no se bloquea.</li>
 <li><strong>Pendiente (alumno):</strong> grabar una referencia de 6–10 s en el mismo perfil, o usar una GPU.</li>
 </ul>
-<h2 id="inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea">INC-021 — Filas del registro de pruebas pegadas en la misma línea<a class="headerlink" href="#inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea" title="Permanent link">&para;</a></h2>
+<h2 id="inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea">#</a>INC-021 — Filas del registro de pruebas pegadas en la misma línea</h2>
 <ul>
 <li><strong>Contexto:</strong> revisión final del registro de pruebas (Fase 9).</li>
 <li><strong>Observación:</strong> cuatro filas (P-027, P-029, P-031 y P-036) estaban a continuación de la anterior
@@ -2752,7 +407,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Causa:</strong> se añadieron sin el salto de línea al final de la fila previa.</li>
 <li><strong>Solución:</strong> se separaron y se comprobó que no hay más casos en <code>docs/</code>.</li>
 </ul>
-<h2 id="inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo">INC-022 — «Enciende el ventilador» no encontraba ningún dispositivo<a class="headerlink" href="#inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo" title="Permanent link">&para;</a></h2>
+<h2 id="inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo">#</a>INC-022 — «Enciende el ventilador» no encontraba ningún dispositivo</h2>
 <ul>
 <li><strong>Contexto:</strong> pruebas MOCK del hogar inteligente (Fase 11).</li>
 <li><strong>Observación:</strong> con varios ventiladores, una orden que solo nombra el tipo de aparato devolvía
@@ -2762,7 +417,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Solución:</strong> si la orden solo contiene palabras de dominio, <code>resolve()</code> devuelve el único
   dispositivo de ese tipo o, si hay varios, la lista para preguntar (D9).</li>
 </ul>
-<h2 id="inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador">INC-023 — ARVI respondía con los datos de ARVI-SERVER cuando se le preguntaba por «el ordenador»<a class="headerlink" href="#inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador" title="Permanent link">&para;</a></h2>
+<h2 id="inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador">#</a>INC-023 — ARVI respondía con los datos de ARVI-SERVER cuando se le preguntaba por «el ordenador»</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba REAL R11 (Fase 11).</li>
 <li><strong>Observación:</strong> ante «¿cómo va el ordenador?», el modelo usó <code>system_info</code> (el servidor) sin
@@ -2771,14 +426,14 @@ servidor real es la fuente más fiable.</p>
   La descripción de <code>system_info</code> indica ahora que solo informa de ARVI-SERVER. La repetición de R11
   pasó.</li>
 </ul>
-<h2 id="inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha">INC-024 — <code>uv add</code> no podía actualizar el entorno con el backend en marcha<a class="headerlink" href="#inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha" title="Permanent link">&para;</a></h2>
+<h2 id="inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha">#</a>INC-024 — <code>uv add</code> no podía actualizar el entorno con el backend en marcha</h2>
 <ul>
 <li><strong>Contexto:</strong> al añadir numpy y soundfile (Fase 12).</li>
 <li><strong>Observación:</strong> error de acceso al reemplazar <code>arvi-server.exe</code>; <code>pyproject.toml</code> no se modificó.</li>
 <li><strong>Causa:</strong> Windows bloquea el ejecutable mientras el proceso está en marcha.</li>
 <li><strong>Solución:</strong> detener el backend, repetir <code>uv add</code> y volver a arrancarlo.</li>
 </ul>
-<h2 id="inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco">INC-025 — La voz sintetizada de ARVI solo se descartaba por ruido, no como eco<a class="headerlink" href="#inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco" title="Permanent link">&para;</a></h2>
+<h2 id="inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco">#</a>INC-025 — La voz sintetizada de ARVI solo se descartaba por ruido, no como eco</h2>
 <ul>
 <li><strong>Contexto:</strong> prueba REAL V6 (Fase 12).</li>
 <li><strong>Observación:</strong> el audio de ARVI se rechazaba por SNR baja, pero el motivo «eco» no aparecía.
@@ -2788,7 +443,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Solución:</strong> si llega la última respuesta de ARVI, el reconocimiento se ejecuta siempre, y las
   pruebas identifican las muestras por su id. Resultado: «parece la voz de ARVI (eco)».</li>
 </ul>
-<h2 id="inc-026-desplazamiento-horizontal-en-el-movil">INC-026 — Desplazamiento horizontal en el móvil<a class="headerlink" href="#inc-026-desplazamiento-horizontal-en-el-movil" title="Permanent link">&para;</a></h2>
+<h2 id="inc-026-desplazamiento-horizontal-en-el-movil"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-026-desplazamiento-horizontal-en-el-movil">#</a>INC-026 — Desplazamiento horizontal en el móvil</h2>
 <ul>
 <li><strong>Contexto:</strong> capturas móviles de las Fases 11 y 13.</li>
 <li><strong>Observación:</strong> a 412 px la página medía 431–435 px de ancho y se cortaba el botón <em>Enviar</em>.</li>
@@ -2797,7 +452,7 @@ servidor real es la fuente más fiable.</p>
 <li><strong>Solución:</strong> columnas <code>minmax(0,1fr)</code> y <code>min-w-0</code> en los contenedores. Se comprueba
   <code>scrollWidth = 412</code> en cada captura.</li>
 </ul>
-<h2 id="inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad">INC-027 — El informe de coordinación de n8n no mostraba la capacidad<a class="headerlink" href="#inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad" title="Permanent link">&para;</a></h2>
+<h2 id="inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad">#</a>INC-027 — El informe de coordinación de n8n no mostraba la capacidad</h2>
 <ul>
 <li><strong>Contexto:</strong> revisión de la ejecución real de «ARVI · Coordinación de equipos» tras R12.</li>
 <li><strong>Observación:</strong> el resumen decía «PC-SECUNDARIO → : pendiente», y los pasos «aclaracion» se
@@ -2809,7 +464,7 @@ servidor real es la fuente más fiable.</p>
   real posterior muestra «ARVI-SERVER-PRUEBA → sistema: completado | PC-SECUNDARIO → sistema:
   pendiente».</li>
 </ul>
-<h2 id="inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio">INC-028 — OmniVoice-GGUF no se puede ejecutar en esta instalación de VoiceStudio<a class="headerlink" href="#inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio" title="Permanent link">&para;</a></h2>
+<h2 id="inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio"><a aria-label="Enlace a esta sección" class="anchor" href="#inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio">#</a>INC-028 — OmniVoice-GGUF no se puede ejecutar en esta instalación de VoiceStudio</h2>
 <ul>
 <li><strong>Contexto:</strong> comparativa de velocidad (Fase 12).</li>
 <li><strong>Observación:</strong> VoiceStudio indica que el motor GGUF está «missing».</li>
@@ -2818,106 +473,15 @@ servidor real es la fuente más fiable.</p>
   ancho de banda que necesita djbota. La comparativa se hizo con los pasos de difusión del modelo
   actual (P-051).</li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-                
-              </article>
-            </div>
-          
-          
-<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
-        </div>
-        
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
-  Volver al principio
-</button>
-        
-      </main>
-      
-        <footer class="md-footer">
-  
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Pie" >
-        
-          
-          <a href="../registro-pruebas/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Registro de pruebas">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Anterior
-              </span>
-              <div class="md-ellipsis">
-                Registro de pruebas
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="../../capturas/figuras/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Capturas">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Siguiente
-              </span>
-              <div class="md-ellipsis">
-                Capturas
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
-    
-  
-  <div class="md-footer-meta md-typeset">
-    <div class="md-footer-meta__inner md-grid">
-      <div class="md-copyright">
-  
-  
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
-  
+</article>
+<div class="pager"><a class="prev" href="../../pruebas/registro-pruebas/"><small>Anterior</small><span>Registro de pruebas</span></a><a class="next" href="../../pruebas/evidencias/openai-real-2026-11-12/"><small>Siguiente</small><span>Evidencias · OpenAI real</span></a></div>
+</main>
+<nav class="toc" aria-label="En esta página"><h2>En esta página</h2><ul><li><a class="" href="#inc-001-rustup-no-se-instala-con-scope-user">INC-001 — rustup no se instala con --scope user</a></li><li><a class="" href="#inc-002-python-no-era-un-interprete-real">INC-002 — python no era un intérprete real</a></li><li><a class="" href="#inc-003-ruta-rest-de-sintesis-de-voicestudio-no-documentada">INC-003 — Ruta REST de síntesis de VoiceStudio no documentada</a></li><li><a class="" href="#inc-004-la-api-respondia-422-a-peticiones-post-validas">INC-004 — La API respondía 422 a peticiones POST válidas</a></li><li><a class="" href="#inc-005-la-reindexacion-contaba-una-nota-de-mas">INC-005 — La reindexación contaba una nota de más</a></li><li><a class="" href="#inc-006-aviso-de-proceso-antiguo-vivo-al-reiniciar-el-servidor">INC-006 — Aviso de &quot;proceso antiguo vivo&quot; al reiniciar el servidor</a></li><li><a class="" href="#inc-007-sobrescritura-de-check_linkspy-creado-por-otra-sesion">INC-007 — Sobrescritura de check_links.py creado por otra sesión</a></li><li><a class="" href="#inc-008-pagina-del-anexo-de-ia-borrada-por-error-al-reorganizar">INC-008 — Página del anexo de IA borrada por error al reorganizar</a></li><li><a class="" href="#inc-009-rutas-personales-dentro-del-word-y-de-la-documentacion">INC-009 — Rutas personales dentro del Word y de la documentación</a></li><li><a class="" href="#inc-010-tildes-danadas-en-env-y-envexample">INC-010 — Tildes dañadas en .env y .env.example</a></li><li><a class="" href="#inc-011-corte-temporal-de-otro-servicio-web-del-usuario-al-abrir-voicestudio">INC-011 — Corte temporal de otro servicio web del usuario al abrir VoiceStudio</a></li><li><a class="l3" href="#resolucion-de-inc-003-2026-11-12">Resolución de INC-003 (2026-11-12)</a></li><li><a class="" href="#inc-012-whisper-transcribia-arvi-como-arbito">INC-012 — Whisper transcribía «ARVI» como «Arbito»</a></li><li><a class="" href="#inc-013-la-interfaz-se-quedaba-en-blanco-al-enviar-un-mensaje">INC-013 — La interfaz se quedaba en blanco al enviar un mensaje</a></li><li><a class="" href="#inc-014-prueba-de-la-interfaz-completada-solo-con-el-motor-de-respaldo">INC-014 — Prueba de la interfaz completada solo con el motor de respaldo</a></li><li><a class="" href="#inc-015-voicestudio-rechaza-sintesis-simultaneas-429-y-la-voz-pasaba-al-respaldo">INC-015 — VoiceStudio rechaza síntesis simultáneas (429) y la voz pasaba al respaldo</a></li><li><a class="" href="#inc-016-las-herramientas-de-n8n-aceptaban-argumentos-no-declarados">INC-016 — Las herramientas de n8n aceptaban argumentos no declarados</a></li><li><a class="" href="#inc-017-un-dato-podia-cerrar-su-propio-envoltorio-y-hacerse-pasar-por-instrucciones">INC-017 — Un dato podía cerrar su propio envoltorio y hacerse pasar por instrucciones</a></li><li><a class="" href="#inc-018-la-pagina-sin-conexion-de-la-pwa-no-se-actualizaba">INC-018 — La página «sin conexión» de la PWA no se actualizaba</a></li><li><a class="" href="#inc-019-una-compilacion-pesada-corto-13-s-el-tunel-del-otro-servicio-web">INC-019 — Una compilación pesada cortó 13 s el túnel del otro servicio web</a></li><li><a class="" href="#inc-020-la-voz-clonada-dj-clement-tarda-mas-de-medio-minuto-por-frase">INC-020 — La voz clonada «DJ CLEMENT» tarda más de medio minuto por frase</a></li><li><a class="" href="#inc-021-filas-del-registro-de-pruebas-pegadas-en-la-misma-linea">INC-021 — Filas del registro de pruebas pegadas en la misma línea</a></li><li><a class="" href="#inc-022-enciende-el-ventilador-no-encontraba-ningun-dispositivo">INC-022 — «Enciende el ventilador» no encontraba ningún dispositivo</a></li><li><a class="" href="#inc-023-arvi-respondia-con-los-datos-de-arvi-server-cuando-se-le-preguntaba-por-el-ordenador">INC-023 — ARVI respondía con los datos de ARVI-SERVER cuando se le preguntaba por «el ordenador»</a></li><li><a class="" href="#inc-024-uv-add-no-podia-actualizar-el-entorno-con-el-backend-en-marcha">INC-024 — uv add no podía actualizar el entorno con el backend en marcha</a></li><li><a class="" href="#inc-025-la-voz-sintetizada-de-arvi-solo-se-descartaba-por-ruido-no-como-eco">INC-025 — La voz sintetizada de ARVI solo se descartaba por ruido, no como eco</a></li><li><a class="" href="#inc-026-desplazamiento-horizontal-en-el-movil">INC-026 — Desplazamiento horizontal en el móvil</a></li><li><a class="" href="#inc-027-el-informe-de-coordinacion-de-n8n-no-mostraba-la-capacidad">INC-027 — El informe de coordinación de n8n no mostraba la capacidad</a></li><li><a class="" href="#inc-028-omnivoice-gguf-no-se-puede-ejecutar-en-esta-instalacion-de-voicestudio">INC-028 — OmniVoice-GGUF no se puede ejecutar en esta instalación de VoiceStudio</a></li></ul></nav>
 </div>
-      
-    </div>
-  </div>
-</footer>
-      
-    </div>
-    <div class="md-dialog" data-md-component="dialog">
-      <div class="md-dialog__inner md-typeset"></div>
-    </div>
-    
-    
-    
-      
-      
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
-    
-    
-      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
-      
-    
-  </body>
-</html>
+<footer class="ftr"><div class="ftr-in">
+<a class="brand" href="../../"><img src="../../assets/img/arvi-logo.svg" alt="" width="24" height="24">ARVI</a>
+<span>Asistente de Respuesta por Voz e Integraciones · Proyecto Final de Ciclo Formativo de Grado Superior</span>
+<nav aria-label="Pie"><a href="../../memoria-academica/">Memoria</a><a href="../../DIARIO_DESARROLLO/">Desarrollo</a><a href="../../pruebas/registro-pruebas/">Pruebas</a><a href="../../gestion/presupuesto/">Gestión</a></nav>
+</div></footer>
+<script src="../../assets/js/app.js" defer></script>
+</body></html>

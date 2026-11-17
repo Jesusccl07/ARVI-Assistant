@@ -1,0 +1,409 @@
+<h2 id="141-requisitos-de-diseno-del-enunciado">14.1 Requisitos de diseño (del enunciado)</h2>
+<ul>
+<li>La esfera energética flotante es el elemento principal, no un chat tradicional.</li>
+<li>Estética futurista y minimalista: transparencias, <em>glassmorphism</em>, azul eléctrico, cian y violeta.</li>
+<li>Estados: <em>idle</em>, <em>listening</em>, <em>processing</em>, <em>speaking</em>, <em>executing</em>, <em>success</em>, <em>error</em> y <em>muted</em>,
+  sincronizados con niveles de audio <strong>reales</strong>.</li>
+<li>Alternativa CSS si WebGL no está disponible.</li>
+<li>Accesibilidad: teclado, contraste, movimiento reducido y estados no dependientes del color.</li>
+</ul>
+<h2 id="142-tecnologias">14.2 Tecnologías</h2>
+<table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Versión</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>React</td>
+<td>19.3</td>
+<td>Componentes y estado de la interfaz</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>7.0 (compilador nativo)</td>
+<td>Tipado estricto (<code>strict</code>, sin variables sin usar)</td>
+</tr>
+<tr>
+<td>Vite</td>
+<td>8.3</td>
+<td>Servidor de desarrollo con <em>proxy</em> a la API y compilación</td>
+</tr>
+<tr>
+<td>Tailwind CSS</td>
+<td>4.3</td>
+<td>Estilos (plugin <code>@tailwindcss/vite</code>)</td>
+</tr>
+<tr>
+<td>Three.js</td>
+<td>0.187</td>
+<td>Esfera 3D con <em>shaders</em> propios</td>
+</tr>
+<tr>
+<td>Vitest + jsdom</td>
+<td>5.1 / 31</td>
+<td>Pruebas unitarias del frontend</td>
+</tr>
+</tbody>
+</table>
+<p>La instalación (<code>npm install</code>) descargó 69 MB en 19 s. Se vigiló el túnel del otro servicio web del
+usuario durante la descarga (INC-011): 0 errores.</p>
+<h2 id="143-estructura">14.3 Estructura</h2>
+<pre class="mermaid">%% figura: Componentes de la interfaz y su relación con la API de ARVI
+flowchart TB
+    subgraph Navegador
+        APP[App.tsx&lt;br/&gt;estado y flujo] --&gt; ORB[Orb.tsx&lt;br/&gt;Three.js]
+        APP --&gt; NAV[Navegación lateral / barra inferior&lt;br/&gt;Icons.tsx · Kpis.tsx]
+        NAV --&gt; SIDE[SidePanel.tsx&lt;br/&gt;permisos · mi voz · mi casa · ordenadores · memoria · estado]
+        APP --&gt; SOCK[chatSocket.ts]
+        APP --&gt; SPL[sentences.ts&lt;br/&gt;frase a frase]
+        SPL --&gt; Q[speechQueue.ts&lt;br/&gt;cola con interrupción]
+        Q --&gt; PLY[audio.ts · Player&lt;br/&gt;nivel de salida]
+        APP --&gt; REC[audio.ts · Recorder&lt;br/&gt;micrófono + silencio]
+    end
+    SOCK &lt;--&gt;|WebSocket /ws/chat| API[(Backend ARVI)]
+    Q --&gt;|POST /api/voice/speak| API
+    REC --&gt;|POST /api/voice/transcribe| API
+    SIDE --&gt;|/api/actions · /api/memories · /api/voice/status| API
+    PLY -.nivel.-&gt; ORB
+    REC -.nivel.-&gt; ORB</pre>
+<p>En desarrollo, Vite (<code>127.0.0.1:5173</code>) reenvía <code>/api</code> y <code>/ws</code> al backend. En uso normal, el backend
+sirve la interfaz compilada (<code>frontend/dist</code>) en <code>http://127.0.0.1:8765/</code>. Así comparten origen y no
+hace falta abrir CORS.</p>
+<h2 id="144-la-esfera">14.4 La esfera</h2>
+<p><code>Orb.tsx</code> dibuja un icosaedro muy subdividido con un <em>shader</em> propio:</p>
+<ul>
+<li><strong>Vértices:</strong> se desplazan siguiendo dos capas de ondas. La amplitud es la suma de una base, un
+  pulso (al pensar o ejecutar) y el <strong>nivel de audio real</strong>.</li>
+<li><strong>Fragmentos:</strong> mezclan dos colores según el desplazamiento y añaden un brillo de borde (efecto
+  Fresnel) que crece con el volumen.</li>
+<li><strong>Decoración:</strong> una malla de alambre que gira y un anillo de 700 partículas.</li>
+</ul>
+<p>El nivel de audio se lee en cada fotograma mediante una función, <strong>sin re-renderizar React</strong>:</p>
+<ul>
+<li>Al escuchar, sale del <code>AnalyserNode</code> del micrófono.</li>
+<li>Al hablar, sale del <code>AnalyserNode</code> conectado a la reproducción.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Cuándo</th>
+<th>Colores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>En espera (<em>idle</em>)</td>
+<td>Sin actividad</td>
+<td>Cian</td>
+</tr>
+<tr>
+<td>Escuchando (<em>listening</em>)</td>
+<td>Grabando el micrófono</td>
+<td>Verde azulado + amplitud del micrófono</td>
+</tr>
+<tr>
+<td>Pensando (<em>processing</em>)</td>
+<td>Esperando al modelo o transcribiendo</td>
+<td>Violeta con pulso</td>
+</tr>
+<tr>
+<td>Ejecutando (<em>executing</em>)</td>
+<td>El agente usa una herramienta (<code>state: executing</code>)</td>
+<td>Ámbar con pulso</td>
+</tr>
+<tr>
+<td>Hablando (<em>speaking</em>)</td>
+<td>Suena la voz de ARVI</td>
+<td>Azul eléctrico + amplitud de la voz</td>
+</tr>
+<tr>
+<td>Hecho (<em>success</em>)</td>
+<td>1,2 s tras una respuesta sin error</td>
+<td>Verde</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>2,5 s tras un error</td>
+<td>Rojo-naranja</td>
+</tr>
+<tr>
+<td>Silenciado (<em>muted</em>)</td>
+<td>«Respuesta hablada» desactivada</td>
+<td>Gris, movimiento lento</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Accesibilidad:</strong></p>
+<ul>
+<li>El estado siempre aparece <strong>escrito</strong> bajo la esfera, en una región <code>aria-live</code>; no depende solo
+  del color.</li>
+<li>La esfera es un botón accesible («Pulsa para interrumpir»).</li>
+<li><code>Esc</code> interrumpe a ARVI.</li>
+<li>Con <code>prefers-reduced-motion</code> la animación se ralentiza mucho.</li>
+<li>Si no hay WebGL, queda un halo CSS que también cambia de color según el estado.</li>
+</ul>
+<h2 id="145-voz-frase-a-frase-e-interrupcion">14.5 Voz frase a frase e interrupción</h2>
+<p>Esperar la respuesta completa y sintetizarla de una vez hacía que el usuario esperara más de 11 s
+hasta oír algo (capítulo 10). Por eso:</p>
+<ol>
+<li><code>SentenceSplitter</code> corta el texto que llega por el WebSocket en frases completas. No corta en
+   decimales («25.5») ni en abreviaturas («p. ej.»), y une las frases demasiado cortas.</li>
+<li><code>SpeechQueue</code> pide cada frase a <code>/api/voice/speak</code> y la reproduce en orden. Mientras suena una,
+   ya prepara la siguiente.</li>
+<li><code>stop()</code> corta el audio al instante, cancela las peticiones en curso y vacía la cola. Se activa
+   con <code>Esc</code>, al pulsar la esfera, con el botón <em>Detener</em> o al empezar a hablar (<em>barge-in</em>). Además,
+   se cancela la respuesta del modelo en el backend (<code>{"type":"cancel"}</code>).</li>
+</ol>
+<p>VoiceStudio rechaza con <code>429</code> dos síntesis simultáneas (INC-015). Por eso el backend pone las
+peticiones en cola y la preparación anticipada no provoca errores.</p>
+<h2 id="146-microfono">14.6 Micrófono</h2>
+<p><code>Recorder</code> usa <code>getUserMedia</code> con cancelación de eco, supresión de ruido y control de ganancia, y
+graba con <code>MediaRecorder</code> (WebM/Opus). La grabación <strong>se corta sola</strong> tras 1,4 s de silencio, una vez
+detectada voz (máximo 30 s). Si no se oyó voz, no se envía nada.</p>
+<h2 id="147-panel-de-secciones">14.7 Panel de secciones</h2>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mi voz</td>
+<td>Consentimiento, estado del aprendizaje, métricas medidas, perfiles y escucha A/B (capítulo 26)</td>
+</tr>
+<tr>
+<td>Mi Casa</td>
+<td>Dispositivos de Home Assistant con su permiso, escenas e historial (capítulo 24)</td>
+</tr>
+<tr>
+<td>Ordenadores</td>
+<td>Equipos registrados, estado del agente, acciones permitidas y revocación (capítulo 25)</td>
+</tr>
+<tr>
+<td>Permisos</td>
+<td>Acciones pendientes con herramienta, nivel y vista previa; botones <em>Aprobar</em> / <em>Rechazar</em></td>
+</tr>
+<tr>
+<td>Memoria</td>
+<td>Buscador sobre la memoria de Obsidian (búsqueda FTS5 del backend)</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Backend, modelo, bóveda, motores de voz con su respaldo, estado de VoiceStudio y aviso de voz IA</td>
+</tr>
+</tbody>
+</table>
+<h2 id="148-seguridad">14.8 Seguridad</h2>
+<ul>
+<li><strong>Acceso:</strong> el token de la API se pide al entrar, se comprueba contra el backend y se guarda solo
+  en ese navegador. En el WebSocket viaja en el primer mensaje, nunca en la URL.</li>
+<li><strong>CSP:</strong> solo se permiten recursos propios (<code>default-src 'self'</code>).</li>
+<li><strong>Contenido:</strong> los mensajes se muestran como texto, sin <code>innerHTML</code>, así que no hay inyección HTML.</li>
+<li><strong>Red:</strong> Vite escucha solo en <code>127.0.0.1</code>.</li>
+</ul>
+<h2 id="149-pruebas">14.9 Pruebas</h2>
+<ul>
+<li><strong>Unitarias (Vitest, 10 casos):</strong></li>
+<li>Troceado de frases: streaming, decimales, abreviaturas, frases cortas, listas.</li>
+<li>Cola de voz: orden, preparación anticipada, interrupción, reanudación, error en una frase.</li>
+<li><strong>Extremo a extremo REAL</strong> (<code>scripts/e2e/interfaz_voz.py</code>, Playwright + Chromium):</li>
+<li>Chromium usa un WAV como <strong>micrófono simulado</strong> (<code>--use-file-for-fake-audio-capture</code>).</li>
+<li>Recorrido probado: acceso, pregunta escrita con voz, pregunta por micrófono con corte
+    automático, interrupción con <code>Esc</code>, aprobación de una acción y vista móvil.</li>
+<li>La prueba comprueba antes que VoiceStudio esté abierto y registra qué motor generó cada
+    respuesta, para que el respaldo no pueda ocultar un fallo (INC-014).</li>
+</ul>
+<p>Resultados de la ejecución final (P-019, configuración elegida por el alumno: voz por defecto de
+VoiceStudio en calidad 4 y reconocimiento con OpenAI):</p>
+<table>
+<thead>
+<tr>
+<th>Medida</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pregunta escrita → primera frase hablada</td>
+<td>7,6 s</td>
+</tr>
+<tr>
+<td>Pregunta por micrófono → texto transcrito (incluye ~3 s hablando y 1,4 s de silencio)</td>
+<td>4,9 s</td>
+</tr>
+<tr>
+<td>Pregunta por micrófono → primera frase hablada</td>
+<td>15,9 s</td>
+</tr>
+<tr>
+<td>Transcripción</td>
+<td>«¿Cuánta memoria RAM tiene mi PC?» (exacta)</td>
+</tr>
+<tr>
+<td>Motores usados</td>
+<td><code>stt:openai</code> ×1, <code>tts:voicestudio</code> ×3; 0 respaldos</td>
+</tr>
+<tr>
+<td>Errores en la consola del navegador</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1410-capturas">14.10 Capturas</h2>
+<p><img alt="Interfaz al iniciar: esfera en espera y panel de permisos" src="../../capturas/fase-4/2026-11-12_interfaz-inicio.png"/></p>
+<p><img alt="ARVI pensando (violeta) tras recibir una pregunta" src="../../capturas/fase-4/2026-11-12_estado-pensando.png"/></p>
+<p><img alt="ARVI hablando: la esfera se deforma con el audio real de la voz" src="../../capturas/fase-4/2026-11-12_estado-hablando.png"/></p>
+<p><img alt="Escuchando el micrófono" src="../../capturas/fase-4/2026-11-12_estado-escuchando.png"/></p>
+<p><img alt="Conversación por voz con herramientas y recuerdos usados" src="../../capturas/fase-4/2026-11-12_conversacion-voz.png"/></p>
+<p><img alt="Acción de nivel 2 esperando aprobación en el centro de permisos" src="../../capturas/fase-4/2026-11-12_permiso-pendiente.png"/></p>
+<p><img alt="Panel de estado con los motores de voz y su respaldo" src="../../capturas/fase-4/2026-11-12_panel-estado.png"/></p>
+<p><img alt="Diseño adaptable en un móvil de 390 px" src="../../capturas/fase-4/2026-11-12_interfaz-movil.png"/></p>
+<h2 id="1411-accesibilidad-rnf-06">14.11 Accesibilidad (RNF-06)</h2>
+<p>La interfaz se auditó el 2026-11-12 (P-040, <code>scripts/e2e/accesibilidad.py</code>) con <strong>axe-core 4.14.0</strong>,
+el motor de auditoría de accesibilidad más usado. Se aplicaron las reglas WCAG 2.0, 2.1 y 2.2 de
+nivel A y AA sobre la interfaz real servida por el backend:</p>
+<table>
+<thead>
+<tr>
+<th>Comprobación</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>axe-core en la pantalla de acceso</td>
+<td>0 infracciones</td>
+</tr>
+<tr>
+<td>axe-core en la pantalla principal (esfera, mensajes, panel lateral)</td>
+<td>0 infracciones</td>
+</tr>
+<tr>
+<td>Primer Tab desde la carga</td>
+<td>Lleva al campo «Token de acceso»</td>
+</tr>
+<tr>
+<td>Recorrido con Tab hasta escribir</td>
+<td><em>Salir</em> → esfera («Pulsa para interrumpir») → <em>Hablar</em> → <em>Mensaje</em> (4 pasos)</td>
+</tr>
+<tr>
+<td>Enviar con Enter, solo teclado</td>
+<td>La pregunta se envía y se recibe la respuesta</td>
+</tr>
+<tr>
+<td><code>prefers-reduced-motion: reduce</code></td>
+<td>Detectado. La esfera congela su animación y CSS desactiva las transiciones</td>
+</tr>
+</tbody>
+</table>
+<p>Lo hacen posible varias decisiones de diseño:</p>
+<ul>
+<li>etiquetas <code>aria-label</code> en los botones solo con icono;</li>
+<li><code>aria-live</code> en el estado de la esfera, para que un lector de pantalla anuncie «Pensando» o
+  «Hablando»;</li>
+<li><code>role="tablist"</code> en el panel;</li>
+<li>anillo de foco visible;</li>
+<li><code>Esc</code> para interrumpir;</li>
+<li>estados con texto, no solo con color.</li>
+</ul>
+<p>Para inyectar axe-core, la prueba desactiva la CSP solo en su navegador, sin cambiar la cabecera real.</p>
+<h2 id="1412-estado">14.12 Estado</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Esfera, voz frase a frase, panel de permisos, memoria y estado</td>
+<td>Hecho (P-019)</td>
+</tr>
+<tr>
+<td>Accesibilidad</td>
+<td>Hecho (P-040)</td>
+</tr>
+<tr>
+<td>Aplicación de escritorio con Tauri 2</td>
+<td>Hecho (capítulo 15, P-034, P-035)</td>
+</tr>
+<tr>
+<td>PWA instalable</td>
+<td>Hecho (capítulo 15, P-029, P-030)</td>
+</tr>
+<tr>
+<td>Acceso desde el móvil por HTTPS</td>
+<td>[PENDIENTE] Activación de Tailscale Serve por el alumno</td>
+</tr>
+<tr>
+<td>Prueba con el micrófono real del alumno</td>
+<td>[PENDIENTE] La automatizada usa un micrófono simulado</td>
+</tr>
+<tr>
+<td>Rediseño «cristal oscuro» (escritorio, PWA y Tauri)</td>
+<td>Hecho (14.13, P-052)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1413-rediseno-cristal-oscuro-glassmorphism">14.13 Rediseño «cristal oscuro» (glassmorphism)</h2>
+<p>El 2026-11-12 el alumno pidió rehacer toda la interfaz con un estilo de panel de control de cristal
+esmerilado en modo oscuro. Tomó como referencia una imagen de la galería <em>Liquid Glass Design</em>
+(«Glassmorphism Dashboard UI Design») y el repositorio de código abierto <em>Glassy_DashBoard</em> (licencia
+MIT). De la galería solo había una imagen y del repositorio solo la idea: no usa estilos propios, solo
+utilidades de Tailwind. Por eso se adoptó el <strong>estilo</strong>, sin copiar código.</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fondo</td>
+<td>Azul noche <code>#060914</code> con cuatro manchas de color (índigo, cian, violeta, verde azulado) difuminadas 90 px y con un movimiento muy lento, que se desactiva con <code>prefers-reduced-motion</code></td>
+</tr>
+<tr>
+<td>Cristal</td>
+<td>Paneles semitransparentes (<code>rgb(255 255 255 / 5,5 %)</code> + degradado de brillo), <code>backdrop-filter: blur(22px) saturate(150%)</code>, borde blanco al 11 %, radio 24 px y sombra suave. Si el navegador no admite <code>backdrop-filter</code>, el panel pasa a ser opaco y legible</td>
+</tr>
+<tr>
+<td>Escritorio y Tauri</td>
+<td>Barra lateral de navegación, saludo con fecha, fila de <strong>indicadores</strong> (acciones por aprobar, luces encendidas, equipos en línea, estado de «Mi voz»), tarjeta de la esfera, conversación y panel de la sección elegida</td>
+</tr>
+<tr>
+<td>Móvil (PWA)</td>
+<td>Indicadores en cuadrícula de 2×2 y <strong>barra de navegación inferior</strong>; cada sección se abre a pantalla completa</td>
+</tr>
+<tr>
+<td>Acento</td>
+<td>Degradado verde azulado → índigo en botones principales, mensajes del usuario y elemento activo</td>
+</tr>
+<tr>
+<td>Web de documentación</td>
+<td>El mismo fondo y paneles de cristal en el tema oscuro de MkDocs (<code>docs/web/stylesheets/arvi.css</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Los indicadores muestran <strong>datos reales</strong> de la API (<code>/api/actions</code>, <code>/api/casa</code>, <code>/api/equipos</code>,
+<code>/api/voz/aprendizaje</code>). Si un servicio no responde, muestran «—» y no un valor inventado. Las luces
+indican si son simuladas.</p>
+<p>Comprobaciones (P-052):</p>
+<ul>
+<li>compilación sin errores;</li>
+<li>Vitest 10/10;</li>
+<li>axe-core sin infracciones (WCAG A/AA) en el acceso y en la pantalla principal;</li>
+<li>sin desplazamiento horizontal a 412 px, 1100 px y 1440 px;</li>
+<li>capturas reales revisadas una a una (F-028 y F-029; las de los capítulos 24–26 se repitieron con el
+  diseño nuevo).</li>
+</ul>
+<p><img alt="Figura F-028. Interfaz «cristal oscuro» en el escritorio" src="../../capturas/fase-13/2026-11-12_interfaz-cristal-escritorio.png"/></p>
+<p><img alt="Figura F-029. Interfaz «cristal oscuro» en el móvil (PWA por Tailscale) con barra de navegación inferior" src="../../capturas/fase-13/2026-11-12_interfaz-cristal-movil.png"/></p>

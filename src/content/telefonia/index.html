@@ -1,0 +1,258 @@
+<blockquote>
+<p><strong>Estado: investigación y diseño.</strong> No se ha contratado ningún servicio, no se ha activado ningún
+desvío y el número del usuario no figura en ningún archivo del repositorio. Todas las cifras
+indican su fuente y fecha de consulta (2026-11-12). Las que no se han podido confirmar en una
+fuente oficial se marcan como <strong>[POR VERIFICAR]</strong>.</p>
+</blockquote>
+<h3 id="objetivo">Objetivo</h3>
+<p>Llamar desde el teléfono principal a una <strong>segunda línea de O2 España</strong> y hablar con ARVI, usando el
+mismo cerebro, la misma memoria de Obsidian, las mismas herramientas y los mismos permisos que en
+el escritorio.</p>
+<h3 id="alternativas-estudiadas">Alternativas estudiadas</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Alternativa</th>
+<th>Reutiliza la línea O2</th>
+<th>Proveedor adicional</th>
+<th>Latencia esperada</th>
+<th>Complejidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>Desvío O2 → número nacional VoIP (Twilio) → <em>Media Streams</em> → backend ARVI (VoiceStudio STT/TTS)</td>
+<td>Sí (desvío)</td>
+<td>Sí</td>
+<td>Alta (STT+LLM+TTS en serie, CPU)</td>
+<td>Media</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Desvío O2 → número VoIP → <em>SIP trunk</em> → <strong>OpenAI Realtime SIP</strong>, controlado por ARVI</td>
+<td>Sí (desvío)</td>
+<td>Sí</td>
+<td><strong>Baja</strong> (voz a voz nativa)</td>
+<td>Media</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Desvío O2 → número VoIP → ElevenLabs Agents</td>
+<td>Sí (desvío)</td>
+<td>Sí (dos)</td>
+<td>Baja</td>
+<td>Media; el cerebro sería ElevenLabs, no ARVI</td>
+</tr>
+<tr>
+<td>D</td>
+<td>SIM de O2 en un módem GSM/LTE local (Quectel EC25) + Asterisk + backend ARVI</td>
+<td><strong>Sí (directa)</strong></td>
+<td><strong>No</strong></td>
+<td>Media-alta (CPU)</td>
+<td><strong>Alta</strong> (VoLTE, firmware)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="desvio-de-llamadas-en-o2">Desvío de llamadas en O2</h4>
+<ul>
+<li>Activación: <code>*21*&lt;número destino&gt;#</code>; desactivación: <code>#21#</code> (fuentes: Roams, Selectra).</li>
+<li>Coste: según Roams y Selectra, el desvío es <strong>gratuito si el destino es un número nacional</strong>. No
+  se ha encontrado la tarifa en la web oficial de O2 → <strong>[POR VERIFICAR]</strong> llamando al 1002.</li>
+<li>En líneas con VoLTE, los códigos pueden no funcionar y hay que configurar el desvío desde los
+  ajustes del teléfono (Roams).</li>
+<li><strong>Consecuencia de diseño:</strong> el destino del desvío debe ser un <strong>número español</strong> (geográfico o
+  nacional) del proveedor VoIP, no un número extranjero.</li>
+</ul>
+<h4 id="proveedores-voip-con-numero-espanol">Proveedores VoIP con número español</h4>
+<table>
+<thead>
+<tr>
+<th>Proveedor</th>
+<th>Número español (mes)</th>
+<th>Recepción</th>
+<th>Fuente</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Twilio</td>
+<td>Local: 119,59 MXN/mes, impuestos incluidos (página en MXN)</td>
+<td>Interfaz SIP: 0,0844 MXN/min; la tarifa de recepción por número no aparece clara</td>
+<td>twilio.com/es-mx/voice/pricing/es</td>
+<td><strong>[POR VERIFICAR]</strong> precio en EUR y requisitos regulatorios (domicilio en España)</td>
+</tr>
+<tr>
+<td>Zadarma</td>
+<td>No visible en las fuentes consultadas</td>
+<td>—</td>
+<td>Reseñas de terceros</td>
+<td><strong>[POR VERIFICAR]</strong> en la web oficial</td>
+</tr>
+<tr>
+<td>Telnyx, Plivo</td>
+<td>Anuncian tarifas SIP de entrada bajas</td>
+<td>—</td>
+<td>Páginas de los propios proveedores</td>
+<td><strong>[POR VERIFICAR]</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="openai-realtime-con-sip-documentacion-oficial">OpenAI Realtime con SIP (documentación oficial)</h4>
+<ul>
+<li>URI SIP del proyecto: <code>sip:$PROJECT_ID@sip.api.openai.com;transport=tls</code>.</li>
+<li>Al llegar una llamada, OpenAI envía el webhook <strong><code>realtime.call.incoming</code></strong> al servidor configurado.</li>
+<li>Control de la llamada: <code>POST /v1/realtime/calls/{call_id}/accept</code> (configura la sesión: modelo,
+  instrucciones, herramientas), <code>/reject</code> (por defecto SIP 603), <code>/refer</code> (transferir) y <code>/hangup</code>.</li>
+<li>Un hilo de la comunidad de OpenAI informa de una respuesta de 5,3 s en <code>accept</code> en un caso
+  concreto; no hay respuesta oficial → se medirá en pruebas.</li>
+</ul>
+<h4 id="elevenlabs-agents">ElevenLabs Agents</h4>
+<p>Admite SIP entrante (TLS, puerto 5061) e integración con Twilio. Las fuentes de terceros dan unos
+0,08 $/min <strong>[POR VERIFICAR]</strong>. Se descarta como opción principal: el "cerebro" de la llamada sería
+el agente de ElevenLabs y habría que duplicar herramientas y memoria fuera de ARVI.</p>
+<h4 id="modem-gsmlte-local">Módem GSM/LTE local</h4>
+<ul>
+<li>Hardware típico: módulo Quectel EC25 con Asterisk y el driver <code>chan_quectel</code>.</li>
+<li>Problema principal: el driver estándar solo maneja voz en 2G/3G; para VoLTE hacen falta <em>forks</em>
+  específicos, firmware y perfil MBN compatibles con el operador. Los foros de Quectel recogen
+  fallos de registro IMS y de detección DTMF en VoLTE.</li>
+<li>La disponibilidad de 2G/3G en la red de O2 España (red de Telefónica) <strong>[POR VERIFICAR]</strong>.</li>
+<li>Ventaja: sin proveedor adicional ni coste mensual; la SIM de O2 queda dedicada a ARVI.</li>
+</ul>
+<h3 id="recomendacion">Recomendación</h3>
+<p><strong>Opción B (Twilio + OpenAI Realtime SIP)</strong> como solución principal, por su baja latencia y porque
+ARVI conserva el control (memoria, herramientas y permisos). <strong>Opción D</strong> como línea de investigación
+"sin proveedor", condicionada a confirmar el soporte VoLTE de O2 con el módem. La opción A queda como
+alternativa 100 % local para la voz.</p>
+<pre class="mermaid">%% figura: Arquitectura propuesta del asistente telefónico (opción B)
+sequenceDiagram
+    actor P as Teléfono principal
+    participant O2 as Línea O2 (desvío *21*)
+    participant TW as Número VoIP español (Twilio)
+    participant OAI as OpenAI Realtime SIP
+    participant ARVI as Backend ARVI (webhook)
+    P-&gt;&gt;O2: Llamada
+    O2-&gt;&gt;TW: Desvío a número nacional
+    TW-&gt;&gt;OAI: SIP (TLS) → sip:PROJECT@sip.api.openai.com
+    OAI-&gt;&gt;ARVI: webhook realtime.call.incoming (firmado)
+    ARVI-&gt;&gt;ARVI: Verificar firma · política de llamadas
+    alt ARVI disponible
+        ARVI-&gt;&gt;OAI: POST /calls/{id}/accept (instrucciones + herramientas de nivel 0)
+        OAI--&gt;&gt;P: "Hola, soy ARVI. Di tu PIN para acceder a tus datos."
+        P-&gt;&gt;OAI: PIN (voz o DTMF)
+        OAI-&gt;&gt;ARVI: herramienta verify_pin (canal de control)
+        ARVI--&gt;&gt;OAI: sesión elevada: memoria y herramientas autorizadas
+    else ARVI no disponible
+        Note over OAI,P: Sin webhook → la llamada se rechaza o salta el buzón
+    end</pre>
+<h3 id="requisitos-de-seguridad-del-diseno">Requisitos de seguridad del diseño</h3>
+<ol>
+<li><strong>El identificador de llamada no autentica.</strong> Se puede falsificar (<em>spoofing</em>). Sin PIN, la sesión
+   solo permite conversación general y herramientas de nivel 0 sin datos personales.</li>
+<li><strong>PIN</strong> con hash (no en texto plano), bloqueo tras 3 intentos y caducidad de la sesión elevada.
+   Las acciones de nivel 2 y 3 siguen exigiendo confirmación explícita.</li>
+<li><strong>Sin salientes:</strong> ninguna herramienta permite llamar ni enviar mensajes sin autorización.</li>
+<li><strong>Exposición mínima:</strong> el webhook de OpenAI debe alcanzar el PC. Se publicaría <strong>una única ruta</strong>
+   (<code>/telephony/openai/webhook</code>) con verificación de firma, mediante Tailscale Funnel o un túnel
+   equivalente, nunca la API completa de ARVI.</li>
+<li><strong>Privacidad:</strong> grabación desactivada por defecto; transcripciones guardadas solo si la política
+   lo permite; los números de teléfono no se escriben en el repositorio (solo en <code>.env</code>).</li>
+<li><strong>Servidor caído:</strong> si ARVI no responde al webhook, la llamada no se acepta; se configurará un
+   mensaje o un desvío de respaldo en el proveedor.</li>
+</ol>
+<h3 id="costes-estimados-a-confirmar">Costes estimados (a confirmar)</h3>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Opción B</th>
+<th>Opción D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desvío O2 a número nacional</td>
+<td>0 € según fuentes secundarias [POR VERIFICAR]</td>
+<td>No aplica</td>
+</tr>
+<tr>
+<td>Número VoIP español</td>
+<td>~119,59 MXN/mes en Twilio [POR VERIFICAR en EUR]</td>
+<td>0 €</td>
+</tr>
+<tr>
+<td>Minutos SIP</td>
+<td>Según tarifa del proveedor [POR VERIFICAR]</td>
+<td>0 €</td>
+</tr>
+<tr>
+<td>Uso de OpenAI Realtime</td>
+<td>Por uso (tarifa de audio) [POR VERIFICAR]</td>
+<td>Solo el LLM de texto</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>0 €</td>
+<td>Módem LTE + adaptador [POR VERIFICAR precio]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="plan-de-pruebas-previsto">Plan de pruebas previsto</h3>
+<table>
+<thead>
+<tr>
+<th>Prueba</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T-01</td>
+<td>Llamada entrante contestada en menos de 3 tonos</td>
+</tr>
+<tr>
+<td>T-02</td>
+<td>Latencia voz a voz (fin de la frase del usuario → inicio de la respuesta)</td>
+</tr>
+<tr>
+<td>T-03</td>
+<td>Sin PIN: la memoria privada no es accesible</td>
+</tr>
+<tr>
+<td>T-04</td>
+<td>PIN erróneo 3 veces: la llamada se bloquea</td>
+</tr>
+<tr>
+<td>T-05</td>
+<td>Con PIN: "¿cómo se llama mi proyecto?" responde desde Obsidian</td>
+</tr>
+<tr>
+<td>T-06</td>
+<td>Acción de nivel 2 por teléfono: requiere confirmación</td>
+</tr>
+<tr>
+<td>T-07</td>
+<td>Backend detenido: la llamada no queda "muda" (mensaje o desvío de respaldo)</td>
+</tr>
+<tr>
+<td>T-08</td>
+<td>Corte de llamada a mitad de la respuesta: la sesión se cierra y queda auditada</td>
+</tr>
+</tbody>
+</table>
+<h3 id="decisiones-que-necesita-el-usuario">Decisiones que necesita el usuario</h3>
+<ol>
+<li>Elegir entre la opción B (proveedor + OpenAI Realtime) y la investigación de la opción D (módem).</li>
+<li>Autorizar, en su momento, la contratación del número VoIP y la activación del desvío en O2.</li>
+</ol>
+<h3 id="fuentes">Fuentes</h3>
+<ul>
+<li>OpenAI — <em>Realtime API with SIP</em> y referencia <code>realtime/calls</code> (developers.openai.com), consultadas el 2026-11-12.</li>
+<li>Twilio — Precios de Voice para España: <a href="https://www.twilio.com/es-mx/voice/pricing/es">https://www.twilio.com/es-mx/voice/pricing/es</a>.</li>
+<li>Roams — Desvío de llamadas en O2: <a href="https://roams.es/companias-telefonicas/o2/guias/telefonia/desvio-llamadas">https://roams.es/companias-telefonicas/o2/guias/telefonia/desvio-llamadas</a>.</li>
+<li>Selectra — Desvío de llamadas O2: <a href="https://selectra.es/internet-telefono/companias/o2/desvio-llamadas">https://selectra.es/internet-telefono/companias/o2/desvio-llamadas</a>.</li>
+<li>Repositorio <code>asterisk-chan-quectel</code> y foros de Quectel sobre VoLTE (EC25).</li>
+</ul>

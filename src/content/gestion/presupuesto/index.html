@@ -1,0 +1,184 @@
+<blockquote>
+<p>Solo se anotan cifras verificadas. Los costes de API se registrarán a partir de las métricas reales
+de uso que guarda ARVI (tokens por petición) y de la factura de OpenAI.</p>
+</blockquote>
+<h2 id="1-recursos-hardware-existentes-coste-de-adquisicion-no-imputado">1. Recursos hardware (existentes, coste de adquisición no imputado)</h2>
+<table>
+<thead>
+<tr>
+<th>Recurso</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ordenador de desarrollo y servidor</td>
+<td>Intel Core i9-12900HK, 23,7 GB RAM, Intel Iris Xe, 940 GB de disco</td>
+</tr>
+<tr>
+<td>Móvil del usuario</td>
+<td>Pendiente de identificar (Fase 8)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-software-y-licencias">2. Software y licencias</h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Licencia</th>
+<th>Coste</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python 3.12</td>
+<td>PSF License</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>FastAPI</td>
+<td>MIT</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>Pydantic</td>
+<td>MIT</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>Uvicorn</td>
+<td>BSD-3-Clause</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>SDK <code>openai</code> (Python)</td>
+<td>Apache-2.0</td>
+<td>0 €</td>
+<td>El uso de la API sí tiene coste</td>
+</tr>
+<tr>
+<td>uv</td>
+<td>MIT / Apache-2.0</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>MIT</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>React</td>
+<td>MIT</td>
+<td>0 €</td>
+<td>Fase 4</td>
+</tr>
+<tr>
+<td>Tauri</td>
+<td>MIT / Apache-2.0</td>
+<td>0 €</td>
+<td>Fase 4</td>
+</tr>
+<tr>
+<td>Obsidian</td>
+<td>Gratuito para uso personal (licencia propietaria)</td>
+<td>0 €</td>
+<td>Licencia comercial no necesaria para uso personal/académico</td>
+</tr>
+<tr>
+<td>n8n</td>
+<td>Sustainable Use License (<em>fair-code</em>)</td>
+<td>0 €</td>
+<td>Autoalojado para uso interno: permitido</td>
+</tr>
+<tr>
+<td>Docker Desktop</td>
+<td>Gratuito para uso personal, educación y pequeñas empresas</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>VoiceStudio (app)</td>
+<td>AGPL-3.0</td>
+<td>0 €</td>
+<td>Si se redistribuye modificado, hay que publicar el código</td>
+</tr>
+<tr>
+<td>OmniVoice (modelo por defecto de VoiceStudio)</td>
+<td>No comercial (según el inventario de VoiceStudio)</td>
+<td>0 €</td>
+<td>Válido para uso académico/personal; <strong>no</strong> para un producto comercial</td>
+</tr>
+<tr>
+<td>Whisper (whisper.cpp)</td>
+<td>MIT (según la ficha fijada por VoiceStudio)</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>Git, GitHub CLI</td>
+<td>GPL-2.0 / MIT</td>
+<td>0 €</td>
+<td></td>
+</tr>
+<tr>
+<td>Home Assistant (contenedor)</td>
+<td>Apache-2.0</td>
+<td>0 €</td>
+<td>Fase 11; integración «demo» sin dispositivos</td>
+</tr>
+<tr>
+<td>numpy / soundfile (libsndfile)</td>
+<td>BSD-3-Clause / BSD-3-Clause (LGPL-2.1 la biblioteca nativa)</td>
+<td>0 €</td>
+<td>Fase 12, análisis de audio</td>
+</tr>
+<tr>
+<td>websockets (agente ARVI Remote)</td>
+<td>BSD-3-Clause</td>
+<td>0 €</td>
+<td>Fase 11</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-servicios-con-coste-por-uso">3. Servicios con coste por uso</h2>
+<table>
+<thead>
+<tr>
+<th>Servicio</th>
+<th>Tarifa publicada (consultada el 2026-11-12)</th>
+<th>Uso estimado</th>
+<th>Coste real</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI <code>gpt-6-luna</code></td>
+<td>0,10 $ / millón de tokens de entrada; 0,50 $ / millón de salida</td>
+<td>Pendiente de medir</td>
+<td>Pendiente</td>
+</tr>
+<tr>
+<td>OpenAI TTS/STT (solo alternativa)</td>
+<td>Pendiente de consultar</td>
+<td>Solo si VoiceStudio falla</td>
+<td>Pendiente</td>
+</tr>
+<tr>
+<td>Tailscale (plan personal)</td>
+<td>Pendiente de verificar</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-coste-de-personal">4. Coste de personal</h2>
+<p>Se calculará con las horas registradas realmente en el diario de desarrollo. <strong>No se estiman horas
+que no se hayan registrado.</strong></p>

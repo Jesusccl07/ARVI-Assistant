@@ -1,0 +1,89 @@
+<p>Mejoras identificadas durante el desarrollo que quedan fuera del alcance entregado. Están ordenadas
+por el beneficio esperado frente al esfuerzo.</p>
+<h2 id="221-a-corto-plazo">22.1 A corto plazo</h2>
+<table>
+<thead>
+<tr>
+<th>Mejora</th>
+<th>Motivo</th>
+<th>Esfuerzo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Referencia corta (6–10 s) para la voz «DJ CLEMENT»</td>
+<td>Reduciría mucho los ~35 s por frase (INC-020); lo hace el alumno en VoiceStudio</td>
+<td>Muy bajo</td>
+</tr>
+<tr>
+<td>Instalar la PWA en el teléfono</td>
+<td>Tailscale Serve ya está activo (P-057); solo falta instalarla en el móvil del alumno</td>
+<td>Muy bajo</td>
+</tr>
+<tr>
+<td>Instalar el agente ARVI Remote en el PC de edición</td>
+<td>Completa P-054; el equipo ya está registrado</td>
+<td>Muy bajo</td>
+</tr>
+<tr>
+<td>Dispositivos domóticos reales</td>
+<td>Sustituir las entidades simuladas de <code>config/casa.yaml</code> y repetir D1–D9</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>Usar «Mi voz» unas semanas con el micrófono real</td>
+<td>Un candidato con audio variado podría superar al original; el primero (14,6 s de una sola grabación) no lo hizo</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>GPU para la síntesis (p. ej., la RTX 3050 Ti del PC de edición)</td>
+<td>Con CPU, la voz clonada va a RTF 7,4 con 4 pasos (P-051)</td>
+<td>Medio</td>
+</tr>
+<tr>
+<td>Credencial OAuth de Google</td>
+<td>Completa OE7 con la prueba REAL de Calendar y Gmail</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>Política de retención del historial</td>
+<td>Borrar automáticamente las conversaciones antiguas (RGPD, minimización)</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>Panel de costes con alertas de presupuesto</td>
+<td><code>/api/usage</code> ya registra los <em>tokens</em>; falta mostrarlos y avisar</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>Repositorio remoto privado y CI activa</td>
+<td>La CI ya está escrita (pruebas y auditorías); falta publicar el repositorio</td>
+<td>Bajo</td>
+</tr>
+</tbody>
+</table>
+<h2 id="222-a-medio-plazo">22.2 A medio plazo</h2>
+<ul>
+<li><strong>Voz con GPU o un motor más ligero.</strong> Con una GPU NVIDIA, OmniVoice bajaría a tiempo real. Sin
+  ella, habría que medir motores pensados para CPU.</li>
+<li><strong>Respaldo de voz en <em>streaming</em>.</strong> La Realtime API devuelve el audio en fragmentos. Reproducirlos
+  al llegar, en vez de esperar al final, reduciría los ~5 s del respaldo.</li>
+<li><strong>Palabra de activación local («Arvi»)</strong> en el escritorio, con un detector que funcione sin
+  conexión.</li>
+<li><strong>Resolución de contradicciones entre recuerdos</strong> asistida por el modelo, con la confirmación
+  del usuario. Hoy el duplicado se sobrescribe.</li>
+<li><strong>Búsqueda semántica con <em>embeddings</em> locales</strong>, solo si una prueba con preguntas reales demuestra
+  que recupera mejor que FTS5.</li>
+<li><strong>Cifrado en reposo</strong> de la base de datos de conversaciones, con DPAPI como ya se hace con el
+  <em>token</em> de Google.</li>
+<li><strong>Capacidades avanzadas en el PC:</strong> control de ventanas y scripts aprobados de antemano, siempre
+  con nivel 2 o 3 y sin terminal libre.</li>
+</ul>
+<h2 id="223-a-largo-plazo">22.3 A largo plazo</h2>
+<ul>
+<li><strong>Asistente telefónico</strong> (OE9, capítulo 16.8), con un número dedicado y la Realtime API por SIP, o
+  sin proveedor externo mediante un módem LTE.</li>
+<li><strong>WhatsApp e Instagram</strong> con sus APIs oficiales, si se dispone de una cuenta de empresa (16.7).</li>
+<li><strong>Varios usuarios</strong> con cuentas, sesiones y memorias separadas. Exigiría rehacer la autenticación,
+  hoy pensada para un solo usuario.</li>
+</ul>

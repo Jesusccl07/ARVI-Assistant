@@ -1,0 +1,325 @@
+<h2 id="51-vision-general">5.1 Visión general</h2>
+<p>ARVI sigue una <strong>arquitectura híbrida nativa en Windows</strong>. El backend Python se ejecuta directamente
+en el sistema operativo, porque necesita abrir aplicaciones y acceder a archivos locales. Los
+servicios auxiliares reutilizan la infraestructura existente: n8n en Docker, VoiceStudio como
+aplicación local y Obsidian como editor de la memoria.</p>
+<pre class="mermaid">%% figura: Arquitectura general de ARVI (vista de contenedores, modelo C4 nivel 2)
+flowchart TB
+    subgraph Clientes
+        DESK[App de escritorio&lt;br/&gt;Tauri 2 + React]
+        PWA[PWA móvil&lt;br/&gt;React]
+        TEL[Teléfono&lt;br/&gt;en investigación]
+    end
+    subgraph PC["PC del usuario (Windows 11)"]
+        API[Backend ARVI&lt;br/&gt;FastAPI · 127.0.0.1:8765]
+        DB[(SQLite&lt;br/&gt;conversaciones, auditoría,&lt;br/&gt;índice FTS5)]
+        VAULT[(Bóveda Obsidian&lt;br/&gt;ARVI-Memory · Markdown)]
+        VS[VoiceStudio&lt;br/&gt;127.0.0.1:3900]
+        N8N[n8n · Docker&lt;br/&gt;127.0.0.1:5678]
+        OS[Sistema operativo&lt;br/&gt;apps, procesos, archivos]
+    end
+    OAI[OpenAI API]
+    EXT[Google · GitHub]
+    DESK -- REST + WebSocket --&gt; API
+    PWA -- HTTPS vía Tailscale --&gt; API
+    TEL -. SIP / WebSocket .-&gt; API
+    API --&gt; DB
+    API --&gt; VAULT
+    API -- STT / TTS --&gt; VS
+    API -- webhooks autenticados --&gt; N8N
+    API -- herramientas con permisos --&gt; OS
+    API -- Responses API --&gt; OAI
+    API -- OAuth 2.0 --&gt; EXT</pre>
+<h2 id="52-componentes-del-backend">5.2 Componentes del backend</h2>
+<pre class="mermaid">%% figura: Componentes internos del backend y sus dependencias
+flowchart LR
+    subgraph api[arvi.api]
+        MAIN[main.py&lt;br/&gt;rutas REST y WS]
+        SEC[security.py&lt;br/&gt;token y rate limit]
+        SVC[services.py&lt;br/&gt;composición]
+    end
+    subgraph core[arvi.core]
+        AG[Agent]
+    end
+    subgraph prov[arvi.providers]
+        LLMP[LLMProvider]
+        OAIP[OpenAIProvider]
+        FAKE[FakeLLMProvider]
+    end
+    subgraph mem[arvi.memory]
+        MS[MemoryService]
+        V[Vault]
+        SF[secrets_filter]
+    end
+    subgraph tools[arvi.tools]
+        TR[ToolRegistry]
+        MT[memory_tools]
+        ST[system_tools]
+    end
+    PERM[security.PermissionPolicy]
+    DBM[storage.Database]
+    MAIN --&gt; SEC
+    MAIN --&gt; SVC
+    SVC --&gt; AG
+    AG --&gt; LLMP
+    LLMP -.implementa.- OAIP
+    LLMP -.implementa.- FAKE
+    AG --&gt; MS
+    AG --&gt; TR
+    TR --&gt; PERM
+    TR --&gt; MT
+    TR --&gt; ST
+    MT --&gt; MS
+    MS --&gt; V
+    MS --&gt; SF
+    MS --&gt; DBM
+    TR --&gt; DBM</pre>
+<p>Cada componente depende de <strong>interfaces</strong> y no de implementaciones concretas. Por ejemplo, el
+<code>Agent</code> no sabe si habla con OpenAI o con el proveedor falso de las pruebas.</p>
+<h2 id="53-secuencia-de-un-turno-de-conversacion">5.3 Secuencia de un turno de conversación</h2>
+<pre class="mermaid">%% figura: Diagrama de secuencia de un turno con uso de herramienta
+sequenceDiagram
+    actor U as Usuario
+    participant API as API (WebSocket)
+    participant AG as Agent
+    participant MS as MemoryService
+    participant LLM as OpenAI
+    participant TR as ToolRegistry
+    U-&gt;&gt;API: {"type":"message","text":"Recuerda que..."}
+    API-&gt;&gt;AG: run_turn()
+    AG-&gt;&gt;MS: search(texto)
+    MS--&gt;&gt;AG: recuerdos relevantes (con nota de origen)
+    AG-&gt;&gt;LLM: instrucciones + recuerdos + historial + herramientas
+    LLM--&gt;&gt;AG: function_call memory_remember(...)
+    AG-&gt;&gt;TR: request("memory_remember", args)
+    TR-&gt;&gt;TR: validar argumentos (Pydantic)
+    TR-&gt;&gt;TR: decidir permiso (nivel 1 → permitir)
+    TR-&gt;&gt;MS: create(...)
+    MS--&gt;&gt;TR: nota 03-Proyectos/...md
+    TR--&gt;&gt;AG: resultado + auditoría
+    AG-&gt;&gt;LLM: function_call_output
+    LLM--&gt;&gt;AG: texto en streaming
+    AG--&gt;&gt;API: text_delta ... done
+    API--&gt;&gt;U: respuesta y fuentes usadas</pre>
+<h2 id="54-sistema-de-permisos">5.4 Sistema de permisos</h2>
+<pre class="mermaid">%% figura: Decisión de permisos para una herramienta solicitada por el modelo
+flowchart TD
+    A[El modelo solicita una herramienta] --&gt; B{¿Existe en el registro?}
+    B -- No --&gt; D1[Denegar y auditar]
+    B -- Sí --&gt; C{¿Argumentos válidos?}
+    C -- No --&gt; D2[Error de validación]
+    C -- Sí --&gt; E{¿Deshabilitada en la política?}
+    E -- Sí --&gt; D1
+    E -- No --&gt; F{Nivel}
+    F -- "0 informativa / 1 reversible" --&gt; X[Ejecutar con timeout y auditar]
+    F -- "2 modificación" --&gt; G{¿Permiso ampliado auto?}
+    G -- Sí --&gt; X
+    G -- No --&gt; P[Crear acción pendiente]
+    F -- "3 sensible" --&gt; P
+    P --&gt; H{¿El usuario aprueba?}
+    H -- Sí --&gt; X
+    H -- No --&gt; R[Rechazar y auditar]</pre>
+<p>La decisión se toma en el backend. Aunque un texto malicioso convenciera al modelo de solicitar
+una acción (<em>prompt injection</em>), la política se aplicaría igualmente.</p>
+<h2 id="55-modelo-de-datos">5.5 Modelo de datos</h2>
+<pre class="mermaid">%% figura: Modelo de datos en SQLite
+erDiagram
+    conversations ||--o{ messages : contiene
+    conversations ||--o{ pending_actions : origina
+    conversations {
+        text id PK
+        text title
+        text summary
+        text created_at
+        text updated_at
+    }
+    messages {
+        int id PK
+        text conversation_id FK
+        text role
+        text content
+        text meta
+    }
+    pending_actions {
+        text id PK
+        text tool_name
+        text arguments
+        int level
+        text status
+    }
+    audit_log {
+        int id PK
+        text ts
+        text actor
+        text action
+        text decision
+    }
+    memory_files {
+        text memory_id PK
+        text rel_path
+        text sha256
+        real mtime
+    }
+    llm_usage {
+        int id PK
+        text model
+        int input_tokens
+        int output_tokens
+        int latency_ms
+    }</pre>
+<p>La tabla virtual <code>memory_fts</code> (FTS5) indexa título, contenido y etiquetas de cada nota. Es un
+<strong>índice reconstruible</strong>: la fuente de verdad son los archivos Markdown de la bóveda.</p>
+<h2 id="56-arquitectura-de-la-memoria">5.6 Arquitectura de la memoria</h2>
+<p>Cada recuerdo es un archivo <code>.md</code> con metadatos YAML:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>---
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>id: 24aa4aa3f9
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>title: Proyecto final
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>category: proyectos
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>tags: [arvi, fp]
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>created: '2026-11-12T14:10:10+00:00'
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>updated: '2026-11-12T14:10:10+00:00'
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>source: interfaz
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>privacy: normal
+<a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="gu">status: activo</span>
+<a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="gu">---</span>
+<a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="gh"># Proyecto final</span>
+<a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>
+<a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>Mi proyecto final de Grado Superior se llama ARVI.
+</code></pre></div>
+<p>La carpeta indica la categoría (<code>00-Inbox</code>, <code>01-Perfil</code>, <code>03-Proyectos</code>…). El ejemplo es la nota
+real creada en la prueba P-005.</p>
+<h2 id="57-diseno-de-la-api">5.7 Diseño de la API</h2>
+<p>La API se documenta automáticamente en OpenAPI (<code>/docs</code>). Rutas implementadas:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Ruta</th>
+<th>Descripción</th>
+<th>Autenticación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/api/health</code></td>
+<td>Estado del servicio</td>
+<td>Pública</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/chat</code></td>
+<td>Turno de conversación (sin streaming)</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>WS</td>
+<td><code>/ws/chat</code></td>
+<td>Conversación en streaming con eventos</td>
+<td>Primer mensaje <code>auth</code></td>
+</tr>
+<tr>
+<td>GET/DELETE</td>
+<td><code>/api/conversations[/{id}]</code></td>
+<td>Historial</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>GET/POST/PUT/DELETE</td>
+<td><code>/api/memories[/{id}]</code></td>
+<td>CRUD y búsqueda de recuerdos</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/memories/reindex</code></td>
+<td>Reindexar la bóveda</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/memories/backup</code></td>
+<td>Copia ZIP de la bóveda</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/tools</code></td>
+<td>Catálogo de herramientas y su decisión de permiso</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>GET/POST</td>
+<td><code>/api/actions[/{id}]</code></td>
+<td>Acciones pendientes y su aprobación</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/audit</code></td>
+<td>Registro de auditoría</td>
+<td>Bearer</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/usage</code></td>
+<td>Tokens y latencia acumulados</td>
+<td>Bearer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="58-diseno-de-la-interfaz">5.8 Diseño de la interfaz</h2>
+<p>La interfaz gira alrededor de una idea: <strong>ARVI es una presencia, no un chat</strong>. El diseño se detalla en
+el capítulo 14. Las decisiones principales fueron:</p>
+<table>
+<thead>
+<tr>
+<th>Decisión</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>La esfera ocupa el centro y los mensajes quedan debajo, en segundo plano</td>
+<td>Que el estado del asistente (escuchando, pensando, hablando, ejecutando) se vea de un vistazo, también a distancia</td>
+</tr>
+<tr>
+<td>La esfera reacciona al <strong>nivel real</strong> del micrófono y de la voz</td>
+<td>Que la animación transmita información verdadera; no es decorativa</td>
+</tr>
+<tr>
+<td>Color <strong>y texto</strong> en cada estado</td>
+<td>Accesibilidad: el estado no depende solo del color (P-040)</td>
+</tr>
+<tr>
+<td>Panel lateral con tres pestañas: permisos, memoria y estado</td>
+<td>Las aprobaciones deben estar siempre a mano. La memoria y el diagnóstico, a un clic</td>
+</tr>
+<tr>
+<td>Voz frase a frase</td>
+<td>Reducir la espera hasta la primera palabra hablada</td>
+</tr>
+<tr>
+<td><em>Glassmorphism</em> oscuro con azul, cian y violeta</td>
+<td>Estética futurista pedida en el enunciado, con contraste suficiente (WCAG AA)</td>
+</tr>
+<tr>
+<td>Diseño adaptable hasta 390 px</td>
+<td>El mismo código sirve para la PWA del móvil</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid">%% figura: Estados de la esfera y transiciones principales
+stateDiagram-v2
+    [*] --&gt; Espera
+    Espera --&gt; Escuchando: pulsar «Hablar»
+    Escuchando --&gt; Pensando: silencio de 1,4 s
+    Espera --&gt; Pensando: mensaje escrito
+    Pensando --&gt; Ejecutando: el modelo llama a una herramienta
+    Ejecutando --&gt; Pensando: resultado
+    Pensando --&gt; Hablando: primera frase sintetizada
+    Hablando --&gt; Espera: fin del audio
+    Hablando --&gt; Espera: Esc o pulsar la esfera
+    Pensando --&gt; Error: fallo
+    Error --&gt; Espera</pre>

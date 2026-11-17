@@ -1,0 +1,119 @@
+<p>Cada decisión sigue el formato <em>Architecture Decision Record</em>: contexto, decisión, alternativas
+consideradas y consecuencias. Estado: <strong>Aceptada</strong>, <strong>Propuesta</strong> o <strong>Sustituida</strong>.</p>
+<hr/>
+<h2 id="adr-001-arquitectura-hibrida-nativa-en-windows">ADR-001 — Arquitectura híbrida nativa en Windows</h2>
+<ul>
+<li><strong>Estado:</strong> Aceptada (2026-11-12).</li>
+<li><strong>Contexto:</strong> el PC usa Windows 11; ARVI debe abrir aplicaciones, consultar procesos y leer
+  archivos locales. Ya existen n8n en Docker y Obsidian nativo.</li>
+<li><strong>Decisión:</strong> backend Python ejecutado de forma nativa en Windows; n8n se mantiene en Docker;
+  VoiceStudio como aplicación nativa local; frontend web servido por el backend y empaquetado con
+  Tauri para escritorio.</li>
+<li><strong>Alternativas:</strong> backend en Docker (descartado: un contenedor no puede abrir VS Code ni controlar
+  ventanas del anfitrión); backend en WSL (descartado: misma limitación y más complejidad de red).</li>
+<li><strong>Consecuencias:</strong> instalación reproducible con <code>uv</code>; el agente local tiene acceso real al sistema,
+  por lo que el sistema de permisos se vuelve crítico (ver ADR-008).</li>
+</ul>
+<h2 id="adr-002-python-fastapi-para-el-backend">ADR-002 — Python + FastAPI para el backend</h2>
+<ul>
+<li><strong>Contexto:</strong> el backend orquesta el LLM, la memoria, la voz y las herramientas; necesita HTTP,
+  WebSockets, validación de datos y un ecosistema de IA maduro.</li>
+<li><strong>Decisión:</strong> Python 3.12 con FastAPI, Pydantic v2 y Uvicorn.</li>
+<li><strong>Justificación:</strong> el SDK oficial de OpenAI es de primera clase en Python; FastAPI genera OpenAPI
+  automáticamente (requisito de documentación), soporta <code>async</code> y WebSockets de forma nativa, y
+  Pydantic permite tipar los argumentos de cada herramienta.</li>
+<li><strong>Alternativas:</strong> Node.js/Express (ecosistema de IA local menor, sin validación tipada integrada);
+  Django (más pesado, orientado a aplicaciones con ORM y plantillas).</li>
+</ul>
+<h2 id="adr-003-openai-como-cerebro-tras-una-interfaz-llmprovider">ADR-003 — OpenAI como "cerebro" tras una interfaz <code>LLMProvider</code></h2>
+<ul>
+<li><strong>Decisión:</strong> API oficial de OpenAI (Responses API con <em>function calling</em> y <em>streaming</em>), accedida
+  solo a través de la interfaz <code>LLMProvider</code>. Modelo por defecto <code>gpt-6-luna</code> (0,10 $/0,50 $ por
+  millón de tokens de entrada/salida, el vigente más barato con <em>function calling</em>), configurable con
+  <code>ARVI_LLM_MODEL</code>. Sustituyó a <code>gpt-6.1-terra</code> (1 $/5 $) el 2026-11-12 para reducir costes durante el
+  desarrollo.</li>
+<li><strong>Justificación:</strong> requisito del proyecto; la interfaz permite sustituir el proveedor o el modelo sin
+  modificar el agente, y facilita pruebas con un proveedor falso (<code>FakeLLMProvider</code>).</li>
+</ul>
+<h2 id="adr-004-obsidian-markdown-yaml-como-memoria-duradera-y-sqlite-fts5-como-indice">ADR-004 — Obsidian (Markdown + YAML) como memoria duradera y SQLite FTS5 como índice</h2>
+<ul>
+<li><strong>Decisión:</strong> los recuerdos son archivos Markdown con <em>front matter</em> YAML en una bóveda dedicada
+  <code>ARVI-Memory</code>, fuera de Git. SQLite FTS5 actúa como índice reconstruible.</li>
+<li><strong>Justificación:</strong> el usuario puede leer y editar su memoria con Obsidian; el formato es abierto y
+  portable. FTS5 está incluido en el SQLite de Python y no requiere servicios externos.</li>
+<li><strong>Fuente de verdad:</strong> los archivos Markdown. El índice se puede borrar y regenerar (<code>reindex</code>).</li>
+<li><strong>Alternativas:</strong> base vectorial (Chroma, Qdrant): se pospone; solo se añadirá búsqueda semántica si
+  se demuestra que mejora la recuperación.</li>
+</ul>
+<h2 id="adr-005-sqlite-para-conversaciones-auditoria-y-metadatos">ADR-005 — SQLite para conversaciones, auditoría y metadatos</h2>
+<ul>
+<li><strong>Justificación:</strong> sin servidor, un único archivo, transacciones ACID y suficiente para un único
+  usuario. Se guarda en <code>data/</code> (ignorado por Git).</li>
+</ul>
+<h2 id="adr-006-voicestudio-como-motor-de-voz-local-con-proveedores-intercambiables">ADR-006 — VoiceStudio como motor de voz local, con proveedores intercambiables</h2>
+<ul>
+<li><strong>Decisión:</strong> interfaces <code>SpeechToTextProvider</code> y <code>TextToSpeechProvider</code>. Implementación principal:
+  VoiceStudio (local, sin coste por uso). Alternativa: OpenAI (de pago por uso).</li>
+<li><strong>Justificación:</strong> prioridad del usuario por la ejecución local y gratuita; VoiceStudio ofrece
+  síntesis, clonación/diseño de voz y transcripción Whisper con una API local (<code>127.0.0.1:3900</code>).</li>
+<li><strong>Riesgos:</strong> sin GPU NVIDIA la latencia será mayor (se medirá); el modelo por defecto OmniVoice
+  figura como <strong>no comercial</strong>, aceptable para uso académico y personal.</li>
+</ul>
+<h2 id="adr-007-n8n-existente-como-motor-de-automatizaciones">ADR-007 — n8n existente como motor de automatizaciones</h2>
+<ul>
+<li><strong>Decisión:</strong> reutilizar el contenedor <code>n8n-local</code>. ARVI lo invoca mediante webhooks autenticados
+  (cabecera secreta) y la API pública (<code>X-N8N-API-KEY</code>) para listar y consultar ejecuciones.
+  Los workflows de ARVI llevan el prefijo <code>ARVI ·</code> y la etiqueta <code>arvi</code>.</li>
+<li><strong>Justificación:</strong> n8n ya estaba instalado; la lógica conversacional permanece en ARVI y n8n solo
+  ejecuta flujos, de modo que ARVI sigue funcionando si n8n no está disponible.</li>
+</ul>
+<h2 id="adr-008-permisos-de-cuatro-niveles-validados-en-el-backend">ADR-008 — Permisos de cuatro niveles validados en el backend</h2>
+<ul>
+<li><strong>Decisión:</strong> cada herramienta declara un nivel (0 informativa, 1 reversible, 2 modificación,
+  3 sensible). El backend decide si se ejecuta, se pide confirmación o se rechaza. El modelo nunca
+  ejecuta comandos arbitrarios.</li>
+<li><strong>Justificación:</strong> mitigación de <em>prompt injection</em> (OWASP LLM01) y de <em>excessive agency</em> (LLM06):
+  la seguridad no puede depender de las instrucciones dadas al modelo.</li>
+</ul>
+<h2 id="adr-009-react-typescript-vite-pwa-y-tauri-2">ADR-009 — React + TypeScript + Vite, PWA y Tauri 2</h2>
+<ul>
+<li><strong>Estado:</strong> Aceptada. React, TypeScript, Vite y PWA implementados (Fases 4 y 8); Tauri aplazado (ADR-011).</li>
+<li><strong>Justificación:</strong> un único código de interfaz para escritorio (Tauri) y móvil (PWA). Tauri genera
+  binarios mucho más ligeros que Electron porque usa WebView2, ya incluido en Windows 11.</li>
+</ul>
+<h2 id="adr-010-uv-como-gestor-del-entorno-python">ADR-010 — <code>uv</code> como gestor del entorno Python</h2>
+<ul>
+<li><strong>Justificación:</strong> crea el entorno virtual y resuelve dependencias de forma reproducible con un
+  archivo de bloqueo (<code>uv.lock</code>), y es mucho más rápido que <code>pip</code>.</li>
+</ul>
+<h2 id="adr-011-pwa-instalable-antes-que-tauri">ADR-011 — PWA instalable antes que Tauri</h2>
+<ul>
+<li><strong>Fecha:</strong> 2026-11-12. <strong>Estado:</strong> Aceptada (decisión del alumno).</li>
+<li><strong>Contexto:</strong> Tauri necesita en Windows el compilador de C++ de Microsoft y el <em>Windows SDK</em>, que
+  no están instalados: unos 2-3 GB de descarga. Una descarga parecida ya cortó otro servicio web que
+  el alumno publica desde este equipo (INC-011).</li>
+<li><strong>Decisión:</strong> hacer primero la PWA. Sin descargas, ya permite instalar ARVI como aplicación con
+  ventana propia e icono. Tauri queda pendiente para un momento de poco tráfico.</li>
+<li><strong>Consecuencias:</strong> por ahora ARVI no arranca el backend solo ni tiene icono en la bandeja del
+  sistema. La interfaz es la misma, así que Tauri se podrá añadir después sin rehacer nada.</li>
+</ul>
+<h2 id="adr-012-oauth-de-google-sin-librerias-externas-con-servidor-temporal-y-dpapi">ADR-012 — OAuth de Google sin librerías externas, con servidor temporal y DPAPI</h2>
+<ul>
+<li><strong>Fecha:</strong> 2026-11-12. <strong>Estado:</strong> Aceptada.</li>
+<li><strong>Contexto:</strong> se necesita acceso a Calendar y Gmail en nombre del usuario. Las librerías oficiales
+  (<code>google-auth-oauthlib</code>, <code>google-api-python-client</code>) añaden muchas dependencias para dos llamadas
+  REST. Además, la documentación de Google para aplicaciones de escritorio solo garantiza
+  redirecciones del tipo <code>http://127.0.0.1:puerto</code>, sin ruta.</li>
+<li><strong>Decisión:</strong></li>
+<li>Implementar el flujo con <code>httpx</code>: PKCE S256, <code>state</code> y un servidor temporal <code>asyncio</code> en un
+    puerto aleatorio de <code>127.0.0.1</code> que atiende una sola autorización.</li>
+<li>Guardar el <em>refresh token</em> cifrado con DPAPI mediante <code>ctypes</code>, sin dependencias nuevas.</li>
+<li>Usar el token de grano fino de GitHub directamente con la API REST.</li>
+<li><strong>Alternativas descartadas:</strong></li>
+<li>Guardar el <em>refresh token</em> en <code>.env</code>: quedaría en claro.</li>
+<li><code>keyring</code>: sería una dependencia más con el mismo resultado en Windows.</li>
+<li>Una ruta de retorno en la API de ARVI: sería una ruta pública sin token.</li>
+<li><strong>Consecuencias:</strong> hay más código propio que mantener, pero está cubierto por pruebas que usan el
+  servidor temporal real. DPAPI solo existe en Windows; en la integración continua se usa un almacén
+  en memoria.</li>
+</ul>

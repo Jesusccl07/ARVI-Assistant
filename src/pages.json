@@ -1,0 +1,162 @@
+{
+ "01-analisis-entorno": {
+  "title": "01 — Análisis del entorno",
+  "description": "Fecha del reconocimiento: 2026-11-12. Todos los datos se obtuvieron con comandos de solo lectura ( Get-CimInstance , Get-Command , docker inspect , Get-NetTCPConnection ), salvo do"
+ },
+ "DIARIO_DESARROLLO": {
+  "title": "Diario de desarrollo de ARVI",
+  "description": "Registro cronológico de cada sesión de trabajo. Cada entrada recoge solo actividades realmente realizadas y verificables. Las incidencias técnicas se detallan en pruebas/incidencia"
+ },
+ "arquitectura/decisiones-tecnologicas": {
+  "title": "Decisiones tecnológicas (ADR)",
+  "description": "Cada decisión sigue el formato Architecture Decision Record : contexto, decisión, alternativas consideradas y consecuencias. Estado: Aceptada , Propuesta o Sustituida ."
+ },
+ "capturas/figuras": {
+  "title": "Índice de figuras (capturas)",
+  "description": "Capturas auténticas obtenidas con Playwright; los datos sensibles se enmascaran."
+ },
+ "desarrollo/HERRAMIENTAS_CLAUDE": {
+  "title": "Herramientas de Claude Code usadas en el proyecto",
+  "description": "Este documento registra cómo se configura y usa el asistente de programación (Claude Code) en el desarrollo de ARVI. Complementa el anexo de uso de IA ."
+ },
+ "gestion/presupuesto": {
+  "title": "Presupuesto, costes y licencias",
+  "description": "Solo se anotan cifras verificadas. Los costes de API se registrarán a partir de las métricas reales de uso que guarda ARVI (tokens por petición) y de la factura de OpenAI."
+ },
+ "": {
+  "title": "ARVI",
+  "description": ""
+ },
+ "memoria-academica/01-introduccion": {
+  "title": "1. Introducción y motivación",
+  "description": "ARVI ( Asistente de Respuesta por Voz e Integraciones ) es un asistente personal de inteligencia artificial que se ejecuta en el ordenador doméstico del usuario. Usa un modelo de l"
+ },
+ "memoria-academica/02-objetivos": {
+  "title": "2. Objetivos",
+  "description": "Diseñar, implementar, probar y documentar un asistente personal por voz y texto, ejecutado en el PC del usuario, con memoria persistente transparente, acciones autorizadas sobre el"
+ },
+ "memoria-academica/03-requisitos": {
+  "title": "3. Análisis de requisitos",
+  "description": ""
+ },
+ "memoria-academica/04-tecnologias": {
+  "title": "4. Estudio de tecnologías",
+  "description": "Este capítulo justifica cada elección tecnológica. Las decisiones completas, en formato ADR ( Architecture Decision Record ), se recogen al final."
+ },
+ "memoria-academica/05-diseno": {
+  "title": "5. Diseño y arquitectura",
+  "description": "ARVI sigue una arquitectura híbrida nativa en Windows . El backend Python se ejecuta directamente en el sistema operativo, porque necesita abrir aplicaciones y acceder a archivos l"
+ },
+ "memoria-academica/06-planificacion": {
+  "title": "6. Planificación del proyecto",
+  "description": "Se sigue un desarrollo incremental e iterativo por fases. Cada fase entrega un incremento funcional que se prueba y se documenta antes de pasar a la siguiente. La regla de cierre e"
+ },
+ "memoria-academica/07-entorno": {
+  "title": "7. Preparación del entorno",
+  "description": "Antes de instalar nada se inspeccionó el equipo con comandos de solo lectura . El informe completo está en Análisis del entorno . Resumen:"
+ },
+ "memoria-academica/08-backend": {
+  "title": "8. Desarrollo del backend",
+  "description": "Se agrupan en backend/arvi/ los paquetes previstos en el enunciado ( api , core , providers , memory , tools , security , schemas ) para que formen un único paquete Python importab"
+ },
+ "memoria-academica/09-openai": {
+  "title": "9. Integración con OpenAI",
+  "description": "El agente se comunica con el modelo a través de una interfaz neutra ( providers/llm/base.py ):"
+ },
+ "memoria-academica/10-voz": {
+  "title": "10. Sistema de voz",
+  "description": "El código está en backend/arvi/providers/voice/ :"
+ },
+ "memoria-academica/11-memoria": {
+  "title": "11. Memoria persistente con Obsidian",
+  "description": "La memoria duradera de ARVI son archivos Markdown en una bóveda de Obsidian . El usuario puede leerlos, corregirlos o borrarlos con Obsidian, y ARVI detecta esos cambios. El índice"
+ },
+ "memoria-academica/12-n8n": {
+  "title": "12. Integración con n8n",
+  "description": "La versión y los parámetros de los nodos se comprobaron dentro del propio contenedor y con la especificación OpenAPI que sirve el servidor ( GET /api/v1/openapi.yml ), no de memori"
+ },
+ "memoria-academica/13-herramientas-permisos": {
+  "title": "13. Sistema de herramientas y permisos",
+  "description": "Cada herramienta es un objeto Tool con nombre, descripción, un modelo Pydantic para sus argumentos, un nivel de permiso, una función asíncrona y un timeout . El esquema JSON que re"
+ },
+ "memoria-academica/14-interfaz": {
+  "title": "14. Interfaz gráfica y animaciones",
+  "description": "La instalación ( npm install ) descargó 69 MB en 19 s. Se vigiló el túnel del otro servicio web del usuario durante la descarga (INC-011): 0 errores."
+ },
+ "memoria-academica/15-movil": {
+  "title": "15. Aplicaciones de escritorio (PWA y Tauri) y acceso móvil",
+  "description": "El plan original preveía una aplicación de escritorio con Tauri 2 (Fase 4b) y una PWA para el móvil (Fase 8). Al empezar la Fase 4b se comprobó que el equipo no tiene el compilador"
+ },
+ "memoria-academica/16-integraciones": {
+  "title": "16. Integraciones externas",
+  "description": "Cada servicio externo sigue el mismo patrón que n8n (capítulo 12):"
+ },
+ "memoria-academica/17-seguridad": {
+  "title": "17. Seguridad y privacidad",
+  "description": "Referencias: OWASP Top 10 (2021), OWASP Top 10 para aplicaciones con LLM y OWASP API Security Top 10. La columna «Prueba» remite a tests/security/test_owasp.py (P-027) o a otras ba"
+ },
+ "memoria-academica/18-pruebas": {
+  "title": "18. Pruebas y resultados",
+  "description": "Las pruebas con el proveedor falso ( FakeLLMProvider ) verifican la orquestación (qué herramienta se llama, qué se guarda, qué se deniega), no la calidad de las respuestas del mode"
+ },
+ "memoria-academica/19-incidencias": {
+  "title": "19. Incidencias y soluciones",
+  "description": "Errores reales encontrados durante el proyecto, con su causa y solución. El texto de cada error es el observado (o un extracto fiel)."
+ },
+ "memoria-academica/20-presupuesto": {
+  "title": "20. Presupuesto",
+  "description": "Solo se anotan cifras verificadas. Los costes de API se registrarán a partir de las métricas reales de uso que guarda ARVI (tokens por petición) y de la factura de OpenAI."
+ },
+ "memoria-academica/21-conclusiones": {
+  "title": "21. Conclusiones",
+  "description": "De los diez objetivos específicos del capítulo 2:"
+ },
+ "memoria-academica/22-mejoras": {
+  "title": "22. Posibles mejoras futuras",
+  "description": "Mejoras identificadas durante el desarrollo que quedan fuera del alcance entregado. Están ordenadas por el beneficio esperado frente al esfuerzo."
+ },
+ "memoria-academica/23-bibliografia-anexos": {
+  "title": "23. Bibliografía y anexos",
+  "description": "Todas las referencias se consultaron durante el desarrollo; la fecha de consulta es 2026-11-12 salvo que se indique otra."
+ },
+ "memoria-academica/24-domotica": {
+  "title": "24. Ampliación: hogar inteligente con Home Assistant",
+  "description": "ARVI ya podía actuar sobre el PC (capítulo 13) y sobre servicios en la nube (capítulos 12 y 16). El siguiente paso natural de un asistente de voz es la casa: luces, enchufes, persi"
+ },
+ "memoria-academica/25-control-remoto": {
+  "title": "25. Ampliación: control de varios ordenadores (ARVI Remote)",
+  "description": "El alumno trabaja con dos equipos: ARVI-SERVER (el portátil i9-12900HK donde corren ARVI, n8n, VoiceStudio y Home Assistant) y un PC de edición con RTX 3050 Ti. Lo útil es poder de"
+ },
+ "memoria-academica/26-aprendizaje-voz": {
+  "title": "26. Ampliación: aprendizaje continuo de la voz («Mi voz»)",
+  "description": "ARVI habla con la voz clonada del alumno, el perfil «DJ CLEMENT» de VoiceStudio (capítulo 10). El objetivo de esta ampliación es que esa voz mejore con el uso , aprovechando lo que"
+ },
+ "memoria-academica/anexo-uso-ia": {
+  "title": "Anexo — Registro del uso de herramientas de IA en el desarrollo",
+  "description": "Este anexo se mantiene para cumplir con las normas académicas del centro sobre el uso de IA. [PENDIENTE: el alumno debe añadir aquí la referencia a la normativa concreta de su cent"
+ },
+ "memoria-academica": {
+  "title": "Memoria del Proyecto Final — ARVI",
+  "description": "ARVI — Asistente de Respuesta por Voz e Integraciones. Proyecto Final de Ciclo Formativo de Grado Superior."
+ },
+ "pruebas/evidencias/openai-real-2026-11-12": {
+  "title": "Evidencia — primeras pruebas REALES con OpenAI (2026-11-12)",
+  "description": "Servidor ARVI local ( 127.0.0.1:8765 ), modelo gpt-6-luna , peticiones POST /api/chat con el token local. Salida copiada de la consola. No incluye la clave de OpenAI ni el token de"
+ },
+ "pruebas/evidencias/voz-real-2026-11-12": {
+  "title": "Evidencia — pruebas REALES de voz (Fase 3, 2026-11-12)",
+  "description": "Entorno: VoiceStudio 0.5.8 en 127.0.0.1:3900 (CPU, OmniVoice + faster-whisper-base), servidor ARVI en 127.0.0.1:8765 , modelo LLM gpt-6-luna . Salida copiada de la consola; sin cla"
+ },
+ "pruebas/incidencias": {
+  "title": "Registro de incidencias y soluciones",
+  "description": "Errores reales aparecidos durante la instalación, el desarrollo y las pruebas. Cada incidencia incluye el mensaje observado (o un extracto fiel), la causa y la solución aplicada."
+ },
+ "pruebas/registro-pruebas": {
+  "title": "Registro de pruebas",
+  "description": "Cada fila documenta una comprobación realmente ejecutada . Tipos:"
+ },
+ "telefonia": {
+  "title": "Asistente telefónico — estudio de viabilidad",
+  "description": "Estado: investigación y diseño. No se ha contratado ningún servicio, no se ha activado ningún desvío y el número del usuario no figura en ningún archivo del repositorio. Todas las "
+ }
+}
